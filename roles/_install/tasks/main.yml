@@ -1,0 +1,10 @@
+---
+- import_role:
+    name: common
+    tasks_from: install-config
+  vars:
+    file: khoe.yml
+
+- import_tasks: mosh.yml
+  become: yes
+  become_user: root

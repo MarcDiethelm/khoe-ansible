@@ -1,0 +1,26 @@
+---
+
+- hosts: khoe
+
+  roles:
+    - _install
+  # Only runs if requested with --tags install
+  tags: [ 'never', 'install' ]
+
+
+- hosts: khoe
+
+  vars:
+    pip_install_packages: docker # additional package to control containers with python
+    docker_users: [ 'khoe' ]
+
+  roles:
+    - role: geerlingguy.pip
+      tags: [ 'never', 'install' ]
+
+    - role: geerlingguy.docker
+      tags: [ 'never', 'install' ]
+
+    - role: pmount
+
+    - role: docker-smb

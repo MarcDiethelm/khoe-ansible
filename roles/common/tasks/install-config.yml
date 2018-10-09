@@ -1,0 +1,17 @@
+---
+- name: Ensure config directory is present.
+  file:
+    path: "{{ config_path | mandatory }}"
+    state: directory
+    owner: khoe
+    group: khoe
+    mode: 0755
+
+- name: "Add config file: {{ file }}."
+  copy:
+    src: "files/{{ file }}"
+    dest: "{{ config_path }}/{{ file }}"
+    backup: yes
+    owner: khoe
+    group: khoe
+    mode: 0640

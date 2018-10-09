@@ -1,0 +1,2 @@
+---
+options: ["-n", "-g \"force user =\"", "-g \"force group =\""]

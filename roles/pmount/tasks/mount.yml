@@ -1,0 +1,27 @@
+---
+- name: "Check if disk is mounted: {{ item.disk_label }}"
+  shell: pmount | grep {{ item.disk_label }}
+  register: grep
+  failed_when: "grep.rc == 2"
+  check_mode: no
+  changed_when: false
+
+- debug:
+    msg: "Disk {{ item.disk_label }} is already mounted."
+  when: grep.rc == 0
+
+- name: "Mount disk {{ item.disk_label }}."
+  shell: pmount /dev/disk/by-label/{{ item.disk_label }} {{ item.disk_label }}
+  when: grep.rc == 1
+
+# - name: Register existing mounts.
+#   stat: path=/media/{{ item.disk_label }}
+#   register: mount_stat
+#
+# - debug:
+#     msg: "stat: Disk {{ item.disk_label }} is already mounted."
+#   when: mount_stat.stat.exists
+#
+# - debug:
+#     msg: "stat: Disk {{ item.disk_label }} is not mounted."
+#   when: not mount_stat.stat.exists

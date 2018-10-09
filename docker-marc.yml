@@ -1,0 +1,46 @@
+#- hosts: local
+#  connection: local
+- hosts: acer.lan
+  become: yes
+  become_user: root
+
+  vars:
+    - ubuntu_version: bionic
+
+  tasks:
+
+    - name: Import Docker apt repository key.
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        id: 0EBFCD88
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ubuntu_version }} stable
+        state: present
+        update_cache: yes
+
+    - name: Install Docker-CE.
+      apt:
+        name: "{{ packages }}"
+        update_cache: yes
+      vars:
+        packages:
+          - apt-transport-https
+          - ca-certificates
+          - docker-ce
+      notify:
+        - start docker
+
+    - name: Add the 'khoe' user to 'docker' group.
+      user:
+        name: khoe
+        groups: docker
+        append: yes
+
+  handlers:
+    - name: start docker
+      service:
+        name: docker
+        state: started

@@ -1,0 +1,34 @@
+- import_role:
+    name: common
+    tasks_from: install-config
+  vars:
+    file: smb.yml
+  tags: [ 'never', 'install' ]
+
+
+- import_tasks: build-options.yml
+  vars:
+    - volumes: []
+
+
+- name: Print the container volumes options to the console.
+  debug: var=volumes
+- name: Print the smb options to the console.
+  debug: var=options
+
+- name: (Re-)create a Samba container.
+  docker_container:
+    name: smb
+    image: dperson/samba
+    state: started
+    recreate: yes
+    log_driver: syslog
+    ports:
+      - "139:139"
+      - "445:445"
+      - "137:137/udp"
+      - "138:138/udp"
+    volumes: "{{ volumes | list }}"
+    command: "{{ options | list }}"
+    #volumes_from: # todo: create a data container and link it
+    #  - mydata

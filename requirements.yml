@@ -1,0 +1,8 @@
+# https://docs.ansible.com/ansible/latest/reference_appendices/galaxy.html#installing-multiple-roles-from-a-file
+
+- src: geerlingguy.docker # can be github, web, etc.
+  version: master # default, but useful to lock to specific version
+
+- src: geerlingguy.pip
+  version: master
+  

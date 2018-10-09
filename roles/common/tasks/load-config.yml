@@ -1,0 +1,9 @@
+---
+- name: Load config.
+  command: "cat {{ config_path }}/{{ file | mandatory }}"
+  register: config
+  changed_when: false
+
+- name: Parse config.
+  set_fact:
+    config: "{{ config.stdout | from_yaml }}"

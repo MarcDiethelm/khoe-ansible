@@ -1,0 +1,32 @@
+
+- name: Add Universe repository
+apt_repository:
+  repo: ppa:duplicity-team/ppa
+  state: present
+  update_cache: yes
+tags: [ 'never', 'install' ]
+
+
+- name: Install packages
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - duplicity
+    - python-boto
+  tags: [ 'never', 'install' ]
+
+
+- import_role:
+    name: common
+    tasks_from: install-config
+  vars:
+    file: duplicity.yml
+  tags: [ 'never', 'install' ]
+
+
+- import_role:
+    name: common
+    tasks_from: load-config
+  vars:
+    file: duplicity.yml
