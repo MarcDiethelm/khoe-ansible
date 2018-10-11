@@ -1,0 +1,20 @@
+---
+- hosts: khoe
+
+  vars:
+    pip_install_packages: docker # additional package to control containers with python
+    docker_users: [ 'khoe' ]
+
+  tasks:
+    - include_role: # Install basic tools (mosh) and khoe config (currently a placeholder)
+        name: install
+    - include_role:
+        name: geerlingguy.pip
+    - include_role:
+        name: geerlingguy.docker
+    - include_role:
+        name: pmount
+        tasks_from: install
+    - include_role:
+        name: docker-smb
+        tasks_from: install

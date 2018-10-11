@@ -1,0 +1,8 @@
+---
+- hosts: khoe
+
+  tasks:
+    - include_role:
+        name: pmount
+    - include_role:
+        name: docker-smb

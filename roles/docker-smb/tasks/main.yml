@@ -1,15 +1,7 @@
-- import_role:
-    name: common
-    tasks_from: install-config
-  vars:
-    file: smb.yml
-  tags: [ 'never', 'install' ]
-
-
+---
 - import_tasks: build-options.yml
   vars:
     - volumes: []
-
 
 - name: Print the container volumes options to the console.
   debug: var=volumes

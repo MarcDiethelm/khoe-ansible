@@ -1,0 +1,26 @@
+---
+- name: Add the 'khoe' user to 'plugdev' group.
+  user:
+    name: khoe
+    groups: plugdev
+    append: yes
+  become: yes
+  become_user: root
+
+- name: Add Universe repository
+  apt_repository:
+    repo: deb http://archive.canonical.com/ubuntu {{ ansible_distribution_release }} universe
+    state: present
+    update_cache: yes
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install pmount.
+  apt:
+    name: pmount
+    state: present
+
+- import_role:
+    name: common
+    tasks_from: install-config
+  vars:
+    file: mounts.yml

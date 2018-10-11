@@ -1,0 +1,6 @@
+---
+- import_role:
+    name: common
+    tasks_from: install-config
+  vars:
+    file: smb.yml
