@@ -1,0 +1,10 @@
+---
+# config_path is defined in the inventory file
+- name: "Write config file: {{ file }}."
+  copy:
+    content: "{{ config | to_nice_yaml }}"
+    dest: "{{ config_path }}/{{ file | mandatory }}"
+    backup: yes
+    owner: khoe
+    group: khoe
+    mode: 0640
