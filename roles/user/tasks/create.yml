@@ -16,7 +16,7 @@
 
 - name: Create user config
   set_fact:
-    user: "{ '{{ username }}': {{ userdata }} }"
+    user: "{ '{{ username }}': {{ user_model }} }"
 
 - name: Add user "{{ username }}" config to users config
   set_fact:

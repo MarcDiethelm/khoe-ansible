@@ -1,4 +1,4 @@
 users:
   primary_group: "khoe"
-userdata:
-  foo: "bar"
+user_model:
+  fingerprint: null
