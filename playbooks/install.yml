@@ -21,3 +21,6 @@
     - include_role:
         name: user
         tasks_from: install
+    - include_role:
+        name: gpg
+        tasks_from: install

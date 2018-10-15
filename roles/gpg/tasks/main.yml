@@ -1,0 +1,16 @@
+---
+- name: "Include create.yml"
+  include_tasks: create.yml
+  when: task == "create"
+
+- name: "Include delete.yml"
+  include_tasks: delete.yml
+  when: task == "delete"
+
+- name: "Include export.yml"
+  include_tasks: export.yml
+  when: task == "export"
+
+- name: "Include import.yml"
+  include_tasks: import.yml
+  when: task == "import"

@@ -1,0 +1,11 @@
+---
+# usage: ansible-playbook playbooks/gpg.yml -e task=create -e username=example2
+
+- name: "Generate keys for user: {{ username }}."
+  command: "gpg2 --batch --status-fd 1 --with-colons --passphrase {{ passphrase | default('\"\"') }} --quick-generate-key {{ keyname }}"
+  register: gpg_output
+  become: yes
+  become_user: "{{ username }}"
+  #failed_when: not( "KEY_CREATED" in gpg_output.stdout )
+
+- import_tasks: write-fingerprint.yml

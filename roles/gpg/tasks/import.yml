@@ -1,0 +1,31 @@
+---
+# usage: ansible-playbook playbooks/gpg.yml -e task=import -e username=khoe [-e path=~/gpg-export]
+
+- name: "Import secret key from: {{ export_key_file }}."
+  command: "gpg2 --status-fd 1 --import {{ export_key_file }}"
+  register: gpg_output
+  become: yes
+  become_user: "{{ username }}"
+- name: "Print gpg import keys result"
+  debug:
+    var: gpg_output.stdout
+
+- import_tasks: write-fingerprint.yml
+
+- name: "Import secret ownertrust db from: {{ export_ownertrust_file }}."
+  command: "gpg2 --import-ownertrust {{ export_ownertrust_file }}"
+  register: gpg_output
+  become: yes
+  become_user: "{{ username }}"
+- name: "Print gpg import ownertrust result" # gives no output
+  debug:
+    var: gpg_output.stdout
+
+- name: "Get keys for user {{ username }} with keyname: {{ keyname }}."
+  command: "gpg2 --list-secret-keys {{ keyname }}"
+  register: gpg_output
+  become: yes
+  become_user: "{{ username }}"
+- name: "Print keys for user {{ username }} with keyname: {{ keyname }}."
+  debug:
+    var: gpg_output.stdout

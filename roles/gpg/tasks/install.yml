@@ -1,0 +1,14 @@
+---
+- name: Ensure dependencies are installed.
+  apt:
+    name:
+      - gnupg2
+      - haveged
+    state: present
+  become: yes
+
+- name: Start haveged service on boot
+  service:
+    name: haveged
+    enabled: yes
+  become: yes
