@@ -8,4 +8,6 @@
   become_user: "{{ username }}"
   #failed_when: not( "KEY_CREATED" in gpg_output.stdout )
 
+  # gpg2 --verbose --quick-set-expire BC5072C00D67B694BBBACE6F834D227AD42F85F0 0
+
 - import_tasks: write-fingerprint.yml

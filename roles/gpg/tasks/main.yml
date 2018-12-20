@@ -14,3 +14,5 @@
 - name: "Include import.yml"
   include_tasks: import.yml
   when: task == "import"
+
+# compare with : https://github.com/juju4/ansible-gpgkey_generate/blob/master/tasks/gpgkey_generate.yml
