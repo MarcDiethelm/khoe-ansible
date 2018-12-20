@@ -18,11 +18,11 @@ printf '\n%s\n' "Installing playbook dependencies from Ansible Galaxy."
 ansible-galaxy install -r requirements.yml
 
 printf '\n%s\n' "Installing command line dependencies and config files."
-ansible-playbook --tags install khoe.yml
+ansible-playbook $scriptpath/playbooks/install.yml
 
 # https://github.com/ansible/ansible-examples/blob/master/language_features/ansible_pull.yml
 # ansible-pull # need to check it out!
 
-printf '\n%s\n%s\n' "You need to edit configuration files in `config/` before continuing." "Then execute 'ansible-playbook ~/ansible/khoe.yml'."
+printf '\n%s\n%s\n' "You need to edit configuration files in `config/` before continuing." "Then execute 'ansible-playbook $scriptpath/[playbook name].yml'."
 #printf '\n%s\n' "Running ansible-playbook khoe.yml."
 #ansible-playbook khoe.yml
