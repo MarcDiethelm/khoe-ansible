@@ -1,5 +1,6 @@
 ---
 - hosts: khoe
+  gather_facts: no
 
   tasks:
     - include_role:
