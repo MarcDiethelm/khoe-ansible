@@ -8,5 +8,3 @@ sudo apt-get install --yes \
     python-jmespath \
 
 # ./ansible.cfg sets roles_path = ~/ansible/galaxy
-
-ansible-galaxy install -r requirements.yml
