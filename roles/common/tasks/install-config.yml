@@ -8,7 +8,7 @@
     group: khoe
     mode: 0755
 
-- name: "Add config file: {{ file }}."
+- name: "Add config file: {{ config_path }}/{{ file }}."
   copy:
     src: "files/{{ file }}"
     dest: "{{ config_path }}/{{ file }}"
