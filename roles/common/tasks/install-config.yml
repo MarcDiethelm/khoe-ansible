@@ -1,6 +1,6 @@
 ---
 # config_path is defined in the inventory file
-- name: Ensure config directory is present.
+- name: "Ensure config directory is present: {{ config_path }}".
   file:
     path: "{{ config_path | mandatory }}"
     state: directory

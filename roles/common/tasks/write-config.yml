@@ -1,6 +1,6 @@
 ---
 # config_path is defined in the inventory file
-- name: "Write config file: {{ file }}."
+- name: "Write config file: {{ config_path }}/{{ file }}."
   copy:
     content: "{{ config | to_nice_yaml }}"
     dest: "{{ config_path }}/{{ file | mandatory }}"
