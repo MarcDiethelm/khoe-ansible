@@ -11,13 +11,15 @@
 
     - set_fact: profile_name=nas # no quotes, no comma; otherwise it will be part of the string value
     - set_fact: user_name="khoe"
+    - set_fact: profile_dir="/home/{{ user_name }}/.duply"
     - set_fact: source_path="/home/{{ user_name }}"
     - set_fact: target_path="file:///home/{{ user_name }}/_backup/{{ profile_name }}"
+    - set_fact: cronjob_state="present" # absent | present
 
     - include_role:
         name: oefenweb.duply-backup
       vars:
-        duply_backup_profile_directory: "/home/{{ user_name }}/.duply" # default set by oefenweb.duply: `/etc/duply/[profile_name]`
+        duply_backup_profile_directory: "{{ profile_dir }}" # default set by oefenweb.duply: `/etc/duply/[profile_name]`
         duply_backup_profiles:
           '{{ profile_name }}':
             conf:
@@ -47,7 +49,11 @@
         #   - ../../../files/duply-backup/E6564C6E.ownertrust.txt
         # duply_backup_gpg_sec_keys:
         #   - ../../../files/duply-backup/E6564C6E.sec.asc
-        # duply_backup_jobs:
-        #   - name: duply-backup-etc
-        #     job: /usr/local/bin/duply etc backup
-        #     minute: "0"
+
+        duply_backup_jobs:
+          - name: "duply-{{ user_name }}-{{ profile_name }}"
+            state: "{{ cronjob_state }}"
+            job: "/usr/local/bin/duply {{ profile_dir }}/{{ profile_name }} backup"
+            # run every day at 04:00
+            minute: "0"
+            hour: "4"
