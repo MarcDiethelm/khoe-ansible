@@ -5,4 +5,9 @@
 
 - src: geerlingguy.pip
   version: master
-  
+
+- src: oefenweb.duply
+  version: master
+
+- src: oefenweb.duply-backup
+  version: master

@@ -45,3 +45,10 @@
       vars:
         ansible_become: yes
         ansible_become_user: root
+
+    - include_role:
+        name: oefenweb.duply
+      vars:
+        ansible_become: yes
+        ansible_become_user: root
+        duply_install: [ 'duplicity' ]
