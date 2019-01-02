@@ -38,3 +38,10 @@
       vars:
         ansible_become: yes
         ansible_become_user: root
+
+    - include_role:
+        name: apt
+        tasks_from: upgrade
+      vars:
+        ansible_become: yes
+        ansible_become_user: root
