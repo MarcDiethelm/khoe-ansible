@@ -1,29 +1,44 @@
 Khoe Cloud server administration with Ansible
 ===
 
+## Prerequisites
+
+Assuming `khoe.lan` as server hostname.
+
+### local
+  - `ssh-copy-id -i /Users/marcd/.ssh/id_rsa.pub khoe@khoe.lan`
+  - `ssh khoe.lan`
+### server
+  - `git clone https://gitlab.com/marcdiethelm/khoe-ansible.git ansible`
+  - `cd ansible`
+  - `git pull origin develop`
+
 
 ## Setup
 
 Adjust ansible.cfg `inventory` line to switch between local ansible commands on server (default) and remote ansible calls (development).
 
 
-## Install vs. Operations
+## Install
 
 * `cd` to this directory.
+* chmod +x install.sh
 * `./install.sh`.
 * Edit configuration files in `config/`.
-* Run `ansible-playbook khoe.yml` to start cloud operation.
 
+##  Operation
+
+* ~~Run `ansible-playbook khoe.yml` to start cloud operation.~~
 
 
 ## Development
 
-Administering Khoe is done directly on the Khoe server. However initially it may be more convenient to execute the playbook remotely from the development environment.
+Administering Khoe during normal use is done directly on the Khoe server through local Ansible use. However it may be more convenient to execute the playbook remotely from a development machine.
 
 For *remote* development you need to configure some additional values:
 
-* Target host in `development` inventory, in the project root directory.
-* `roles_path` in ansible.cfg: path to installed Ansible Galaxy dependencies.
+* `ansible-galaxy install -r requirements.yml` (satisfy dependencies; installs to `roles/_galaxy`)
+* # Target hostname in `development` inventory, in the project root directory [default: khoe.lan].
 
 However once SMB is up and running you can develop directly on the server, which should simplify things. By default the khoe home directory of the server is shared as `dev`.
 
