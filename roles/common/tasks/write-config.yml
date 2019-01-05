@@ -4,7 +4,7 @@
   copy:
     content: "{{ config | to_nice_yaml }}"
     dest: "{{ config_path }}/{{ file | mandatory }}"
-    backup: "{{ do_backup | default(no) }}"
+    backup: "{{ do_backup | default('no') }}"
     owner: khoe
     group: khoe
     mode: 0640
