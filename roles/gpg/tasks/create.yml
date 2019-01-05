@@ -1,8 +1,8 @@
 ---
 # usage: ansible-playbook playbooks/gpg.yml -e task=create -e username=example2
 
-- name: "Generate keys for user: {{ username }}."
-  command: "gpg2 --batch --status-fd 1 --with-colons --passphrase {{ passphrase | default('\"\"') }} --quick-generate-key {{ keyname }}"
+- name: "Generate keys  '{{ keyname }}' for user: '{{ username }}'."
+  command: "gpg2 --batch --status-fd 1 --with-colons --passphrase {{ passphrase | default('\"\"') }} --quick-gen-key {{ keyname }}" # used to be: --quick-generate-key
   register: gpg_output
   become: yes
   become_user: "{{ username }}"
