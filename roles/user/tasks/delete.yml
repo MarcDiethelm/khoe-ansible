@@ -1,5 +1,11 @@
 ---
-- name: Remove the user {{ username }}
+# After key creation the gpg-agent daemon is started for the user. Requires killing it before user deletion.
+- name: "Kill gpg-agent for user: '{{ username }}'"
+  command: "gpgconf --kill gpg-agent"
+  become: yes
+  become_user: "{{ username }}"
+
+- name: Remove the user '{{ username }}''
   user:
     name: "{{ username }}"
     state: absent
