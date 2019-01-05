@@ -35,9 +35,10 @@ Adjust ansible.cfg `inventory` line to switch between local ansible commands on 
 
 Administering Khoe during normal use is done directly on the Khoe server through local Ansible use. However it may be more convenient to execute the playbook remotely from a development machine.
 
-For *remote* development you need to configure some additional values:
+For *remote* development you need some more stuff:
 
 * `ansible-galaxy install -r requirements.yml` (satisfy dependencies; installs to `roles/_galaxy`)
+* `sudo easy_install pip && pip install --user passlib` Mac only, needed for password hashing in user:create task
 * # Target hostname in `development` inventory, in the project root directory [default: khoe.lan].
 
 However once SMB is up and running you can develop directly on the server, which should simplify things. By default the khoe home directory of the server is shared as `dev`.
