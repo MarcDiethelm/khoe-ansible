@@ -1,6 +1,13 @@
 ---
 - hosts: khoe
   gather_facts: no
+
   tasks:
+
     - include_role:
         name: user
+
+    - include_role:
+        name: gpg
+        tasks_from: create
+      when: task == "create"
