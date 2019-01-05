@@ -1,5 +1,7 @@
 ---
 # usage: ansible-playbook playbooks/user.yml -e task=create -e username=example -e password=1234
+# usage: ansible-playbook playbooks/user.yml -e task=delete -e username=example
+
 
 - import_role: # belongs in meta as a dependency, but that wouldn't allow use of tasks_from to load other than main.yml
     name: common
