@@ -2,7 +2,7 @@
 # config_path is defined in the inventory file
 - name: "Write config file: {{ config_path }}/{{ file }}."
   copy:
-    content: "{{ config | to_nice_yaml }}"
+    content: "{{ content | to_nice_yaml | default({}, true) }}"
     dest: "{{ config_path }}/{{ file | mandatory }}"
     backup: "{{ do_backup | default('no') }}"
     owner: khoe

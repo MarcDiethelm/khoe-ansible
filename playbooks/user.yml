@@ -1,13 +1,68 @@
 ---
+# usage: ansible-playbook playbooks/user.yml -e task=create -e username=example1 -e password=1234
+# usage: ansible-playbook playbooks/user.yml -e task=delete -e username=example1
+
 - hosts: khoe
   gather_facts: no
 
   tasks:
 
     - include_role:
-        name: user
+        name: common
+        tasks_from: load-config
+      vars:
+        file: "{{ config_file_users }}"
 
-    - include_role:
-        name: gpg
-        tasks_from: create
+    - set_fact:
+        users: "{{ config }}"
+
+
+    - name: "Case: Create user {{ username }}"
+      block:
+        - include_role:
+            name: user
+            tasks_from: create
+
+        - include_role:
+            name: gpg
+            tasks_from: create
+
+        - name: Create user config
+          set_fact:
+            users: "{{ users | combine( { username: { 'fingerprint': '{{ fingerprint }}' } }, recursive=True ) }}"
+
       when: task == "create"
+
+
+    - name: "Case: Delete user {{ username }}"
+      block:
+        - include_role:
+            name: user
+            tasks_from: delete
+
+        - include_role:
+            name: gpg
+            tasks_from: delete
+          vars:
+            fingerprint: "{{ users[username].fingerprint }}"
+
+        - name: Delete user "{{ username }}" from users config
+          dict_element_delete:
+            dict: "{{ users | from_yaml }}"
+            key: "{{ username }}"
+          register: result
+
+        - name: "Update users var"
+          set_fact:
+            users: "{{ result.dict }}"
+
+      when: task == "delete"
+
+    - name:  write updated users config
+      import_role:
+        name: common
+        tasks_from: write-config
+      vars:
+        file: "{{ config_file_users }}"
+        content: "{{ users }}"
+        #do_backup: yes

@@ -1,5 +1,4 @@
 keyname: "{{ username }}-master" # calling it master in case we want additional keys later
-fingerprint_path: "/home/{{ username }}/fingerprint-master"
-export_path: "/home/{{ username }}/gpg-export"
-export_key_file: "{{ export_path}}/{{ keyname }}-secret.key"
-export_ownertrust_file: "{{ export_path}}/{{ username }}-ownertrust.txt"
+export_path: "/home/khoe/gpg-export/{{ username }}"
+export_key_file: "{{ export_path}}/gpgkey.{{ keyname }}.sec.asc"
+export_ownertrust_file: "{{ export_path}}/gpgkey.{{ username }}.ownertrust.txt"

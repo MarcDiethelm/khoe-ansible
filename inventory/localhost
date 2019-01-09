@@ -1,2 +1,2 @@
 [khoe]
-127.0.0.1 ansible_connection=local  config_path=./ansible/config
+127.0.0.1 ansible_connection=local

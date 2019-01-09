@@ -1,11 +1,5 @@
 ---
-# After key creation the gpg-agent daemon is started for the user. Requires killing it before user deletion.
-- name: "Kill gpg-agent for user: '{{ username }}'"
-  command: "gpgconf --kill gpg-agent"
-  become: yes
-  become_user: "{{ username }}"
-
-- name: Remove the user '{{ username }}''
+- name: Remove the user '{{ username }}'
   user:
     name: "{{ username }}"
     state: absent
@@ -19,18 +13,3 @@
 
 - meta: end_play
   when: not result.changed
-
-- name: Delete user "{{ username}}" from users config
-  dict_element_delete:
-    dict: "{{ config | from_yaml }}"
-    key: "{{ username }}"
-  register: result
-
-- name: "Overwrite config var"
-  set_fact:
-    config: "{{ result.dict }}"
-
-- name:  write updated users config
-  import_role:
-    name: common
-    tasks_from: write-config

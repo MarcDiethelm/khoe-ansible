@@ -2,9 +2,15 @@
 # config_path is defined in the inventory file
 - name: "Load config: {{ config_path }}/{{ file }}."
   command: "cat {{ config_path }}/{{ file | mandatory }}"
-  register: config
+  register: cat
   changed_when: false
 
 - name: Parse config.
   set_fact:
-    config: "{{ config.stdout | from_yaml }}"
+    config: "{{ cat.stdout | from_yaml }}"
+  when: cat.stdout != ""
+
+- name: Provide empty dict (if config file is empty).
+  set_fact:
+    config: {}
+  when: cat.stdout == ""

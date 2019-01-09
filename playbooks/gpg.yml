@@ -1,4 +1,10 @@
 ---
+# Not used currently, but keeping it in case we want to publish the gpg module
+# usage: ansible-playbook playbooks/gpg.yml -e task=create -e username=example1 -e passphrase="1234"
+# usage  ansible-playbook playbooks/gpg.yml -e task=delete -e username=khoe [-e fingerprint=9409A43E4F16771D8FBF25CADF8D04072F675974]
+# usage: ansible-playbook playbooks/gpg.yml -e task=export -e username=example1 [-e passphrase="1234"]
+# usage: ansible-playbook playbooks/gpg.yml -e task=import -e username=example1 [-e path=~/gpg-export]
+
 - hosts: khoe
   gather_facts: no
   tasks:

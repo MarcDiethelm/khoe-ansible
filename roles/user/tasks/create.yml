@@ -2,7 +2,7 @@
 - name: Adding khoe user "{{ username }}"
   user:
     name: "{{ username }}"
-    group: "{{ users.primary_group }}"
+    group: "{{ defaults.primary_group }}"
     password: "{{ password | password_hash('sha512') }}"
   register: result
   become: yes
@@ -13,16 +13,3 @@
 
 - meta: end_play
   when: not result.changed
-
-- name: Create user config
-  set_fact:
-    user: "{ '{{ username }}': {{ user_model }} }"
-
-- name: Add user "{{ username }}" config to users config
-  set_fact:
-    config: "{{ config | combine( user ) }}"
-
-- name:  write updated users config
-  import_role:
-    name: common
-    tasks_from: write-config

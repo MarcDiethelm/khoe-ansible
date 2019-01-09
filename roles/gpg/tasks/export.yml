@@ -1,6 +1,4 @@
 ---
-# usage: ansible-playbook playbooks/gpg.yml -e task=export -e username=example2
-
 - name: "Check that a home directory exists for the username: {{ username }}."
   stat:
     path: "/home/{{ username }}"
@@ -12,25 +10,17 @@
     path: "{{ export_path }}"
     state: directory
     mode: 0700
-  become: yes
-  become_user: "{{ username }}"
 
-- name: "Export secret key to: {{ export_key_file }}." # gpg secret key contains public key
-  shell: "gpg2 --armor --export-secret-keys {{ keyname }} > {{ export_key_file }}"
-  become: yes
-  become_user: "{{ username }}"
+- name: "Export secret key '{{ username }}' to: {{ export_key_file }}." # gpg secret key contains public key
+  shell: "gpg2 --armor --export-secret-keys {{ username }} > {{ export_key_file }}"
 
 - name: "Export ownertrust to: {{ export_ownertrust_file }}"
   shell: "gpg2 --export-ownertrust > {{ export_ownertrust_file }}"
-  become: yes
-  become_user: "{{ username }}"
 
 - name: "Restrict permissions on exported files: {{ export_path }}."
   file:
     path: "{{ item }}"
     mode: 0600
-  become: yes
-  become_user: "{{ username }}"
   with_items:
     - "{{ export_ownertrust_file }}"
     - "{{ export_key_file }}"
