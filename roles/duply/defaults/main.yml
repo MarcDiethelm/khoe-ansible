@@ -1,0 +1,4 @@
+profile_name: nas # no quotes, no comma; otherwise it will be part of the string value
+profile_dir: "/home/{{ username }}/.duply"
+source_path: "/home/{{ username }}"
+target_path: "file:///home/{{ username }}/_backup/{{ profile_name }}"

@@ -1,0 +1,5 @@
+---
+- name: "Run a duply backup for user '{{ username }}' and profile '{{ profile_name }}'"
+  command: "sudo duply /home/{{ username }}/.duply/{{ profile_name }} backup"
+  register: duply
+  # Only running with `sudo` as on the command line works, using `become` fails

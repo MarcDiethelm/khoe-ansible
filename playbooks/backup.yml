@@ -1,0 +1,40 @@
+---
+# usage: ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e passphrase=]
+# usage: ansible-playbook playbooks/backup.yml -e task=backup -e username=example1
+
+- hosts: khoe
+  gather_facts: no
+
+  tasks:
+
+    - include_role:
+        name: common
+        tasks_from: load-config
+      vars:
+        file: "{{ config_file_users }}"
+
+    - set_fact:
+        users: "{{ config }}"
+        user: "{{ config[username] }}"
+
+
+    - name: "Create duply backup profile"
+      block:
+
+        - include_role:
+            name: duply
+            tasks_from: setup
+
+      become: yes # oefenweb.duply is written to require root
+      become_user: root
+      when: task == "setup"
+
+
+    - name: "Run duply backup"
+      block:
+
+        - include_role:
+            name: duply
+            tasks_from: backup
+
+      when: task == "backup"
