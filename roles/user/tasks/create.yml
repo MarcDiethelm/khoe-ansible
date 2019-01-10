@@ -13,3 +13,13 @@
 
 - meta: end_play
   when: not result.changed
+
+- name: "Create user's config directory"
+  file:
+    path: "{{ config_dir_user }}"
+    state: directory
+    owner: "{{ username }}"
+    group: khoe
+    mode: 0755
+  become: yes
+  become_user: "{{ username }}"

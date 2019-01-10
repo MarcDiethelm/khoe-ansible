@@ -28,8 +28,12 @@
             tasks_from: create
 
         - name: Create user config
-          set_fact:
+          set_fact: # Storing in khoe ensures ability to restore user from backup (todo: backup)
             users: "{{ users | combine( { username: { 'fingerprint': '{{ fingerprint }}' } }, recursive=True ) }}"
+
+        - include_role: # Create empty backup file list
+            name: duply
+            tasks_from: install
 
       when: task == "create"
 

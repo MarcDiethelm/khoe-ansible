@@ -1,0 +1,11 @@
+---
+- name: Create empty backup file list
+  copy:
+    content: ""
+    dest: "{{ config_dir_user }}/{{ backup_list_name }}"
+    force: no # if it already exists, do nothing
+    group: khoe
+    owner: "{{ username }}"
+    mode: 0640
+  become: yes
+  become_user: "{{ username }}"

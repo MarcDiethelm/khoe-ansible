@@ -3,3 +3,5 @@ config_file_khoe: khoe.yml
 config_file_users: users.yml
 config_file_mounts: users.yml
 config_file_smb: smb.yml
+
+config_dir_user: /home/{{ username }}/config

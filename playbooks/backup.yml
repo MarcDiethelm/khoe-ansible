@@ -18,7 +18,7 @@
         user: "{{ config[username] }}"
 
 
-    - name: "Create duply backup profile"
+    - name: "Case: Create duply backup profile"
       block:
 
         - include_role:
@@ -30,7 +30,7 @@
       when: task == "setup"
 
 
-    - name: "Run duply backup"
+    - name: "Case: Run duply backup"
       block:
 
         - include_role:

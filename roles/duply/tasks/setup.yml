@@ -4,6 +4,15 @@
 - debug:
     msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nEncrypting with gpg key: {{ user.fingerprint }}"
 
+
+- name: Read filelist
+  command: "cat {{ config_dir_user }}/{{ backup_list_name }}"
+  register: filelist
+
+# Filelist format:
+#- /home/example1/nas/bar.txt
+#+ /home/example1/nas
+
 - include_role:
     name: oefenweb.duply-backup
   vars:
@@ -31,9 +40,7 @@
           #arch_dir: '/data/backup/.duply-cache'
         # pre: ../../../files/duply-backup/pre
         # post: ../../../files/duply-backup/post
-        excludes:
-          - '+ {{ source_path }}/nas'
-          - '- **'
+        excludes: "{{ filelist.stdout_lines + ['- **'] }}"
 
     duply_backup_jobs:
       - name: "duply-{{ username }}-{{ profile_name }}"
