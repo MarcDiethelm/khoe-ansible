@@ -7,7 +7,7 @@ short_description: Delete an element from a dict by key
 '''
 
 EXAMPLES = '''
-- name: Delete element dict
+- name: Delete element from dict
   dict_element_delete:
     dict: dictname
     key: "key"
@@ -19,7 +19,7 @@ from ansible.module_utils.basic import AnsibleModule
 
 def work(d, key):
 
-    del d[key]
+    d.pop(key, None)
     return d
 
 
