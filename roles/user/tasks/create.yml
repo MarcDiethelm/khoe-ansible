@@ -1,18 +1,11 @@
 ---
-- name: Adding khoe user "{{ username }}"
+- name: Create user "{{ username }}"
   user:
     name: "{{ username }}"
     group: "{{ defaults.primary_group }}"
     password: "{{ password | password_hash('sha512') }}"
-  register: result
+  register: user
   become: yes
-
-- debug:
-    msg: no user was created. ending play.
-  when: not result.changed
-
-- meta: end_play
-  when: not result.changed
 
 - name: "Create user's config directory"
   file:
@@ -23,3 +16,17 @@
     mode: 0755
   become: yes
   become_user: "{{ username }}"
+
+- name: "Get uid for '{{ username }}'"
+  command: id --user {{ username }}
+  register: uid
+  changed_when: false
+
+- name: "Get uid for '{{ username }}'"
+  command: id --group {{ username }}
+  register: gid
+  changed_when: false
+
+- name: Create user config
+  set_fact:
+    users: "{{ users | combine( { username: { 'uid': uid.stdout, 'gid': gid.stdout } }, recursive=True ) }}"

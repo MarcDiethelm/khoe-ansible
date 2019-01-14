@@ -6,10 +6,3 @@
     remove: yes
   register: result
   become: yes
-
-- debug:
-    msg: no user was removed. ending play.
-  when: not result.changed
-
-- meta: end_play
-  when: not result.changed

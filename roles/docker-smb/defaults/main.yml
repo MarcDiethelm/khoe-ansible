@@ -1,0 +1,15 @@
+defaults:
+  share:
+      path: /home/{{ username }}/nas
+      users: '{{ username }}'
+      browsable: 'yes'
+      readonly: 'no'
+      writelist: ''
+      guest: 'no'
+      admins: 'none'
+      comment: "{{ username }}''s private NAS"
+
+  user:
+      smbpsw: '{{ password }}'
+      userid: '{{ user.uid }}'
+      groupid: '{{ user.gid }}'

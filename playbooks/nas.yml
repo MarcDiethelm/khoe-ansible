@@ -1,9 +1,13 @@
 ---
+# usage:
+# ansible-playbook playbooks/nas.yml -e task=create -e username=example1
+# ansible-playbook playbooks/nas.yml # (re-)start all shares
+
 - hosts: khoe
   gather_facts: no
 
   tasks:
-    - include_role:
-        name: pmount
+    # - include_role:
+    #     name: pmount
     - include_role:
         name: docker-smb

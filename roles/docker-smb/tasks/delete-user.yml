@@ -1,0 +1,32 @@
+---
+- include_role:
+    name: common
+    tasks_from: load-config
+  vars:
+    file: "{{ config_file_smb }}"
+
+- name: Delete user nas from shares
+  dict_element_delete:
+    dict: "{{ config.shares }}"
+    key: "{{ username }}"
+  register: shares
+
+- name: Delete user from smb users
+  dict_element_delete:
+    dict: "{{ config.users }}"
+    key: "{{ username }}"
+  register: smb_users
+
+- set_fact:
+    config: "{ 'shares': {{ shares.dict }}, 'users': {{ smb_users.dict }} }"
+
+- name:  write updated users config
+  include_role:
+    name: common
+    tasks_from: write-config
+  vars:
+    file: "{{ config_file_smb }}"
+    content: "{{ config }}"
+    do_backup: yes
+
+- include_tasks: main.yml

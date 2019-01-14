@@ -1,16 +1,4 @@
 ---
-# Load smb options from json file.
-
-# - name: Get contents of smb-conf.json
-#   command: "cat {{ config_path }}/smb-conf.json" # "{{lookup('file', '/home/khoe/smb-conf.json') }}" reads file from controller, fails when doing remote development
-#   register: smb_config
-#   changed_when: false
-#
-# - name: Parse smb-conf.json.
-#   set_fact:
-#     smb_json: "{{ smb_config.stdout | from_json }}"
-
-
 - import_role:
     name: common
     tasks_from: load-config
@@ -19,18 +7,22 @@
 
 - name: Add volumes to container options.
   set_fact:
-    volumes: "{{ volumes }} + [ '{{ item.path }}:{{ item.path }}' ]"
-  loop: "{{ config.shares | list }}"
+    volumes: "{{ volumes }} + [ '{{ item.value.path }}:{{ item.value.path }}' ]"
+  loop: "{{ config.shares | dict2items }}"
 
 - name: Add smb shares to entrypoint options.
   set_fact:
-    options: "{{ options }} + [ '-s \"{{ item.name }};{{ item.path }};yes;no;no\"' ]"
-  loop: "{{ config.shares | list }}"
+    options: "{{ options }} + [ '-s \"{{ item.key }};{{ item.value.path }};{{ item.value.browsable }};{{ item.value.readonly }};{{ item.value.guest }};{{ item.value.users }};{{ item.value.admins }};{{ item.value.writelist }};{{ item.value.comment }}\"' ]"
+  loop: "{{ config.shares | dict2items }}"
 
 - name: Add smb users to entrypoint options.
   set_fact:
-    options: "{{ options }} + [ '-u \"{{ item.name }};{{ item.smbpsw }};{{ item.userid }};{{ item.groupid }}\"' ]"
-  loop: "{{ config.users | list }}"
+    options: "{{ options }} + [ '-u \"{{ item.key }};{{ item.value.smbpsw }};{{ item.value.userid }};{{ item.value.groupid }}\"' ]"
+  loop: "{{ config.users | dict2items }}"
+
+- set_fact:
+    volumes: "{{ volumes | list }}"
+    options: "{{ options | list }}"
 
 # - name: Print the smb options to the console.
 #   debug: var=options

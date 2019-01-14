@@ -1,4 +1,2 @@
-shares:
-  - {"name": "dev", "path": "/home/khoe"}
-users:
-  - {"name": "khoe", "smbpsw": "1234", "userid": "1001", "groupid": "1001"}
+shares: {}
+users: {}

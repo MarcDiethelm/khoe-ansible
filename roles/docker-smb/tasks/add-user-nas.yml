@@ -1,0 +1,35 @@
+---
+- include_role:
+    name: common
+    tasks_from: load-config
+  vars:
+    file: "{{ config_file_smb }}"
+
+- set_fact:
+    smb_share: "{{ defaults.share }}"
+    smb_user: "{{ defaults.user }}"
+
+- set_fact:
+    config: "{{ config | combine( { 'shares': { username: smb_share } }, recursive=true ) }}"
+- set_fact:
+    config: "{{ config | combine( { 'users': { username: smb_user } }, recursive=true ) }}"
+
+- name:  write updated users config
+  include_role:
+    name: common
+    tasks_from: write-config
+  vars:
+    file: "{{ config_file_smb }}"
+    content: "{{ config }}"
+    do_backup: yes
+
+- name: "Ensure nas directory is present: {{ defaults.share.path }}."
+  file:
+    path: "{{ defaults.share.path }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ user.gid }}"
+    mode: 0755
+  become: yes
+
+- include_tasks: main.yml

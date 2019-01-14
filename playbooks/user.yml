@@ -1,6 +1,7 @@
 ---
-# usage: ansible-playbook playbooks/user.yml -e task=create -e username=example1 -e password=1234
-# usage: ansible-playbook playbooks/user.yml -e task=delete -e username=example1
+# usage:
+# ansible-playbook playbooks/user.yml -e task=create -e username=example1 -e password=1234
+# ansible-playbook playbooks/user.yml -e task=delete -e username=example1
 
 - hosts: khoe
   gather_facts: no
@@ -16,9 +17,11 @@
     - set_fact:
         users: "{{ config }}"
 
-
+      ########################################
     - name: "Case: Create user {{ username }}"
+      ########################################
       block:
+
         - include_role:
             name: user
             tasks_from: create
@@ -26,10 +29,14 @@
         - include_role:
             name: gpg
             tasks_from: create
+          # todo: fingerprint should be read from the system, not stored. because idempotency. no conflicting sources of truth! (but backing up is still good.)
+          when: users[username].fingerprint is undefined
 
-        - name: Create user config
-          set_fact: # Storing in khoe ensures ability to restore user from backup (todo: backup)
-            users: "{{ users | combine( { username: { 'fingerprint': '{{ fingerprint }}' } }, recursive=True ) }}"
+        - include_role:
+            name: docker-smb
+            tasks_from: add-user-nas
+          vars:
+            user: "{{ users[username] }}"
 
         - include_role: # Create empty backup file list
             name: duply
@@ -37,9 +44,15 @@
 
       when: task == "create"
 
-
+      ########################################
     - name: "Case: Delete user {{ username }}"
+      ########################################
       block:
+
+        - include_role:
+            name: docker-smb
+            tasks_from: delete-user
+
         - include_role:
             name: user
             tasks_from: delete
@@ -49,6 +62,7 @@
             tasks_from: delete
           vars:
             fingerprint: "{{ users[username].fingerprint }}"
+          when: users[username] is defined
 
         - name: Delete user "{{ username }}" from users config
           dict_element_delete:
@@ -62,6 +76,7 @@
 
       when: task == "delete"
 
+      # Storing in khoe ensures ability to restore user from backup (todo: backup)
     - name:  write updated users config
       import_role:
         name: common

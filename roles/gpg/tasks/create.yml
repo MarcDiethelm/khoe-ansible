@@ -9,3 +9,7 @@
     fingerprint: "{{ gpg_output.stdout | regex_search('[A-Z0-9]{40}', multiline=True) }}"
 
 # gpg2 --verbose --quick-set-expire {{ fingerprint }} 0
+
+- name: Create user config
+  set_fact: # Storing in khoe ensures ability to restore user from backup (todo: backup)
+    users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"

@@ -2,11 +2,7 @@
 - import_tasks: build-options.yml
   vars:
     - volumes: []
-
-- name: Print the container volumes options to the console.
-  debug: var=volumes
-- name: Print the smb options to the console.
-  debug: var=options
+    # options are defined in vars/main.yml
 
 - name: (Re-)create a Samba container.
   docker_container:
