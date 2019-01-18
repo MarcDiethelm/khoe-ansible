@@ -6,13 +6,17 @@
     file: "{{ config_file_smb }}"
 
 - set_fact:
-    smb_share: "{{ defaults.share }}"
-    smb_user: "{{ defaults.user }}"
+    smb_options: "{{ defaults.share }}"
+    smb_users: "{{ defaults.user }}"
+- set_fact:
+    smb_options: "{{ smb_options | combine( { 'path': share_path }, recursive=true ) }}"
+  when: share_path is defined
 
 - set_fact:
-    config: "{{ config | combine( { 'shares': { username: smb_share } }, recursive=true ) }}"
+    config: "{{ config | combine( { 'shares': { username: smb_options } }, recursive=true ) }}" # share name == username
+
 - set_fact:
-    config: "{{ config | combine( { 'users': { username: smb_user } }, recursive=true ) }}"
+    config: "{{ config | combine( { 'users': { username: smb_users } }, recursive=true ) }}"
 
 - name:  write updated users config
   include_role:
@@ -23,9 +27,9 @@
     content: "{{ config }}"
     do_backup: yes
 
-- name: "Ensure nas directory is present: {{ defaults.share.path }}."
+- name: "Ensure nas directory is present: {{ smb_options.path }}."
   file:
-    path: "{{ defaults.share.path }}"
+    path: "{{ smb_options.path }}"
     state: directory
     owner: "{{ username }}"
     group: "{{ user.gid }}"
