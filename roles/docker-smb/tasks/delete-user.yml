@@ -10,15 +10,17 @@
     dict: "{{ config.shares }}"
     key: "{{ username }}"
   register: shares
+  when: config.shares is defined
 
 - name: Delete user from smb users
   dict_element_delete:
     dict: "{{ config.users }}"
     key: "{{ username }}"
   register: smb_users
+  when: config.users is defined
 
 - set_fact:
-    config: "{ 'shares': {{ shares.dict }}, 'users': {{ smb_users.dict }} }"
+    config: "{ 'shares': {{ shares.dict | default({}) }}, 'users': {{ smb_users.dict | default({}) }} }"
 
 - name:  write updated users config
   include_role:
