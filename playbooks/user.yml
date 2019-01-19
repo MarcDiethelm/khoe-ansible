@@ -29,8 +29,6 @@
         - include_role:
             name: gpg
             tasks_from: create
-          # todo: fingerprint should be read from the system, not stored. because idempotency. no conflicting sources of truth! (but backing up is still good.)
-          when: users[username].fingerprint is undefined
 
         - include_role:
             name: docker-smb

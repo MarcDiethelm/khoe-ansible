@@ -2,3 +2,4 @@
 - name: "Deleting key with fingerprint {{ fingerprint }} for user: {{ username }}."
   command: "gpg2 --batch --yes --delete-secret-and-public-key {{ fingerprint }}"
   register: gpg_output
+  failed_when: false

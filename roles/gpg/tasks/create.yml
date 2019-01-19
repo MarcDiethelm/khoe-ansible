@@ -1,15 +1,40 @@
 ---
-- name: "Generate keys for user: '{{ username }}'."
-  command: "gpg2 --batch --status-fd 1 --with-colons --passphrase {{ passphrase | default('\"\"') }} --quick-gen-key {{ keyname }}" # used to be: --quick-generate-key
-  register: gpg_output
-   # gnupg does not support operations using su. Unable to ex/import keys this way.
+- block:
 
-- name: "Get fingerprint from gpg output"
-  set_fact:
-    fingerprint: "{{ gpg_output.stdout | regex_search('[A-Z0-9]{40}', multiline=True) }}"
+  - name: "Looking for existing keys"
+    command: "gpg --with-colons --list-secret-keys {{ keyname }}"
+    register: gpg_output
+    failed_when: false
+    changed_when: false
 
-# gpg2 --verbose --quick-set-expire {{ fingerprint }} 0
+  - name: "Get fingerprint from gpg output"
+    set_fact:
+      fingerprint: "{{ gpg_output.stdout | regex_search('[A-Z0-9]{40}', multiline=True) }}"
+    when: gpg_output.stderr == ""
 
-- name: Create user config
-  set_fact: # Storing in khoe ensures ability to restore user from backup (todo: backup)
-    users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
+  - name: Create user config
+    set_fact: # Storing in khoe ensures ability to restore user from backup (todo: backup)
+      users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
+    when: fingerprint is defined
+
+  when: users[username].fingerprint is not defined
+
+
+- block:
+
+  - name: "Generate keys for user: '{{ username }}'."
+    command: "gpg2 --batch --status-fd 1 --with-colons --passphrase {{ passphrase | default('\"\"') }} --quick-gen-key {{ keyname }}" # used to be: --quick-generate-key
+    register: gpg_output
+     # gnupg does not support operations using su. Unable to ex/import keys this way.
+
+  - name: "Get fingerprint from gpg output"
+    set_fact:
+      fingerprint: "{{ gpg_output.stdout | regex_search('[A-Z0-9]{40}', multiline=True) }}"
+
+  # gpg2 --verbose --quick-set-expire {{ fingerprint }} 0
+
+  - name: Create user config
+    set_fact: # Storing in khoe ensures ability to restore user from backup (todo: backup)
+      users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
+
+  when: fingerprint is not defined
