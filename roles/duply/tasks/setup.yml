@@ -42,7 +42,7 @@
           #arch_dir: '/data/backup/.duply-cache'
         # pre: ../../../files/duply-backup/pre
         # post: ../../../files/duply-backup/post
-        excludes: "{{ filelist.stdout_lines + ['- **'] }}"
+        excludes: "{{ filelist.stdout_lines + ['- {{ restore_target }}', '- **'] }}"
 
     duply_backup_jobs:
       - name: "duply-{{ username }}-{{ profile_name }}"

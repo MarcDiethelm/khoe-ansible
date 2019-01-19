@@ -1,0 +1,16 @@
+---
+- name: "Ensure restore target directory is not present: {{ restore_target }}."
+  file:
+    path: "{{ restore_target }}"
+    state: absent
+
+# Only running with `sudo` as on the command line works, using `become` fails
+
+- name: "Restore a full backup to {{ restore_target }} for user '{{ username }}' and profile '{{ profile_name }}'"
+  command: "sudo duply /home/{{ username }}/.duply/{{ profile_name }} restore {{ restore_target }} {{ age }}"
+  register: duply
+  failed_when: duply.stdout is search("Errno")
+  when: task == "restore"
+
+- debug:
+    msg: "{{ duply.stdout }}"

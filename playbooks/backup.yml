@@ -2,6 +2,8 @@
 # usage:
 # ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e passphrase=]
 # ansible-playbook playbooks/backup.yml -e task=backup -e username=example1 [-e profile_name=nas]
+# ansible-playbook playbooks/backup.yml -e task=restore -e username=example1 [-e profile_name=nas] [-e age=0D]  [-e age=2019-01-23]
+# ansible-playbook playbooks/backup.yml -e task=fetch -e username=example1 -e fetch_path=nas/filename [-e profile_name=nas] [-e age=0D]  [-e age=2019-01-23]
 
 - hosts: khoe
   gather_facts: no
@@ -25,7 +27,7 @@
         - include_role:
             name: duply
             tasks_from: setup
-            
+
       when: task == "setup"
 
 
@@ -37,3 +39,23 @@
             tasks_from: backup
 
       when: task == "backup"
+
+
+    - name: "Case: Run duply restore"
+      block:
+
+        - include_role:
+            name: duply
+            tasks_from: restore
+
+      when: task == "restore"
+
+
+    - name: "Case: Run duply fetch"
+      block:
+
+        - include_role:
+            name: duply
+            tasks_from: fetch
+
+      when: task == "fetch"

@@ -1,0 +1,25 @@
+---
+- file:
+    path: "{{ restore_target }}"
+    state: absent
+  become: yes
+
+- name: "Ensure restore target directory is present: {{ restore_target }}."
+  file:
+    path: "{{ restore_target }}"
+    state: directory
+    owner: "{{ username }}"
+    group: khoe # todo: improve
+    mode: 0755
+  become: yes
+
+# Only running with `sudo` as on the command line works, using `become` fails
+
+- name: "Restore file/dir {{ fetch_path }} to {{ restore_target }}/{{ fetch_path | basename }} for user '{{ username }}' and profile '{{ profile_name }}'"
+  command: "sudo duply /home/{{ username }}/.duply/{{ profile_name }} fetch {{ fetch_path }} {{ restore_target }}/{{ fetch_path | basename }} {{ age }}"
+  register: duply
+  failed_when: duply.stdout is search("Errno")
+  when: task == "fetch"
+
+- debug:
+    var: duply

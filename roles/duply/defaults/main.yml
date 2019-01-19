@@ -3,3 +3,6 @@ profile_dir: "/home/{{ username }}/.duply"
 source_path: "/home/{{ username }}"
 target_path: "file:///home/{{ username }}/_backup/{{ profile_name }}"
 backup_list_name: "backup-list-{{ profile_name }}"
+
+restore_target: "{{ share_path }}/restored"
+age: "0D"
