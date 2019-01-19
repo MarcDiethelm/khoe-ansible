@@ -36,9 +36,11 @@
           vars:
             user: "{{ users[username] }}"
 
-        - include_role: # Create empty backup file list
+        - include_role: # Create default backup file list, and create duply profile
             name: duply
             tasks_from: install
+          vars:
+            user: "{{ users[username] }}"
 
       when: task == "create"
 

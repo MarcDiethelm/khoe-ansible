@@ -1,6 +1,6 @@
 defaults:
   share:
-      path: /home/{{ username }}/nas
+      path: '{{ share_path }}'
       users: '{{ username }}'
       browsable: 'yes'
       readonly: 'no'

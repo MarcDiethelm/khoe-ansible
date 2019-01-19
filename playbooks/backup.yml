@@ -1,6 +1,7 @@
 ---
-# usage: ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e passphrase=]
-# usage: ansible-playbook playbooks/backup.yml -e task=backup -e username=example1
+# usage:
+# ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e passphrase=]
+# ansible-playbook playbooks/backup.yml -e task=backup -e username=example1 [-e profile_name=nas]
 
 - hosts: khoe
   gather_facts: no
@@ -24,9 +25,7 @@
         - include_role:
             name: duply
             tasks_from: setup
-
-      become: yes # oefenweb.duply is written to require root
-      become_user: root
+            
       when: task == "setup"
 
 

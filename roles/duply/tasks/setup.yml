@@ -16,6 +16,8 @@
 - include_role:
     name: oefenweb.duply-backup
   vars:
+    ansible_become: yes # oefenweb.duply is written to require root
+    ansible_become_user: root
     duply_backup_profile_directory: "{{ profile_dir }}" # default set by oefenweb.duply: `/etc/duply/[profile_name]`
     duply_backup_profiles:
       '{{ profile_name }}':
