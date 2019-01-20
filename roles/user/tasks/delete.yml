@@ -6,3 +6,5 @@
     remove: yes
   register: result
   become: yes
+
+# not explicitly deleting primary group. system should take care of it

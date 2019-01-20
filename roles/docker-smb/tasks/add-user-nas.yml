@@ -32,7 +32,7 @@
     path: "{{ smb_options.path }}"
     state: directory
     owner: "{{ username }}"
-    group: "{{ user.gid }}"
+    group: "{{ username }}"
     mode: 0755
   become: yes
 

@@ -1,8 +1,14 @@
 ---
+- name: Ensure group "{{ username }}" exists
+  group:
+    name: "{{ username }}"
+    state: present
+  become: yes
+
 - name: Create user "{{ username }}"
   user:
     name: "{{ username }}"
-    group: "{{ defaults.primary_group }}"
+    group: "{{ username }}"
     password: "{{ password | password_hash('sha512') }}"
   register: user
   become: yes
@@ -15,18 +21,17 @@
     group: khoe
     mode: 0755
   become: yes
-  become_user: "{{ username }}"
 
-- name: "Get uid for '{{ username }}'"
+- name: "Get uid for '{{ username }}'" # needed for docker-smb, could be moved there
   command: id --user {{ username }}
   register: uid
   changed_when: false
 
-- name: "Get uid for '{{ username }}'"
+- name: "Get uid for '{{ username }}'" # needed for docker-smb, could be moved there
   command: id --group {{ username }}
   register: gid
   changed_when: false
 
-- name: Create user config
+- name: Create user config # don't see the need to save this anymore
   set_fact:
     users: "{{ users | combine( { username: { 'uid': uid.stdout, 'gid': gid.stdout } }, recursive=True ) }}"

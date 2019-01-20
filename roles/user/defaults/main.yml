@@ -1,4 +1,2 @@
-defaults:
-  primary_group: "khoe"
 user_model:
   fingerprint: null

@@ -9,7 +9,7 @@
     path: "{{ restore_target }}"
     state: directory
     owner: "{{ username }}"
-    group: khoe # todo: improve
+    group: "{{ username }}"
     mode: 0755
   become: yes
 

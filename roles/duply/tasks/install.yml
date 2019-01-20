@@ -4,10 +4,9 @@
     content: "+ {{ share_path }}"
     dest: "{{ config_dir_user }}/{{ backup_list_name }}"
     force: no # if it already exists, do nothing
-    group: khoe
     owner: "{{ username }}"
+    group: khoe
     mode: 0640
   become: yes
-  become_user: "{{ username }}"
 
 - include_tasks: setup.yml
