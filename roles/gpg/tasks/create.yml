@@ -1,23 +1,18 @@
 ---
-- block:
+- name: "Looking for existing keys {{ keyname }}"
+  command: "gpg --with-colons --list-secret-keys {{ keyname }}"
+  register: gpg_output
+  failed_when: false
+  changed_when: false
 
-  - name: "Looking for existing keys"
-    command: "gpg --with-colons --list-secret-keys {{ keyname }}"
-    register: gpg_output
-    failed_when: false
-    changed_when: false
+- name: "Get fingerprint from gpg output"
+  set_fact:
+    fingerprint: "{{ gpg_output.stdout | regex_search('[A-Z0-9]{40}', multiline=True) }}"
+  when: gpg_output.stderr == ""
 
-  - name: "Get fingerprint from gpg output"
-    set_fact:
-      fingerprint: "{{ gpg_output.stdout | regex_search('[A-Z0-9]{40}', multiline=True) }}"
-    when: gpg_output.stderr == ""
-
-  - name: Create user config
-    set_fact: # Storing in khoe ensures ability to restore user from backup (todo: backup)
-      users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
-    when: fingerprint is defined
-
-  when: users[username].fingerprint is not defined
+- debug:
+    msg: "Found existing keys {{ keyname }}: fingerprint"
+  when: fingerprint is defined
 
 
 - block:
@@ -38,3 +33,9 @@
       users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
 
   when: fingerprint is not defined
+
+
+- name: Add fingerprint to user facts
+  set_fact: # Storing in khoe ensures ability to restore user from backup (todo: backup)
+    users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
+  when: fingerprint is defined
