@@ -1,5 +1,11 @@
 ---
+  # Using `sudo` like on the command line works, using `become` fails
 - name: "Run a duply backup for user '{{ username }}' and profile '{{ profile_name }}'"
   command: "sudo duply /home/{{ username }}/.duply/{{ profile_name }} backup"
   register: duply
-  # Only running with `sudo` as on the command line works, using `become` fails
+  when: remote is undefined
+
+- name: "Run a duply backup for user '{{ username }}' and profile '{{ profile_name }}'"
+  command: "sudo AWS_ACCESS_KEY_ID={{ remote_backup_key }} AWS_SECRET_ACCESS_KEY={{ remote_backup_psw }} duply /home/{{ username }}/.duply/{{ profile_name }} backup"
+  register: duply
+  when: remote == "s3"

@@ -13,6 +13,9 @@
 #- /home/example1/nas/bar.txt
 #+ /home/example1/nas
 
+- debug:
+    var: target_path
+
 - include_role:
     name: oefenweb.duply-backup
   vars:
@@ -28,9 +31,9 @@
           source: "{{ source_path }}"
           target: "{{ target_path }}"
 
-          # remote auth
-          target_user: null
-          target_path: null
+          # remote auth. Duply removed this functionality. Need to set env vars in backup.yml
+          #target_user: "{{ remote_backup_key }}"
+          #target_pass: "{{ remote_backup_psw }}"
 
           dupl_params: null
 
@@ -42,7 +45,7 @@
           #arch_dir: '/data/backup/.duply-cache'
         # pre: ../../../files/duply-backup/pre
         # post: ../../../files/duply-backup/post
-        excludes: "{{ filelist.stdout_lines + ['- {{ restore_target }}', '- **'] }}"
+        excludes: "{{ filelist.stdout_lines + ['- '+restore_target, '- **'] }}"
 
     duply_backup_jobs:
       - name: "duply-{{ username }}-{{ profile_name }}"
