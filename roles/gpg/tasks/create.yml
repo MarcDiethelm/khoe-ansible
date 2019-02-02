@@ -8,7 +8,7 @@
 - name: "Get fingerprint from gpg output"
   set_fact:
     fingerprint: "{{ gpg_output.stdout | regex_search('[A-Z0-9]{40}', multiline=True) }}"
-  when: gpg_output.stderr == ""
+  when: gpg_output.stderr is not search("No secret key")
 
 - debug:
     msg: "Found existing keys {{ keyname }}: fingerprint"
