@@ -6,11 +6,6 @@
 scriptpath=$(dirname $(realpath $0))
 #source $scriptpath/env.template
 
-printf '\n%s\n' "Setting permissions."
-chmod +x \
-  $scriptpath/install/passwordless-sudo.sh \
-  $scriptpath/install/install-ansible.sh \
-
 printf '\n%s\n' "Running install/passwordless-sudo.sh."
 $scriptpath/install/passwordless-sudo.sh
 
