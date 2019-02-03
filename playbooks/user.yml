@@ -38,7 +38,7 @@
 
         - include_role: # Create default backup file list, and create duply profile
             name: duply
-            tasks_from: install
+            tasks_from: setup
           vars:
             user: "{{ users[username] }}"
 

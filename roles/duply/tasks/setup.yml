@@ -4,6 +4,16 @@
 - debug:
     msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nEncrypting with gpg key: {{ user.fingerprint }}"
 
+- name: Create empty backup file list (if none exists)
+  copy:
+    content: "+ {{ share_path }}"
+    dest: "{{ config_dir_user }}/{{ backup_list_name }}"
+    force: no # if it already exists, do nothing
+    owner: "{{ username }}"
+    group: khoe
+    mode: 0640
+  become: yes
+
 
 - name: Read filelist
   command: "cat {{ config_dir_user }}/{{ backup_list_name }}"

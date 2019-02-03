@@ -52,3 +52,7 @@
         ansible_become: yes
         ansible_become_user: root
         duply_install: [ 'duplicity' ]
+
+    - include_role:
+        name: duply
+        tasks_from: install

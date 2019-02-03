@@ -4,6 +4,7 @@
     repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
     state: present
     update_cache: yes
+  become: yes
   when: ansible_distribution == 'Ubuntu'
 
 - name: Install boto.
@@ -11,15 +12,3 @@
     name: python-boto
     state: present
   become: yes
-
-- name: Create empty backup file list
-  copy:
-    content: "+ {{ share_path }}"
-    dest: "{{ config_dir_user }}/{{ backup_list_name }}"
-    force: no # if it already exists, do nothing
-    owner: "{{ username }}"
-    group: khoe
-    mode: 0640
-  become: yes
-
-- include_tasks: setup.yml
