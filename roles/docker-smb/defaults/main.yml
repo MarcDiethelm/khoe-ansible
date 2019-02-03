@@ -10,6 +10,6 @@ defaults:
       comment: "{{ username }}''s private NAS"
 
   user:
-      smbpsw: '{{ password }}'
+      smbpsw: '{{ smbpassword | default(password) }}'
       userid: '{{ user.uid }}'
       groupid: '{{ user.gid }}'

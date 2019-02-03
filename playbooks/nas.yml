@@ -1,6 +1,6 @@
 ---
 # usage:
-# ansible-playbook playbooks/nas.yml -e task=create -e username=example1 -e password=1234 [-e share_path=/home/example1/nas]
+# ansible-playbook playbooks/nas.yml -e task=create -e username=example1 -e smbpassword=1234 [-e share_path=/home/example1/nas]
 # ansible-playbook playbooks/nas.yml # (re-)start all shares
 
 - hosts: khoe
