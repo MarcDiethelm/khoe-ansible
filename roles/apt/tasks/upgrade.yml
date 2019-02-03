@@ -1,5 +1,5 @@
 ---
-# Ubuntu upgrade with Ansible 
+# Ubuntu upgrade with Ansible
 # https://gist.github.com/kiview/eb82c422d341b168f12cbe0776fef41b
 
 - name: Update apt cache
@@ -20,10 +20,10 @@
   ignore_errors: true
   when: reboot_required_file.stat.exists == true
 
-- name: Waiting for server to come back
-  become: yes
-  local_action: wait_for
-    port=22
-    host={{ inventory_hostname }}
-    search_regex=OpenSSH
-    delay=10
+# - name: Waiting for server to come back
+#   become: no
+#   local_action: wait_for
+#     port=22
+#     host={{ inventory_hostname }}
+#     search_regex=OpenSSH
+#     delay=10
