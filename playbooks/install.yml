@@ -40,13 +40,6 @@
         ansible_become_user: root
 
     - include_role:
-        name: apt
-        tasks_from: upgrade
-      vars:
-        ansible_become: yes
-        ansible_become_user: root
-
-    - include_role:
         name: oefenweb.duply
       vars:
         ansible_become: yes
@@ -56,3 +49,10 @@
     - include_role:
         name: duply
         tasks_from: install
+
+    - include_role:
+        name: apt
+        tasks_from: upgrade
+      vars:
+        ansible_become: yes
+        ansible_become_user: root
