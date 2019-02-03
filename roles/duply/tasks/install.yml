@@ -1,12 +1,4 @@
 ---
-- name: Add Universe repository
-  apt_repository:
-    repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
-    state: present
-    update_cache: yes
-  become: yes
-  when: ansible_distribution == 'Ubuntu'
-
 - name: Install boto.
   apt:
     name: python-boto

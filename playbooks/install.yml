@@ -1,5 +1,21 @@
 ---
 - hosts: khoe
+  gather_facts: yes
+
+  pre_tasks:
+    - name: Update apt cache.
+      apt: update_cache=true cache_valid_time=600
+      when: ansible_os_family == 'Debian'
+      become: yes
+
+    - name: Add Universe repository
+      apt_repository:
+        repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
+        state: present
+        update_cache: yes
+      become: yes
+      when: ansible_distribution == 'Ubuntu'
+
   tasks:
     #- include_role: # Install basic tools (mosh) and khoe config (currently a placeholder)
     #    name: install
