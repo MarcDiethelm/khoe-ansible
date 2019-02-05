@@ -1,9 +1,0 @@
----
-- import_role: # belongs in meta as a dependency, but that wouldn't allow use of tasks_from to load other than main.yml
-    name: common
-    tasks_from: load-config
-  vars:
-    file: mounts.yml
-
-- include_tasks: mount.yml
-  loop: "{{ config | list }}"

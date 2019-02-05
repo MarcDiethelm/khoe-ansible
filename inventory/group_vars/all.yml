@@ -1,7 +1,7 @@
 config_path: /home/khoe/ansible/config
 config_file_khoe: khoe.yml
 config_file_users: users.yml
-config_file_mounts: users.yml
+config_file_mounts: mounts.yml
 config_file_smb: smb.yml
 share_path: '/home/{{ username }}/nas'
 

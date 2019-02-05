@@ -1,0 +1,77 @@
+---
+# Usage:
+# ansible-playbook playbooks/mount.yml -e task=create -e disk_label=label
+# ansible-playbook playbooks/mount.yml -e task=delete -e disk_label=label
+# ansible-playbook playbooks/mount.yml   # re-mount disks previously mounted with create
+
+- hosts: khoe
+  gather_facts: no
+
+  pre_tasks:
+
+    - include_role:
+        name: common
+        tasks_from: load-config
+      vars:
+        file: "{{ config_file_mounts }}"
+
+    - set_fact:
+        mounts: "{{ config }}"
+
+  tasks:
+
+    - include_role:
+        name: pmount
+        tasks_from: mount
+      with_dict: "{{ mounts }}"
+      when: task is undefined
+
+    # case: Add disk mount
+    ###########################################
+    - block:
+
+        - name: Create mount config
+          set_fact:
+            mounts: "{{ mounts | combine( { disk_label: {} }, recursive=true ) }}"
+
+        - include_role: # not using handlers because we want this to fail if input was bad
+            name: pmount
+            tasks_from: mount
+          with_dict: "{{ mounts }}"
+
+        - name:  write updated mounts config
+          include_role:
+            name: common
+            tasks_from: write-config
+          vars:
+            file: "{{ config_file_mounts }}"
+            content: "{{ mounts }}"
+            do_backup: no
+
+      when: task is defined and task == "create"
+
+
+    # case: Delete disk mount
+    ###########################################
+    - block:
+
+      - name: "Delete disk mount: {{ disk_label }}"
+        dict_element_delete:
+          dict: "{{ mounts }}"
+          key: "{{ disk_label }}"
+        register: dict_element_delete
+
+      - include_role:
+          name: pmount
+          tasks_from: unmount
+
+      - name:  write updated mounts config
+        include_role:
+          name: common
+          tasks_from: write-config
+        vars:
+          file: "{{ config_file_mounts }}"
+          content: "{{ dict_element_delete.dict }}"
+          do_backup: no
+
+      when: task is defined and task == "delete"
