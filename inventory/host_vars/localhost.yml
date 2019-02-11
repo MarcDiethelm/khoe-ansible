@@ -1,0 +1,4 @@
+# remote backup config
+# target_path: s3://ams3.digitaloceanspaces.com/khoe-cloud-backup/khoe-example1-nas
+# remote_backup_key: QWERTYUIOP1234567890
+# remote_backup_psw: qwertyuiop123456789qwertyuiop1234567890qwer
