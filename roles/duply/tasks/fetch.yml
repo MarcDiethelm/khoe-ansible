@@ -13,16 +13,17 @@
     mode: 0755
   become: yes
 
-# Using `sudo` like on the command line works, using `become` fails
+# Using `sudo` as on the command line works, using `become` fails
+# `shell` command is needed to correctly handle UTF-8 chars in `fetch_path` and wrapping in single quotes
 
-- name: "Restore file/dir {{ fetch_path }} to {{ restore_target }}/{{ fetch_path | basename }} for user '{{ username }}' and profile '{{ profile_name }}'"
-  command: "sudo AWS_ACCESS_KEY_ID={{ remote_backup_key }} AWS_SECRET_ACCESS_KEY={{ remote_backup_psw }} duply /home/{{ username }}/.duply/{{ profile_name }} fetch {{ fetch_path }} {{ restore_target }}/{{ fetch_path | basename }} {{ age }}"
+- name: "Restore file/dir '{{ fetch_path }}' to '{{ restore_target }}/{{ fetch_path | basename }}' for user '{{ username }}' and profile '{{ profile_name }}'"
+  shell: "sudo AWS_ACCESS_KEY_ID={{ remote_backup_key }} AWS_SECRET_ACCESS_KEY={{ remote_backup_psw }} duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ fetch_path }}' '{{ restore_target }}/{{ fetch_path | basename }}' {{ age }}"
   register: duply
-  failed_when: duply.stdout is search("Errno")
-  when: remote == "s3"
+  failed_when: duply.stdout is search("Errno") or duply.rc > 0
+  when: remote is defined and remote == "s3"
 
-- name: "Restore file/dir {{ fetch_path }} to {{ restore_target }}/{{ fetch_path | basename }} for user '{{ username }}' and profile '{{ profile_name }}'"
-  command: "sudo duply /home/{{ username }}/.duply/{{ profile_name }} fetch {{ fetch_path }} {{ restore_target }}/{{ fetch_path | basename }} {{ age }}"
+- name: "Restore file/dir '{{ fetch_path }}' to '{{ restore_target }}/{{ fetch_path | basename }}' for user '{{ username }}' and profile '{{ profile_name }}'"
+  shell: "sudo duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ fetch_path }}' '{{ restore_target }}/{{ fetch_path | basename }}' {{ age }}"
   register: duply
-  failed_when: duply.stdout is search("Errno")
+  failed_when: duply.stdout is search("Errno") or duply.rc > 0
   when: remote is undefined

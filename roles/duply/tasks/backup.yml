@@ -8,4 +8,4 @@
 - name: "Run a duply backup for user '{{ username }}' and profile '{{ profile_name }}'"
   command: "sudo AWS_ACCESS_KEY_ID={{ remote_backup_key }} AWS_SECRET_ACCESS_KEY={{ remote_backup_psw }} duply /home/{{ username }}/.duply/{{ profile_name }} backup"
   register: duply
-  when: remote == "s3"
+  when: remote is defined and remote == "s3"
