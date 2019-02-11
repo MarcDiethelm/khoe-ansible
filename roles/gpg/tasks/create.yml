@@ -28,14 +28,22 @@
 
   # gpg2 --verbose --quick-set-expire {{ fingerprint }} 0
 
-  - name: Create user config
-    set_fact: # Storing in khoe ensures ability to restore user from backup (todo: backup)
-      users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
-
   when: fingerprint is not defined
 
+- block:
 
-- name: Add fingerprint to user facts
-  set_fact: # Storing in khoe ensures ability to restore user from backup (todo: backup)
-    users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
+    - name: Add fingerprint to user facts
+      set_fact:
+        users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
+
+      # Storing in khoe ensures ability to restore user from backup (todo: backup)
+    - name:  write updated users config
+      import_role:
+        name: common
+        tasks_from: write-config
+      vars:
+        file: "{{ config_file_users }}"
+        content: "{{ users }}"
+        do_backup: no
+
   when: fingerprint is defined
