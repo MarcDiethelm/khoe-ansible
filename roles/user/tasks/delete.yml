@@ -8,3 +8,23 @@
   become: yes
 
 # not explicitly deleting primary group. system should take care of it
+
+- name: Delete user "{{ username }}" from users config
+  dict_element_delete:
+    dict: "{{ users | from_yaml }}"
+    key: "{{ username }}"
+  register: result
+
+- name: "Update users var"
+  set_fact:
+    users: "{{ result.dict }}"
+
+  # Storing in khoe ensures ability to restore user from backup (todo: backup)
+- name:  write updated users config
+  import_role:
+    name: common
+    tasks_from: write-config
+  vars:
+    file: "{{ config_file_users }}"
+    content: "{{ users }}"
+    do_backup: yes

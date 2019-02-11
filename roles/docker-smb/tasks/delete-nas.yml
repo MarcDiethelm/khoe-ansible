@@ -1,0 +1,70 @@
+---
+- fail:
+    msg: "{{ username }} is not defined"
+  when: username is not defined
+
+- include_role:
+    name: common
+    tasks_from: load-config
+  vars:
+    file: "{{ config_file_smb }}"
+- set_fact:
+    smb: "{{ config }}"
+
+- block:
+    - include_role:
+        name: common
+        tasks_from: load-config
+      vars:
+        file: "{{ config_file_users }}"
+    - set_fact:
+        users: "{{ config }}"
+  when: users is not defined
+
+- set_fact:
+    user: "{{ users[username] }}"
+    share_name: "{{ item.key }}"
+    keyname: "{{ username + '_' + share_name }}"
+
+- name: Delete nas from smb.shares
+  dict_element_delete:
+    dict: "{{ smb.shares }}"
+    key: "{{ keyname }}"
+  register: shares
+
+- set_fact:
+    smb: "{ 'shares': {{ shares.dict | default({}) }}, 'users': {{ smb.users }} }"
+
+- name:  write updated smb config
+  include_role:
+    name: common
+    tasks_from: write-config
+  vars:
+    file: "{{ config_file_smb }}"
+    content: "{{ smb }}"
+    do_backup: yes
+
+- name: Delete nas from user.shares
+  dict_element_delete:
+    dict: "{{ user.shares }}"
+    key: "{{ share_name }}"
+  register: user_shares
+
+- name: "Update user.shares var"
+  set_fact:
+    user: "{{ user | combine( { 'shares': user_shares.dict } ) }}"
+
+- name: "Update users var"
+  set_fact:
+    users: "{{ users | combine( { username: user } ) }}"
+
+- name:  write updated users config
+  include_role:
+    name: common
+    tasks_from: write-config
+  vars:
+    file: "{{ config_file_users }}"
+    content: "{{ users }}"
+    do_backup: yes
+
+- include_tasks: main.yml

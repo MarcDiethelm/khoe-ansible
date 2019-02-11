@@ -34,4 +34,14 @@
 
 - name: Create user config # don't see the need to save this anymore
   set_fact:
-    users: "{{ users | combine( { username: { 'uid': uid.stdout, 'gid': gid.stdout } }, recursive=True ) }}"
+    users: "{{ users | combine( { username: { 'uid': uid.stdout, 'gid': gid.stdout, 'shares': {} } }, recursive=True ) }}"
+
+  # Storing in khoe ensures ability to restore user from backup (todo: backup)
+- name:  write updated users config
+  import_role:
+    name: common
+    tasks_from: write-config
+  vars:
+    file: "{{ config_file_users }}"
+    content: "{{ users }}"
+    #do_backup: yes

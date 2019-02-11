@@ -1,21 +1,22 @@
 ---
 # usage:
-# ansible-playbook playbooks/user.yml -e task=create -e username=<example1> -e password=<1234> [-e share_path=/home/example1/nas] [-e smbpassword=<2345>]
+# ansible-playbook playbooks/user.yml -e task=create -e username=example1 -e password=1234 [-e share_name=nas] [disk_label=label] [-e smbpassword=2345]
 # ansible-playbook playbooks/user.yml -e task=delete -e username=example1
 
 - hosts: khoe
   gather_facts: no
 
+  pre_tasks:
+
+      - include_role:
+          name: common
+          tasks_from: load-config
+        vars:
+          file: "{{ config_file_users }}"
+      - set_fact:
+          users: "{{ config }}"
+
   tasks:
-
-    - include_role:
-        name: common
-        tasks_from: load-config
-      vars:
-        file: "{{ config_file_users }}"
-
-    - set_fact:
-        users: "{{ config }}"
 
       ########################################
     - name: "Case: Create user {{ username }}"
@@ -33,14 +34,10 @@
         - include_role:
             name: docker-smb
             tasks_from: add-user-nas
-          vars:
-            user: "{{ users[username] }}"
 
         - include_role: # Create default backup file list, and create duply profile
             name: duply
             tasks_from: setup
-          vars:
-            user: "{{ users[username] }}"
 
       when: task == "create"
 
@@ -51,37 +48,15 @@
 
         - include_role:
             name: docker-smb
+            tasks_from: delete-nas
+          with_dict: "{{ users[username].shares }}"
+
+        - include_role:
+            name: docker-smb
             tasks_from: delete-user
 
         - include_role:
             name: user
             tasks_from: delete
 
-        - include_role:
-            name: gpg
-            tasks_from: delete
-          vars:
-            fingerprint: "{{ users[username].fingerprint }}"
-          when: users[username] is defined
-
-        - name: Delete user "{{ username }}" from users config
-          dict_element_delete:
-            dict: "{{ users | from_yaml }}"
-            key: "{{ username }}"
-          register: result
-
-        - name: "Update users var"
-          set_fact:
-            users: "{{ result.dict }}"
-
       when: task == "delete"
-
-      # Storing in khoe ensures ability to restore user from backup (todo: backup)
-    - name:  write updated users config
-      import_role:
-        name: common
-        tasks_from: write-config
-      vars:
-        file: "{{ config_file_users }}"
-        content: "{{ users }}"
-        #do_backup: yes

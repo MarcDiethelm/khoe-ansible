@@ -1,5 +1,10 @@
+shares_dirname: 'nas'
+shares_path: '/home/{{ username }}/{{ shares_dirname }}'
+share_path:  '/home/{{ username }}/{{ shares_dirname }}/{{ share_name }}'
+
 defaults:
   share:
+      name: '{{ share_name }}'
       path: '{{ share_path }}'
       users: '{{ username }}'
       browsable: 'yes'
@@ -11,5 +16,5 @@ defaults:
 
   user:
       smbpsw: '{{ smbpassword | default(password) }}'
-      userid: '{{ user.uid }}'
-      groupid: '{{ user.gid }}'
+      userid: '{{ users[username].uid }}'
+      groupid: '{{ users[username].gid }}'

@@ -3,3 +3,19 @@
   command: "gpg2 --batch --yes --delete-secret-and-public-key {{ fingerprint }}"
   register: gpg_output
   failed_when: false
+
+- include_role:
+    name: gpg
+    tasks_from: delete
+    vars:
+    fingerprint: "{{ users[username].fingerprint }}"
+    when: users[username] is defined
+
+- name:  write updated users config
+  import_role:
+    name: common
+    tasks_from: write-config
+  vars:
+    file: "{{ config_file_users }}"
+    content: "{{ users }}"
+    do_backup: yes

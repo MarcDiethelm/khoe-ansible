@@ -1,14 +1,14 @@
 ---
 # usage:
-# ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e passphrase=]
+# ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e passphrase=] [-e share_name=nas]
 # ansible-playbook playbooks/backup.yml -e task=backup -e username=example1 [-e profile_name=nas] [-e remote=s3]
 # ansible-playbook playbooks/backup.yml -e task=restore -e username=example1 [-e profile_name=nas] [-e remote=s3] [-e age=0D]  [-e age=2019-01-23]
-# ansible-playbook playbooks/backup.yml -e task=fetch -e username=example1 -e fetch_path=nas/filename [-e profile_name=nas] [-e remote=s3] [-e age=0D]  [-e age=2019-01-23]
+# ansible-playbook playbooks/backup.yml -e task=fetch -e username=example1 -e "fetch_path='nas/filename'" [-e profile_name=nas] [-e remote=s3] [-e age=0D]  [-e age=2019-01-23]
 
 - hosts: khoe
   gather_facts: no
 
-  tasks:
+  pre_tasks:
 
     - include_role:
         name: common
@@ -20,6 +20,7 @@
         users: "{{ config }}"
         user: "{{ config[username] }}"
 
+  tasks:
 
     - name: "Case: Create duply backup profile"
       block:

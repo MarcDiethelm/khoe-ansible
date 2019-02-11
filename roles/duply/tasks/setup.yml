@@ -1,12 +1,31 @@
 ---
 - set_fact: cronjob_state="absent" # absent | present
 
+
+- block:
+    - include_role:
+        name: common
+        tasks_from: load-config
+      vars:
+        file: "{{ config_file_users }}"
+    - set_fact:
+        users: "{{ config }}"
+  when: users is not defined
+
+- set_fact:
+    user: "{{ users[username] }}"
+
+# share_name defaults to username (via group_vars)
+- set_fact:
+    source_path: "{{ user.shares[share_name] }}"
+    profile_name: "{{ share_name }}"
+
 - debug:
     msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nEncrypting with gpg key: {{ user.fingerprint }}"
 
 - name: Create empty backup file list (if none exists)
   copy:
-    content: "+ {{ share_path }}"
+    content: "+ {{ source_path }}/{{ share_name }}"
     dest: "{{ config_dir_user }}/{{ backup_list_name }}"
     force: no # if it already exists, do nothing
     owner: "{{ username }}"
@@ -55,7 +74,7 @@
           #arch_dir: '/data/backup/.duply-cache'
         # pre: ../../../files/duply-backup/pre
         # post: ../../../files/duply-backup/post
-        excludes: "{{ filelist.stdout_lines + ['- '+restore_target, '- **'] }}"
+        excludes: "{{ filelist.stdout_lines + ['- '+ restore_target, '- **'] }}"
 
     duply_backup_jobs:
       - name: "duply-{{ username }}-{{ profile_name }}"

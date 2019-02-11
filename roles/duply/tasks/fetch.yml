@@ -1,4 +1,20 @@
 ---
+- block:
+    - include_role:
+        name: common
+        tasks_from: load-config
+      vars:
+        file: "{{ config_file_users }}"
+    - set_fact:
+        users: "{{ config }}"
+  when: users is not defined
+
+- set_fact:
+    user: "{{ users[username] }}"
+    share_name: "{{ profile_name }}"
+- set_fact:
+    source_path: "{{ user.shares[share_name] }}"
+
 - file:
     path: "{{ restore_target }}"
     state: absent

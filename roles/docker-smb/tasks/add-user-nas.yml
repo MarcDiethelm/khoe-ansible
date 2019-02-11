@@ -4,27 +4,66 @@
     tasks_from: load-config
   vars:
     file: "{{ config_file_smb }}"
+- set_fact:
+    shares: "{{ config }}"
+
+- include_role:
+    name: common
+    tasks_from: load-config
+  vars:
+    file: "{{ config_file_users }}"
+- set_fact:
+    users: "{{ config }}"
+
+- block:
+    - name: Check that disk_label '{{ disk_label }}' is mounted
+      command: grep -w {{ disk_label }} /proc/mounts
+      register: grep
+      failed_when: false
+    - fail:
+        msg: "disk_label '{{ disk_label }}' is not mounted."
+      when: grep.rc == 1
+
+    - set_fact:
+        shares_path: "/media/{{ disk_label }}/{{ username }}/{{ shares_dirname }}" # needed for duply backup; stored in users.yml:user.shares
+        share_path:  "/media/{{ disk_label }}/{{ username }}/{{ shares_dirname }}/{{ share_name }}"
+  when: disk_label is defined
+
+- assert:
+    that:
+      - users[username] is defined
+    msg: "User '{{ username }}' not found in users config. Create the user first."
 
 - set_fact:
     smb_options: "{{ defaults.share }}"
     smb_users: "{{ defaults.user }}"
-- set_fact:
-    smb_options: "{{ smb_options | combine( { 'path': share_path }, recursive=true ) }}"
-  when: share_path is defined
+    keyname: "{{ username + '_' + share_name }}"
 
 - set_fact:
-    config: "{{ config | combine( { 'shares': { username: smb_options } }, recursive=true ) }}" # share name == username
+    shares: "{{ shares | combine( { 'shares': { keyname: smb_options } }, recursive=true ) }}"
 
 - set_fact:
-    config: "{{ config | combine( { 'users': { username: smb_users } }, recursive=true ) }}"
+    shares: "{{ shares | combine( { 'users': { username: smb_users } }, recursive=true ) }}"
 
-- name:  write updated users config
+- set_fact:
+    users: "{{ users | combine( { username: { 'shares': { share_name: shares_path } } }, recursive=true ) }}" # using dict instead of list for easy accessing and deleting
+
+- name:  write updated smb config
   include_role:
     name: common
     tasks_from: write-config
   vars:
     file: "{{ config_file_smb }}"
-    content: "{{ config }}"
+    content: "{{ shares }}"
+    do_backup: yes
+
+- name:  write updated user config
+  include_role:
+    name: common
+    tasks_from: write-config
+  vars:
+    file: "{{ config_file_users }}"
+    content: "{{ users }}"
     do_backup: yes
 
 - name: "Ensure nas directory is present: {{ smb_options.path }}."
