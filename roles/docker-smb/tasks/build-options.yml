@@ -7,18 +7,24 @@
 
 - name: Add volumes to container options.
   set_fact:
-    volumes: "{{ volumes }} + [ '{{ item.value.path }}:{{ item.value.path }}' ]"
+    volumes: "{{ volumes }} + [ '{{ i.value.path }}:{{ i.value.path }}' ]"
   loop: "{{ config.shares | dict2items }}"
+  loop_control:
+    loop_var: i
 
 - name: Add smb shares to entrypoint options.
   set_fact:
-    options: "{{ options }} + [ '-s \"{{ item.key }};{{ item.value.path }};{{ item.value.browsable }};{{ item.value.readonly }};{{ item.value.guest }};{{ item.value.users }};{{ item.value.admins }};{{ item.value.writelist }};{{ item.value.comment }}\"' ]"
+    options: "{{ options }} + [ '-s \"{{ i.value.name }};{{ i.value.path }};{{ i.value.browsable }};{{ i.value.readonly }};{{ i.value.guest }};{{ i.value.users }};{{ i.value.admins }};{{ i.value.writelist }};{{ i.value.comment }}\"' ]"
   loop: "{{ config.shares | dict2items }}"
+  loop_control:
+    loop_var: i
 
 - name: Add smb users to entrypoint options.
   set_fact:
-    options: "{{ options }} + [ '-u \"{{ item.key }};{{ item.value.smbpsw }};{{ item.value.userid }};{{ item.value.groupid }}\"' ]"
+    options: "{{ options }} + [ '-u \"{{ i.key }};{{ i.value.smbpsw }};{{ i.value.userid }};{{ i.value.groupid }}\"' ]"
   loop: "{{ config.users | dict2items }}"
+  loop_control:
+    loop_var: i
 
 - set_fact:
     volumes: "{{ volumes | list }}"
