@@ -4,3 +4,5 @@
 
 /roles/_galaxy
 /config
+
+host_vars/
