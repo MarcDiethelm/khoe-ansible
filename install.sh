@@ -7,10 +7,10 @@ scriptpath=$(dirname $(realpath $0))
 #source $scriptpath/env.template
 
 printf '\n%s\n' "Running install/passwordless-sudo.sh."
-$scriptpath/install/passwordless-sudo.sh
+$scriptpath/scripts/passwordless-sudo.sh
 
 printf '\n%s\n' "Running install/install-ansible.sh."
-$scriptpath/install/install-ansible.sh
+$scriptpath/scripts/install-ansible.sh
 
 printf '\n%s\n' "Installing playbook dependencies from Ansible Galaxy."
 # ./ansible.cfg sets roles_path
