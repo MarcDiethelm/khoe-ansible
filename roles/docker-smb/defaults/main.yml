@@ -17,4 +17,5 @@ defaults:
   user:
       smbpsw: '{{ smbpassword | default(password) }}'
       userid: '{{ users[username].uid }}'
-      groupid: '{{ users[username].gid }}'
+      group: '{{ username }}'
+      groupid: '{{ users[username].gid }}' # unused by dperson/samba

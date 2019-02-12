@@ -20,3 +20,11 @@
     command: "{{ options | list }}"
     #volumes_from: # todo: create a data container and link it
     #  - mydata
+
+  # Workaround for dperson/smb not knowing/setting user's gid, resulting in files created via smb having the wrong group.
+  # https://github.com/dperson/samba/issues/190)
+- name: Set correct group IDs in container
+  command: "docker exec -i smb bash -l -c 'groupmod -g {{ i.value.groupid }} {{ i.key }}'"
+  loop: "{{ config.users | dict2items }}"
+  loop_control:
+    loop_var: i
