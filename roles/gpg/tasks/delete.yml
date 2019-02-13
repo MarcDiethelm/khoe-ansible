@@ -4,13 +4,6 @@
   register: gpg_output
   failed_when: false
 
-- include_role:
-    name: gpg
-    tasks_from: delete
-    vars:
-    fingerprint: "{{ users[username].fingerprint }}"
-    when: users[username] is defined
-
 - name:  write updated users config
   import_role:
     name: common
