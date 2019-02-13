@@ -60,6 +60,12 @@
             tasks_from: delete-user
 
         - include_role:
+            name: gpg
+            tasks_from: delete
+          vars:
+            fingerprint: "{{ users[username].fingerprint }}"
+
+        - include_role:
             name: user
             tasks_from: delete
 
