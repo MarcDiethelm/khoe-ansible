@@ -83,3 +83,9 @@
         # run every day at 04:00
         minute: "0"
         hour: "4"
+
+
+  # Using `sudo` like on the command line works, using `become` fails
+- name: "Run a duply status command (to copy the gpg keys to the profile now)"
+  command: "sudo duply {{ profile_dir }}/{{ profile_name }} status"
+  register: duply
