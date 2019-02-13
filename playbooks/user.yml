@@ -46,6 +46,10 @@
       ########################################
       block:
 
+        - fail:
+            msg: "User '{{ username }} not found in user config.'"
+          when: users[username] is undefined
+
         - include_role:
             name: docker-smb
             tasks_from: delete-nas
