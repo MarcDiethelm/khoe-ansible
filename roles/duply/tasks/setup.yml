@@ -74,6 +74,7 @@
 
 
   # Using `sudo` like on the command line works, using `become` fails
-- name: "Run a duply status command (to copy the gpg keys to the profile now)"
-  command: "sudo duply {{ profile_dir }}/{{ profile_name }} status"
-  register: duply
+  # hangs waiting for input
+# - name: "Run a duply status command (to copy the gpg keys to the profile now)"
+#   command: "sudo duply {{ profile_dir }}/{{ profile_name }} status"
+#   register: duply
