@@ -14,8 +14,11 @@
 
         - include_role:
             name: docker-smb
-            tasks_from: add-user-nas
+            tasks_from: create-share
           with_dict: "{ '{{ share_name }}': '{{ disk_label }}' }"
+
+        - include_role:
+            name: docker-smb
 
         # - adding duply setup here would overwrite any previous duply profile with the same name
 
@@ -27,8 +30,11 @@
 
         - include_role:
             name: docker-smb
-            tasks_from: delete-nas
+            tasks_from: delete-share
           with_dict: "{ '{{ share_name }}': '' }"
+
+        - include_role:
+            name: docker-smb
 
       when: task is defined and task == "delete"
 

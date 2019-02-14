@@ -65,5 +65,3 @@
     file: "{{ config_file_users }}"
     content: "{{ users }}"
     do_backup: yes
-
-- include_tasks: main.yml

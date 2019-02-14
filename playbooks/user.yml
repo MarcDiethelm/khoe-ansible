@@ -32,8 +32,11 @@
 
         - include_role:
             name: docker-smb
-            tasks_from: add-user-nas
+            tasks_from: create-share
           with_dict: "{ '{{ share_name }}': '' }"
+
+        - include_role:
+            name: docker-smb
 
         - include_role: # Create default backup file list, and create duply profile
             name: duply
@@ -52,12 +55,15 @@
 
         - include_role:
             name: docker-smb
-            tasks_from: delete-nas
+            tasks_from: delete-share
           with_dict: "{{ users[username].shares }}"
 
         - include_role:
             name: docker-smb
             tasks_from: delete-user
+
+        - include_role:
+            name: docker-smb
 
         - include_role:
             name: gpg

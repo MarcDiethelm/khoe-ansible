@@ -35,8 +35,11 @@
 
 - include_role:
     name: docker-smb
-    tasks_from: add-user-nas
+    tasks_from: create-share
   with_dict: "{{ user_recovery.shares }}"
+
+- include_role:
+    name: docker-smb
 
 - name: "Copy duply profiles to user home dir'"
   command: cp -r {{ target }}/.duply /home/{{ username }}

@@ -78,5 +78,3 @@
     group: "{{ users[username].gid }}"
     mode: 01775 # (ug+rwx,o+rx,+t), set sticky bit
   become: yes
-
-- include_tasks: main.yml
