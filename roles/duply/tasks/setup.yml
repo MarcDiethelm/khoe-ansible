@@ -2,22 +2,10 @@
 - set_fact: cronjob_state="absent" # absent | present
 
 
-- block:
-    - include_role:
-        name: common
-        tasks_from: load-config
-      vars:
-        file: "{{ config_file_users }}"
-    - set_fact:
-        users: "{{ config }}"
-  when: users is not defined
-
-- set_fact:
-    user: "{{ users[username] }}"
+- include_tasks: sourcepath.yml
 
 # share_name defaults to username (via group_vars)
 - set_fact:
-    source_path: "{{ user.shares[share_name] }}"
     profile_name: "{{ share_name }}"
 
 - debug:

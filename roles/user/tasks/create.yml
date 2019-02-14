@@ -2,13 +2,14 @@
 - name: Ensure group "{{ username }}" exists
   group:
     name: "{{ username }}"
-    state: present
+    gid: "{{ gid | default(omit) }}"
   become: yes
 
 - name: Create user "{{ username }}"
   user:
     name: "{{ username }}"
     group: "{{ username }}"
+    uid: "{{ uid | default(omit) }}"
     password: "{{ password | password_hash('sha512') }}"
   register: user
   become: yes
@@ -22,19 +23,20 @@
     mode: 0755
   become: yes
 
-- name: "Get uid for '{{ username }}'" # needed for docker-smb, could be moved there
+ # uid and gid are needed for docker-smb and user recovery
+- name: "Get uid for '{{ username }}'"
   command: id --user {{ username }}
-  register: uid
+  register: _uid
   changed_when: false
 
-- name: "Get uid for '{{ username }}'" # needed for docker-smb, could be moved there
+- name: "Get gid for '{{ username }}'"
   command: id --group {{ username }}
-  register: gid
+  register: _gid
   changed_when: false
 
-- name: Create user config # don't see the need to save this anymore
+- name: Create user config
   set_fact:
-    users: "{{ users | combine( { username: { 'uid': uid.stdout, 'gid': gid.stdout, 'shares': {} } }, recursive=True ) }}"
+    users: "{{ users | combine( { username: { 'uid': _uid.stdout | int, 'gid': _gid.stdout | int, 'shares': {} } }, recursive=True ) }}"
 
   # Storing in khoe ensures ability to restore user from backup (todo: backup)
 - name:  write updated users config

@@ -1,7 +1,3 @@
-shares_dirname: 'nas'
-shares_path: '/home/{{ username }}/{{ shares_dirname }}'
-share_path:  '/home/{{ username }}/{{ shares_dirname }}/{{ share_name }}'
-
 defaults:
   share:
       name: '{{ share_name }}'

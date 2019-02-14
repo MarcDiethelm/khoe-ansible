@@ -1,0 +1,23 @@
+---
+- block:
+    - include_role:
+        name: common
+        tasks_from: load-config
+      vars:
+        file: "{{ config_file_users }}"
+        varname: "users"
+  when: users is not defined
+
+- set_fact:
+    user: "{{ users[username] }}"
+- set_fact:
+    disk_label: "{{ user.shares[share_name] }}"
+
+- name: "set default source path"
+  set_fact:
+    source_path: "{{ shares_path }}"
+  when: disk_label == ''
+- name: "set source path for disk label: {{ disk_label }}"
+  set_fact:
+    source_path: "{{ disk_label_shares_path }}"
+  when: disk_label != ''

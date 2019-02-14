@@ -1,0 +1,4 @@
+target: /media/{{ recovery_disk_label }}/khoe/{{ username }}
+file_user: user.yml
+file_smb: smb.yml
+dir_gpg: "{{ target }}/gpg"

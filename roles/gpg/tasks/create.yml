@@ -32,18 +32,6 @@
 
 - block:
 
-    - name: Add fingerprint to user facts
-      set_fact:
-        users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
-
-      # Storing in khoe ensures ability to restore user from backup (todo: backup)
-    - name:  write updated users config
-      import_role:
-        name: common
-        tasks_from: write-config
-      vars:
-        file: "{{ config_file_users }}"
-        content: "{{ users }}"
-        do_backup: no
+    - include_tasks: write-fingerprint.yml
 
   when: fingerprint is defined

@@ -6,4 +6,7 @@ config_file_smb: smb.yml
 
 config_dir_user: /home/{{ username }}/config
 
+shares_dirname: 'nas'
+shares_path: '/home/{{ username }}/{{ shares_dirname }}'
+disk_label_shares_path: "/media/{{ disk_label }}/{{ username }}/{{ shares_dirname }}"
 share_name: '{{ username }}'

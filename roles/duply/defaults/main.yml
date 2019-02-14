@@ -1,6 +1,6 @@
 profile_name: "{{ share_name }}"
 profile_dir: "/home/{{ username }}/.duply"
-target_path: "file:///home/{{ username }}/_backup/{{ profile_name }}" # temp for dev
+target_path: "file:///var/khoe/backup/{{ username }}/{{ profile_name }}" # just for development
 backup_list_name: "backup-list-{{ profile_name }}"
 
 restore_target: "{{ source_path }}/{{ share_name }}/restored"

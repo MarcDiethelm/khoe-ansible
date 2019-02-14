@@ -1,19 +1,5 @@
 ---
-- block:
-    - include_role:
-        name: common
-        tasks_from: load-config
-      vars:
-        file: "{{ config_file_users }}"
-    - set_fact:
-        users: "{{ config }}"
-  when: users is not defined
-
-- set_fact:
-    user: "{{ users[username] }}"
-    share_name: "{{ profile_name }}"
-- set_fact:
-    source_path: "{{ user.shares[share_name] }}"
+- include_tasks: sourcepath.yml
 
 - file:
     path: "{{ restore_target }}"
@@ -30,7 +16,7 @@
   become: yes
 
 # Using `sudo` as on the command line works, using `become` fails
-# `shell` command is needed to correctly handle UTF-8 chars in `fetch_path` and wrapping in single quotes
+# `shell` command and wrapping `fetch_path` in single quotes is needed to correctly handle spaces and possibly UTF-8 chars
 
 - name: "Restore file/dir '{{ fetch_path }}' to '{{ restore_target }}/{{ fetch_path | basename }}' for user '{{ username }}' and profile '{{ profile_name }}'"
   shell: "sudo AWS_ACCESS_KEY_ID={{ remote_backup_key }} AWS_SECRET_ACCESS_KEY={{ remote_backup_psw }} duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ fetch_path }}' '{{ restore_target }}/{{ fetch_path | basename }}' {{ age }}"

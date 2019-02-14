@@ -14,3 +14,8 @@
   set_fact:
     config: {}
   when: cat.stdout == ""
+
+- name: "Set var '{{ varname }}'."
+  set_fact:
+    '{{ varname }}': "{{ config }}"
+  when: varname is defined

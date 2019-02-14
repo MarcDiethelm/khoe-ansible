@@ -34,6 +34,7 @@
         - include_role:
             name: docker-smb
             tasks_from: add-user-nas
+          with_dict: "{ '{{ share_name }}': '' }"
 
         - include_role: # Create default backup file list, and create duply profile
             name: duply

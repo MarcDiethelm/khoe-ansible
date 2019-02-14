@@ -15,6 +15,14 @@
 - set_fact:
     users: "{{ config }}"
 
+- set_fact:
+    share_name: "{{ item.key }}"
+    disk_label: "{{ item.value }}"
+
+- set_fact:
+    share_path:  '/home/{{ username }}/{{ shares_dirname }}/{{ share_name }}'
+  when: disk_label == ''
+
 - block:
     - name: "Check that disk_label '{{ disk_label }}' is mounted"
       command: grep -w {{ disk_label }} /proc/mounts
@@ -25,9 +33,9 @@
       when: grep.rc == 1
 
     - set_fact:
-        shares_path: "/media/{{ disk_label }}/{{ username }}/{{ shares_dirname }}" # needed for duply backup; stored in users.yml:user.shares
-        share_path:  "/media/{{ disk_label }}/{{ username }}/{{ shares_dirname }}/{{ share_name }}"
-  when: disk_label is defined
+        shares_path: "{{ disk_label_shares_path }}" # needed for duply backup; stored in users.yml:user.shares
+        share_path:  "{{ disk_label_shares_path }}/{{ share_name }}"
+  when: disk_label != ''
 
 - assert:
     that:
@@ -41,12 +49,10 @@
 
 - set_fact:
     shares: "{{ shares | combine( { 'shares': { keyname: smb_options } }, recursive=true ) }}"
-
 - set_fact:
     shares: "{{ shares | combine( { 'users': { username: smb_users } }, recursive=true ) }}"
-
 - set_fact:
-    users: "{{ users | combine( { username: { 'shares': { share_name: shares_path } } }, recursive=true ) }}" # using dict instead of list for easy accessing and deleting
+    users: "{{ users | combine( { username: { 'shares': { share_name: disk_label } } }, recursive=true ) }}" # using dict instead of list for easy accessing and deleting
 
 - name:  write updated smb config
   include_role:
@@ -70,9 +76,9 @@
   file:
     path: "{{ smb_options.path }}"
     state: directory
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    mode: 0755
+    owner: "{{ users[username].uid }}"
+    group: "{{ users[username].gid }}"
+    mode: 01775 # (ug+rwx,o+rx,+t), set sticky bit
   become: yes
 
 - include_tasks: main.yml

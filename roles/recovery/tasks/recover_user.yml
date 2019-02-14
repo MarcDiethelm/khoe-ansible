@@ -1,0 +1,43 @@
+---
+- include_role:
+    name: common
+    tasks_from: load-config
+  vars:
+    file: "{{ file_user }}"
+    varname: user_recovery
+    config_path: "{{ target }}"
+
+- include_role:
+    name: common
+    tasks_from: load-config
+  vars:
+    file: "{{ file_smb }}"
+    varname: smb_recovery
+    config_path: "{{ target }}"
+
+- include_role:
+    name: user
+    tasks_from: create
+  vars:
+    uid: "{{ user_recovery.uid }}"
+    gid: "{{ user_recovery.gid }}"
+
+- set_fact:
+    share: "{{ user_recovery.shares | list }}"
+- set_fact:
+    first_share_name: "{{ share[0] }}"
+
+- include_role:
+    name: gpg
+    tasks_from: import
+  vars:
+    export_path: "{{ dir_gpg }}"
+
+- include_role:
+    name: docker-smb
+    tasks_from: add-user-nas
+  with_dict: "{{ user_recovery.shares }}"
+
+- name: "Copy duply profiles to user home dir'"
+  command: cp -r {{ target }}/.duply /home/{{ username }}
+  become: yes

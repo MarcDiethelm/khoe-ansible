@@ -2,7 +2,7 @@
 # usage:
 # ansible-playbook playbooks/nas.yml -e task=create -e username=example1 -e smbpassword=1234 [-e share_name=example1] [-e disk_label=label]
 # ansible-playbook playbooks/nas.yml -e task=delete -e username=example1 -e share_name=example1
-# ansible-playbook playbooks/nas.yml # (re-)start all shares
+# ansible-playbook playbooks/nas.yml # (re)start all shares
 
 - hosts: khoe
   gather_facts: no
@@ -15,10 +15,11 @@
         - include_role:
             name: docker-smb
             tasks_from: add-user-nas
+          with_dict: "{ '{{ share_name }}': '{{ disk_label }}' }"
 
         # - adding duply setup here would overwrite any previous duply profile with the same name
 
-      when: task == "create"
+      when: task is defined and task == "create"
 
 
     # Case: Delete share {{ disk_label | default(share_path) }}"
@@ -27,6 +28,15 @@
         - include_role:
             name: docker-smb
             tasks_from: delete-nas
-          with_dict: { share_name: null }
+          with_dict: "{ '{{ share_name }}': '' }"
 
-      when: task == "delete"
+      when: task is defined and task == "delete"
+
+
+    # Case: {Re}start all shares
+    - block:
+
+        - include_role:
+            name: docker-smb
+
+      when: task is undefined

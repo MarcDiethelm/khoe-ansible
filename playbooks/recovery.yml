@@ -1,0 +1,60 @@
+---
+# Usage:
+# ansible-playbook playbooks/recovery.yml -e task=create -e username=example1 -e password=1234 -e recovery_disk_label=label
+# ansible-playbook playbooks/recovery.yml -e task=recover -e username=example1 -e password=1234 -e recovery_disk_label=label
+
+- hosts: khoe
+  gather_facts: no
+
+  pre_tasks:
+
+    - fail:
+        msg:
+      when: recovery_disk_label is not defined
+
+    - include_role:
+        name: common
+        tasks_from: load-config
+      vars:
+        file: "{{ config_file_users }}"
+        varname: "users"
+
+    - include_role:
+        name: common
+        tasks_from: load-config
+      vars:
+        file: "{{ config_file_smb }}"
+        varname: "smb"
+
+  tasks:
+
+    - include_role:
+        name: pmount
+        tasks_from: mount
+      vars:
+        disk_label: "{{ recovery_disk_label }}"
+      with_dict: { '{{ disk_label }}': null }
+
+    # case: Create user recovery
+    ###########################################
+    - block:
+
+        - fail:
+            msg: 'username not found in config.'
+          when: users[username] is not defined
+
+        - include_role:
+            name: recovery
+            tasks_from: create_user_recovery
+
+      when: task == "create" and username is defined
+
+    # case: Recreate user from recovery
+    ###########################################
+    - block:
+
+        - include_role:
+            name: recovery
+            tasks_from: recover_user
+
+      when: task == "recover" and username is defined
