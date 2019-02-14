@@ -6,7 +6,7 @@
     state: directory
     owner: khoe
     group: khoe
-    mode: 0755
+    mode: 0700
 
 - name: "Add config file: {{ config_path }}/{{ file }}."
   copy:
@@ -15,4 +15,4 @@
     backup: yes
     owner: khoe
     group: khoe
-    mode: 0640
+    mode: 0600

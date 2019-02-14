@@ -7,4 +7,4 @@
     backup: "{{ do_backup | default('no') }}"
     owner: khoe
     group: khoe
-    mode: 0640
+    mode: 0600
