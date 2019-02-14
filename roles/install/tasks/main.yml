@@ -1,10 +1,14 @@
 ---
-- import_role:
-    name: common
-    tasks_from: install-config
-  vars:
-    file: khoe.yml
+- file:
+    path: /home/khoe/inventory/host_vars
+    mode: 0700
 
-- import_tasks: mosh.yml
-  become: yes
-  become_user: root
+- file:
+    path: /home/khoe/inventory/host_vars/*
+    mode: 0600
+
+# - import_role:
+#     name: common
+#     tasks_from: install-config
+#   vars:
+#     file: khoe.yml

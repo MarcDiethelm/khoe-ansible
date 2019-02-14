@@ -1,5 +1,0 @@
----
-- name: Install mosh.
-  apt:
-    name: mosh
-    state: present
