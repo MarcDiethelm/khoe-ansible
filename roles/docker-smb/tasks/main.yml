@@ -25,6 +25,7 @@
   # https://github.com/dperson/samba/issues/190)
 - name: Set correct group IDs in container
   command: "docker exec -i smb bash -l -c 'groupmod -g {{ i.value.groupid }} {{ i.key }}'"
+  no_log: "{{ production }}"
   loop: "{{ _smb.users | dict2items }}"
   loop_control:
     loop_var: i
