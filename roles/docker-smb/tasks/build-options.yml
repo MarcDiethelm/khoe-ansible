@@ -1,28 +1,31 @@
 ---
-- import_role:
-    name: common
-    tasks_from: load-config
-  vars:
-    file: smb.yml
-
+- block:
+  - import_role:
+      name: common
+      tasks_from: load-config
+    vars:
+      file: smb.yml
+      varname: "_smb"
+  when: _smb is undefined
+  
 - name: Add volumes to container options.
   set_fact:
     volumes: "{{ volumes }} + [ '{{ i.value.path }}:{{ i.value.path }}' ]"
-  loop: "{{ config.shares | dict2items }}"
+  loop: "{{ _smb.shares | dict2items }}"
   loop_control:
     loop_var: i
 
 - name: Add smb shares to docker entrypoint options.
   set_fact:
     options: "{{ options }} + [ '-s \"{{ i.value.name }};{{ i.value.path }};{{ i.value.browsable }};{{ i.value.readonly }};{{ i.value.guest }};{{ i.value.users }};{{ i.value.admins }};{{ i.value.writelist }};{{ i.value.comment }}\"' ]"
-  loop: "{{ config.shares | dict2items }}"
+  loop: "{{ _smb.shares | dict2items }}"
   loop_control:
     loop_var: i
 
 - name: Add smb users to docker entrypoint options.
   set_fact:
     options: "{{ options }} + [ '-u \"{{ i.key }};{{ i.value.smbpsw }};{{ i.value.userid }};{{ i.value.group }}\"' ]"
-  loop: "{{ config.users | dict2items }}"
+  loop: "{{ _smb.users | dict2items }}"
   loop_control:
     loop_var: i
 

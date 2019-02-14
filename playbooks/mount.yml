@@ -14,9 +14,7 @@
         tasks_from: load-config
       vars:
         file: "{{ config_file_mounts }}"
-
-    - set_fact:
-        mounts: "{{ config }}"
+        varname: mounts
 
   tasks:
 

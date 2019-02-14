@@ -4,16 +4,17 @@
     tasks_from: load-config
   vars:
     file: "{{ config_file_smb }}"
+    varname: "_smb"
 
 - name: Delete user from smb users
   dict_element_delete:
-    dict: "{{ config.users }}"
+    dict: "{{ _smb.users }}"
     key: "{{ username }}"
   register: smb_users
-  when: config.users is defined
+  when: _smb.users is defined
 
 - set_fact:
-    config: "{ 'shares': {{ config.shares }}, 'users': {{ smb_users.dict | default({}) }} }"
+    _smb: "{ 'shares': {{ _smb.shares }}, 'users': {{ smb_users.dict | default({}) }} }"
 
 - name:  write updated users config
   include_role:
@@ -21,7 +22,7 @@
     tasks_from: write-config
   vars:
     file: "{{ config_file_smb }}"
-    content: "{{ config }}"
+    content: "{{ _smb }}"
     do_backup: yes
 
 - include_tasks: main.yml

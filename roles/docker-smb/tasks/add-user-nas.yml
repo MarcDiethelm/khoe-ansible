@@ -4,16 +4,14 @@
     tasks_from: load-config
   vars:
     file: "{{ config_file_smb }}"
-- set_fact:
-    shares: "{{ config }}"
+    varname: "shares"
 
 - include_role:
     name: common
     tasks_from: load-config
   vars:
     file: "{{ config_file_users }}"
-- set_fact:
-    users: "{{ config }}"
+    varname: "users"
 
 - set_fact:
     share_name: "{{ item.key }}"

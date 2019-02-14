@@ -5,17 +5,12 @@
   register: cat
   changed_when: false
 
-- name: Parse config.
+- name: "Parse config and write to '{{ varname }}'"
   set_fact:
-    config: "{{ cat.stdout | from_yaml }}"
+    '{{ varname }}': "{{ cat.stdout | from_yaml }}"
   when: cat.stdout != ""
 
 - name: Provide empty dict (if config file is empty).
   set_fact:
-    config: {}
+    '{{ varname }}': {}
   when: cat.stdout == ""
-
-- name: "Set var '{{ varname }}'."
-  set_fact:
-    '{{ varname }}': "{{ config }}"
-  when: varname is defined
