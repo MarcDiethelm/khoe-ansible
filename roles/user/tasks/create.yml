@@ -8,8 +8,9 @@
 - name: Create user "{{ username }}"
   user:
     name: "{{ username }}"
-    group: "{{ username }}"
     uid: "{{ uid | default(omit) }}"
+    group: "{{ username }}"
+    groups: "{{ khoe_users_group }}"
     password: "{{ password | password_hash('sha512') }}"
   register: user
   become: yes

@@ -7,6 +7,11 @@
     path: /home/khoe/inventory/host_vars/*
     mode: 0600
 
+- name: Ensure group "{{ khoe_users_group }}" exists
+  group:
+    name: "{{ khoe_users_group }}"
+  become: yes
+
 # - import_role:
 #     name: common
 #     tasks_from: install-config
