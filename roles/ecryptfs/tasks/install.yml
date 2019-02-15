@@ -1,0 +1,6 @@
+---
+- name: Install eCryptFS.
+  apt:
+    name: ecryptfs-utils
+    state: present
+  become: yes

@@ -6,6 +6,9 @@
 - hosts: khoe
   gather_facts: no
 
+  vars:
+    target: /media/{{ recovery_disk_label }}/khoe/{{ username }}
+
   pre_tasks:
 
     - fail:
@@ -35,6 +38,12 @@
         disk_label: "{{ recovery_disk_label }}"
       with_dict: { '{{ disk_label }}': null }
 
+    - include_role:
+        name: ecryptfs
+        tasks_from: mount
+      vars:
+        encrypted_root: "{{ target }}"
+
     # case: Create user recovery
     ###########################################
     - block:
@@ -58,3 +67,18 @@
             tasks_from: recover_user
 
       when: task == "recover" and username is defined
+
+
+  post_tasks:
+
+    - include_role:
+        name: ecryptfs
+        tasks_from: unmount
+      vars:
+        encrypted_root: "{{ target }}"
+
+    - include_role:
+        name: pmount
+        tasks_from: unmount
+      vars:
+        disk_label: "{{ recovery_disk_label }}"

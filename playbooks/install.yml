@@ -28,6 +28,13 @@
         ansible_become_user: root
 
     - include_role:
+        name: ecryptfs
+        tasks_from: install
+      vars:
+        ansible_become: yes
+        ansible_become_user: root
+
+    - include_role:
         name: geerlingguy.pip
       vars:
         ansible_become: yes
