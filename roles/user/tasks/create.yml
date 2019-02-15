@@ -21,7 +21,7 @@
     state: directory
     owner: "{{ username }}"
     group: khoe
-    mode: 0755
+    mode: 0770
   become: yes
 
  # uid and gid are needed for docker-smb and user recovery
