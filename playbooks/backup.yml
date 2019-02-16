@@ -15,10 +15,10 @@
         tasks_from: load-config
       vars:
         file: "{{ config_file_users }}"
-        varname: "users"
+        varname: users
 
     - set_fact:
-        user: "{{ config[username] }}"
+        user: "{{ users[username] }}"
 
   tasks:
 
