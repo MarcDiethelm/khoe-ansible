@@ -1,7 +1,4 @@
 ---
-- set_fact: cronjob_state="absent" # absent | present
-
-
 - include_tasks: sourcepath.yml
 
 # share_name defaults to username (via group_vars)
@@ -10,6 +7,13 @@
 
 - debug:
     msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nEncrypting with gpg key: {{ user.fingerprint }}"
+
+- set_fact:
+    cronjob_state: present
+  when: cronjob is defined and cronjob | bool
+- debug:
+    msg: "Adding cronjob for backup profile: {{ profile_name }}"
+  when: cronjob_state == "present"
 
 - name: Create empty backup file list (if none exists)
   copy:
@@ -21,17 +25,14 @@
     mode: 0640
   become: yes
 
+  # Filelist format:
+  #- /home/example1/nas/bar.txt
+  #+ /home/example1/nas
 
 - name: Read filelist
   command: "cat {{ config_dir_user }}/{{ backup_list_name }}"
   register: filelist
 
-# Filelist format:
-#- /home/example1/nas/bar.txt
-#+ /home/example1/nas
-
-- debug:
-    var: target_path
 
 - include_role:
     name: oefenweb.duply-backup
@@ -71,6 +72,8 @@
         # run every day at 04:00
         minute: "0"
         hour: "4"
+
+    # `cat /etc/cron.d/duply-backup` to verify
 
 
   # Using `sudo` like on the command line works, using `become` fails

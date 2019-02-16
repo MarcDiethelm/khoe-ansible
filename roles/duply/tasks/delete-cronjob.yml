@@ -1,0 +1,17 @@
+---
+- set_fact:
+    profile_name: "{{ share_name }}"
+
+- debug:
+    msg: "Removing cronjob for backup profile: {{ profile_name }}"
+
+- include_role:
+    name: oefenweb.duply-backup
+    tasks_from: jobs
+  vars:
+    ansible_become: yes # oefenweb.duply is written to require root
+    ansible_become_user: root
+    duply_backup_jobs:
+      - name: "duply-{{ username }}-{{ profile_name }}"
+        state: "absent"
+        job: "" 

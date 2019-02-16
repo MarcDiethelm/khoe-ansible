@@ -36,6 +36,10 @@
         - include_role:
             name: docker-smb
 
+        - include_role:
+            name: duply
+            tasks_from: delete-cronjob
+
       when: task is defined and task == "delete"
 
 

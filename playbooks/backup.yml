@@ -1,9 +1,10 @@
 ---
 # usage:
-# ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e passphrase=] [-e share_name=username]
+# ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e passphrase=] [-e share_name=username] [-e cronjob=no]
 # ansible-playbook playbooks/backup.yml -e task=backup -e username=example1 [-e profile_name=username] [-e remote=s3]
 # ansible-playbook playbooks/backup.yml -e task=restore -e username=example1 [-e profile_name=username] [-e remote=s3] [-e age=0D]  [-e age=2019-01-23]
 # ansible-playbook playbooks/backup.yml -e task=fetch -e username=username -e "fetch_path='nas/filename'" [-e profile_name=nas] [-e remote=s3] [-e age=0D]  [-e age=2019-01-23]
+# ansible-playbook playbooks/backup.yml -e task=delete-cronjob -e username=example1 [-e share_name=username]
 
 - hosts: khoe
   gather_facts: no
@@ -60,3 +61,13 @@
             tasks_from: fetch
 
       when: task == "fetch"
+
+
+    - name: "Case: Delete cronjob"
+      block:
+
+        - include_role:
+            name: duply
+            tasks_from: delete-cronjob
+
+      when: task == "delete-cronjob"
