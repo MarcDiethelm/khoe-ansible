@@ -5,4 +5,5 @@
 /roles/_galaxy
 /config
 
-host_vars/
+/inventory/host_vars/*
+!/inventory/host_vars/example.yml

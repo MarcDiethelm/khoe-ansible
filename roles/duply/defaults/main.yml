@@ -1,6 +1,6 @@
 profile_name: "{{ share_name }}"
 profile_dir: "/home/{{ username }}/.duply"
-target_path: "file:///var/khoe/backup/{{ username }}/{{ profile_name }}" # just for development
+backup_location: "file:///var/khoe/backup" # just for development
 backup_list_name: "backup-list-{{ profile_name }}"
 
 cronjob_state: absent

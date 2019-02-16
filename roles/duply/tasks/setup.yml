@@ -5,9 +5,6 @@
 - set_fact:
     profile_name: "{{ share_name }}"
 
-- debug:
-    msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nEncrypting with gpg key: {{ user.fingerprint }}"
-
 - set_fact:
     cronjob_state: present
   when: cronjob is defined and cronjob | bool
@@ -32,7 +29,19 @@
 - name: Read filelist
   command: "cat {{ config_dir_user }}/{{ backup_list_name }}"
   register: filelist
+  changed_when: false
 
+- name: Get hostname
+  command: hostname
+  register: hostname
+  changed_when: false
+  failed_when: false
+
+- set_fact:
+    target: "{{ backup_location }}/{{ hostname.stdout | default('khoe') }}-{{ username }}-{{ profile_name }}"
+
+- debug:
+    msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nBackup location: {{ target }} \nEncrypting with gpg key: {{ user.fingerprint }}"
 
 - include_role:
     name: oefenweb.duply-backup
@@ -44,23 +53,21 @@
       '{{ profile_name }}':
         conf:
           gpg_key: "{{ user.fingerprint }}"
-          gpg_pw: ''
+          gpg_pw: "{{ passphrase | default('') }}"
 
           source: "{{ source_path }}"
-          target: "{{ target_path }}"
-
+          target: "{{ target }}"
           # remote auth. Duply removed this functionality. Need to set env vars in backup.yml
           #target_user: "{{ remote_backup_key }}", #target_pass: "{{ remote_backup_psw }}"
-
-          dupl_params: null
 
           max_age: "{{ max_age }}" # Time frame for old backups to keep
           max_fullbkp_age: "{{ max_fullbkp_age }}" # Perform a full backup if latest full backup in the collection is older than the given time
           max_fulls_with_incrs: "{{ max_fulls_with_incrs }}" # Number of full backups for which incrementals will be kept for
 
+          #dupl_params: null
           #verbosity: 5
-
           #arch_dir: '/data/backup/.duply-cache'
+
         # pre: ../../../files/duply-backup/pre
         # post: ../../../files/duply-backup/post
         excludes: "{{ ['- '+ restore_target] + filelist.stdout_lines + ['- **'] }}"
