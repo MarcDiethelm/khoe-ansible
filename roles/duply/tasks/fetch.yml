@@ -1,6 +1,15 @@
 ---
 - include_tasks: sourcepath.yml
 
+- set_fact:
+    _fetch_path: "{{ share_name }}/{{ fetch_path }}"
+
+- debug:
+    msg: |
+      Restore a file/dir from backup to {{ restore_target }}, user: '{{ username }}', profile: '{{ profile_name }}'
+      Backup location: {{ remote.backup_location }}"
+      Path in backup: '{{ _fetch_path }}'
+
 - file:
     path: "{{ restore_target }}"
     state: absent
@@ -18,14 +27,19 @@
 # Using `sudo` as on the command line works, using `become` fails
 # `shell` command and wrapping `fetch_path` in single quotes is needed to correctly handle spaces and possibly UTF-8 chars
 
-- name: "Restore file/dir '{{ fetch_path }}' to '{{ restore_target }}/{{ fetch_path | basename }}' for user '{{ username }}' and profile '{{ profile_name }}'"
-  shell: "sudo AWS_ACCESS_KEY_ID={{ remote_backup_key }} AWS_SECRET_ACCESS_KEY={{ remote_backup_psw }} duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ fetch_path }}' '{{ restore_target }}/{{ fetch_path | basename }}' {{ age }}"
+- name: Restore from file system
+  shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ _fetch_path }}' '{{ restore_target }}/{{ _fetch_path | basename }}' {{ age }}"
   register: duply
   failed_when: duply.stdout is search("Errno") or duply.rc > 0
-  when: remote is defined and remote == "s3"
+  when: remote.backup_location is match('^file:///')
 
-- name: "Restore file/dir '{{ fetch_path }}' to '{{ restore_target }}/{{ fetch_path | basename }}' for user '{{ username }}' and profile '{{ profile_name }}'"
-  shell: "sudo duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ fetch_path }}' '{{ restore_target }}/{{ fetch_path | basename }}' {{ age }}"
+- name: Restore from S3 storage
+  shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ _fetch_path }}' '{{ restore_target }}/{{ _fetch_path | basename }}' {{ age }}"
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
   register: duply
   failed_when: duply.stdout is search("Errno") or duply.rc > 0
-  when: remote is undefined
+  when: remote.backup_location is match('^s3://')
+
+  # Add more fetch setups here

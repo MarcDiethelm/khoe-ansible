@@ -1,11 +1,22 @@
 ---
-  # Using `sudo` like on the command line works, using `become` fails
-- name: "Run a duply backup for user '{{ username }}' and profile '{{ profile_name }}'"
-  command: "sudo duply /home/{{ username }}/.duply/{{ profile_name }} backup"
-  register: duply
-  when: remote is undefined
+- debug:
+    msg: |
+      Run a duply backup, user: '{{ username }}', profile: '{{ profile_name }}'
+      Backup location: {{ remote.backup_location }}"
 
-- name: "Run a duply backup for user '{{ username }}' and profile '{{ profile_name }}'"
-  command: "sudo AWS_ACCESS_KEY_ID={{ remote_backup_key }} AWS_SECRET_ACCESS_KEY={{ remote_backup_psw }} duply /home/{{ username }}/.duply/{{ profile_name }} backup"
+# Using `sudo` like on the command line works, using `become` fails to access gpg keys
+
+- name: Backup to file system
+  shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} backup"
   register: duply
-  when: remote is defined and remote == "s3"
+  when: remote.backup_location is match('^file:///')
+
+- name: Backup to S3 storage
+  shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} backup"
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
+  register: duply
+  when: remote.backup_location is match('^s3://')
+
+# Add more backup setups here

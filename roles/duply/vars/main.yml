@@ -1,0 +1,11 @@
+---
+profile_name: "{{ share_name }}-{{ remote_name }}" # share_name defaults to username (via group_vars)
+backup_list_name: "backup-list-{{ profile_name }}"
+
+remote: "{{ remote_backups[ remote_name ] }}"
+target: "{{ remote.backup_location }}/{{ hostname.stdout | default('khoe') }}-{{ username }}-{{ profile_name }}"
+
+job_name: "backup-{{ username }}-{{ profile_name }}"
+restore_target: "{{ source_path }}/{{ share_name }}/restored"
+
+duplicity_log_path: /var/log/duplicity.log

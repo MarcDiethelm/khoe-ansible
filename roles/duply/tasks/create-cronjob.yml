@@ -1,0 +1,16 @@
+---
+# Using the backup playbook conveniently solves the problem of setting env vars.
+# The problem with this is though that it can't be tested during development without a current checkout on the server.
+- name: "Add (cron) job {{ job_name }} to khoe's crontab"
+  cron:
+    name: "{{ job_name }}"
+    job: "cd ansible && ansible-playbook playbooks/backup.yml -e task=backup -e username={{ username }} -e share_name={{ share_name }} -e remote_name={{ remote_name }}"
+    user: khoe
+    state: present
+    minute:   "{{ cron.minute }}"
+    hour:     "{{ cron.hour }}"
+    day:      "{{ cron.day }}"
+    month:    "{{ cron.month }}"
+    weekday:  "{{ cron.weekday }}"
+
+  # `cat /var/spool/cron/crontabs/khoe` to verify

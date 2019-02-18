@@ -1,18 +1,16 @@
 ---
 - include_tasks: sourcepath.yml
 
-# share_name defaults to username (via group_vars)
-- set_fact:
-    profile_name: "{{ share_name }}"
+- name: Get hostname
+  command: hostname
+  register: hostname
+  changed_when: false
+  failed_when: false
 
-- set_fact:
-    cronjob_state: present
-  when: cronjob is defined and cronjob | bool
 - debug:
-    msg: "Adding cronjob for backup profile: {{ profile_name }}"
-  when: cronjob_state == "present"
+    msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nBackup location: {{ target }} \nEncrypting with gpg key: {{ user.fingerprint }}"
 
-- name: Create empty backup file list (if none exists)
+- name: "Create default backup file list (if none exists): {{ backup_list_name }}"
   copy:
     content: "+ {{ source_path }}/{{ share_name }}"
     dest: "{{ config_dir_user }}/{{ backup_list_name }}"
@@ -22,26 +20,10 @@
     mode: 0640
   become: yes
 
-  # Filelist format:
-  #- /home/example1/nas/bar.txt
-  #+ /home/example1/nas
-
 - name: Read filelist
   command: "cat {{ config_dir_user }}/{{ backup_list_name }}"
   register: filelist
   changed_when: false
-
-- name: Get hostname
-  command: hostname
-  register: hostname
-  changed_when: false
-  failed_when: false
-
-- set_fact:
-    target: "{{ backup_location }}/{{ hostname.stdout | default('khoe') }}-{{ username }}-{{ profile_name }}"
-
-- debug:
-    msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nBackup location: {{ target }} \nEncrypting with gpg key: {{ user.fingerprint }}"
 
 - include_role:
     name: oefenweb.duply-backup
@@ -64,7 +46,7 @@
           max_fullbkp_age: "{{ max_fullbkp_age }}" # Perform a full backup if latest full backup in the collection is older than the given time
           max_fulls_with_incrs: "{{ max_fulls_with_incrs }}" # Number of full backups for which incrementals will be kept for
 
-          #dupl_params: null
+          dupl_params: '--log-file {{ duplicity_log_path }}'
           #verbosity: 5
           #arch_dir: '/data/backup/.duply-cache'
 
@@ -72,19 +54,12 @@
         # post: ../../../files/duply-backup/post
         excludes: "{{ ['- '+ restore_target] + filelist.stdout_lines + ['- **'] }}"
 
-    duply_backup_jobs:
-      - name: "duply-{{ username }}-{{ profile_name }}"
-        state: "{{ cronjob_state }}"
-        job: "/usr/local/bin/duply {{ profile_dir }}/{{ profile_name }} backup"
-        # run every day at 04:00
-        minute: "0"
-        hour: "4"
+        # Filelist format:
+        #- /home/example1/nas/bar.txt
+        #+ /home/example1/nas
 
-    # `cat /etc/cron.d/duply-backup` to verify
+    # duply_backup_jobs: not using this. Because no env vars support and hardcoded root which gets messy because we need to run backups as khoe with sudo
 
-
-  # Using `sudo` like on the command line works, using `become` fails
-  # hangs waiting for input
 # - name: "Run a duply status command (to copy the gpg keys to the profile now)"
 #   command: "sudo duply {{ profile_dir }}/{{ profile_name }} status"
 #   register: duply

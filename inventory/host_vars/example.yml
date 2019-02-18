@@ -1,5 +1,9 @@
-# remote backup config
+remote_backups:
 
-# backup_location: s3://ams3.digitaloceanspaces.com/khoe-cloud-backup # path is name of 'space' at DigitalOcean, no trailing slash
-# remote_backup_key: QWERTYUIOP1234567890
-# remote_backup_psw: qwertyuiop123456789qwertyuiop1234567890qwer
+  digitalocean:
+    backup_location:  s3://ams3.digitaloceanspaces.com/khoe-cloud-backup # /path is name of 'space' at DigitalOcean, no trailing slash
+    api_key:          QWERTYUIOP1234567890
+    api_key_secret:   qwertyuiop123456789qwertyuiop1234567890qwer
+
+  local:
+    backup_location:  file:///var/khoe/backup
