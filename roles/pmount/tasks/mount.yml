@@ -17,6 +17,7 @@
       file:
         path: "/media/{{ item.key }}"
         state: absent
+      become: yes
 
     - name: "Mount disk {{ item.key }} to /media/{{ item.key }}."
       shell: pmount /dev/disk/by-label/{{ item.key }} {{ item.key }}
