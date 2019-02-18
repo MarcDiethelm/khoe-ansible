@@ -48,4 +48,4 @@
         var: duply.stdout
   when: remote.backup_location is match('^s3://')
 
-  # Add more fetch setups here
+  # Add more `fetch` setups here

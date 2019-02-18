@@ -3,20 +3,15 @@
 
 - debug:
     msg: |
-      Restore a full backup to {{ restore_target }}, user: '{{ username }}', profile: '{{ profile_name }}'
+      List files in backup, user: '{{ username }}', profile: '{{ profile_name }}'
       Backup location: {{ remote.backup_location }}"
-
-- name: "Ensure restore target directory is not present: {{ restore_target }}."
-  file:
-    path: "{{ restore_target }}"
-    state: absent
-  become: yes
+      Age: {{ age }}
 
 # Using `sudo` like on the command line works, using `become` fails
 
 - block:
-    - name: Restore from file system
-      command: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} restore {{ restore_target }} {{ age }}"
+    - name: List files in backup from file system
+      command: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} list {{ age }}"
       register: duply
       failed_when: duply.stdout is search("Errno") or duply.rc > 0
     - debug:
@@ -24,8 +19,8 @@
   when: remote.backup_location is match('^file:///')
 
 - block:
-    - name: Restore from S3 storage
-      command: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} restore {{ restore_target }} {{ age }}"
+    - name: List files in backup from S3 storage
+      command: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} list {{ age }}"
       environment:
         AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
         AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
@@ -35,4 +30,4 @@
         var: duply.stdout
   when: remote.backup_location is match('^s3://')
 
-# Add more `restore` setups here
+# Add more `list` setups here

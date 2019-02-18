@@ -30,4 +30,4 @@
         var: duply.stdout
   when: remote.backup_location is match('^s3://')
 
-# Add more backup setups here
+# Add more `backup` setups here
