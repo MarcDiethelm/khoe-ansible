@@ -1,6 +1,6 @@
 ---
 - name: "Import secret key from: {{ export_key_file }}."
-  command: "gpg2 --status-fd 1 --import {{ export_key_file }}"
+  command: "gpg2 --status-fd 1 --batch --import {{ export_key_file }}"
   register: gpg_output
 
 - name: "Get fingerprint from gpg output"
