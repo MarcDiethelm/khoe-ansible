@@ -27,9 +27,14 @@
 # Using `sudo` as on the command line works, using `become` fails
 # `shell` command and wrapping `fetch_path` in single quotes is needed to correctly handle spaces and possibly UTF-8 chars
 
+# Explanation for the GPG_OPTS env var: needed for gpg to use passphrase from duply
+# https://lists.launchpad.net/duplicity-team/msg02653.html
+
 - block:
     - name: Restore from file system
       shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ _fetch_path }}' '{{ restore_target }}/{{ _fetch_path | basename }}' {{ age }}"
+      environment:
+        GPG_OPTS: '--pinentry-mode loopback'
       register: duply
       failed_when: duply.stdout is search("Errno") or duply.rc > 0
     - debug:
@@ -40,6 +45,7 @@
     - name: Restore from S3 storage
       shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ _fetch_path }}' '{{ restore_target }}/{{ _fetch_path | basename }}' {{ age }}"
       environment:
+        GPG_OPTS: '--pinentry-mode loopback'
         AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
         AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
       register: duply
