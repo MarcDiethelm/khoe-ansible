@@ -7,8 +7,8 @@ config_file_smb: smb.yml
 
 config_dir_user: /home/{{ username }}/config
 
-shares_dirname: 'nas'
 disk_label: ''
+shares_dirname: 'shares' # changing this will make duplicity notice a changed source path and abort (disable with --allow-source-mismatch)
 shares_path: '/home/{{ username }}/{{ shares_dirname }}'
 disk_label_shares_path: "/media/{{ disk_label }}/{{ username }}/{{ shares_dirname }}"
 share_name: '{{ username }}'
