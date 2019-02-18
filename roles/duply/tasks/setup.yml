@@ -12,7 +12,7 @@
 
 - name: "Create default backup file list (if none exists): {{ backup_list_name }}"
   copy:
-    content: "+ {{ source_path }}/{{ share_name }}"
+    content: "+ {{ source_path }}/{{ share_name }}\n"
     dest: "{{ config_dir_user }}/{{ backup_list_name }}"
     force: no # if it already exists, do nothing
     owner: "{{ username }}"
