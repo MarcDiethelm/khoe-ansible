@@ -50,6 +50,10 @@
           #verbosity: 5
           #arch_dir: '/data/backup/.duply-cache'
 
+          #needed for gpg 2.1+ to use passphrase from duply (see conf template)
+          # https://lists.launchpad.net/duplicity-team/msg02653.html
+          gpg_opts: "--pinentry-mode loopback"
+
         # pre: ../../../files/duply-backup/pre
         # post: ../../../files/duply-backup/post
         excludes: "{{ ['- '+ restore_target] + filelist.stdout_lines + ['- **'] }}"

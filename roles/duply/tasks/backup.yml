@@ -11,14 +11,9 @@
 
 # Using `sudo` like on the command line works, using `become` fails to access gpg keys
 
-# Explanation for the GPG_OPTS env var: needed for gpg to use passphrase from duply
-# https://lists.launchpad.net/duplicity-team/msg02653.html
-
 - block:
     - name: Backup to file system
       shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} backup {{ dry_run_option }}"
-      environment:
-        GPG_OPTS: '--pinentry-mode loopback'
       register: duply
     - debug:
         var: duply.stdout
@@ -28,7 +23,6 @@
     - name: Backup to S3 storage
       shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} backup {{ dry_run_option }}"
       environment:
-        GPG_OPTS: '--pinentry-mode loopback'
         AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
         AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
       register: duply
