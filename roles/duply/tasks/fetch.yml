@@ -27,19 +27,25 @@
 # Using `sudo` as on the command line works, using `become` fails
 # `shell` command and wrapping `fetch_path` in single quotes is needed to correctly handle spaces and possibly UTF-8 chars
 
-- name: Restore from file system
-  shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ _fetch_path }}' '{{ restore_target }}/{{ _fetch_path | basename }}' {{ age }}"
-  register: duply
-  failed_when: duply.stdout is search("Errno") or duply.rc > 0
+- block:
+    - name: Restore from file system
+      shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ _fetch_path }}' '{{ restore_target }}/{{ _fetch_path | basename }}' {{ age }}"
+      register: duply
+      failed_when: duply.stdout is search("Errno") or duply.rc > 0
+    - debug:
+        var: duply.stdout
   when: remote.backup_location is match('^file:///')
 
-- name: Restore from S3 storage
-  shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ _fetch_path }}' '{{ restore_target }}/{{ _fetch_path | basename }}' {{ age }}"
-  environment:
-    AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
-    AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
-  register: duply
-  failed_when: duply.stdout is search("Errno") or duply.rc > 0
+- block:
+    - name: Restore from S3 storage
+      shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ _fetch_path }}' '{{ restore_target }}/{{ _fetch_path | basename }}' {{ age }}"
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
+      register: duply
+      failed_when: duply.stdout is search("Errno") or duply.rc > 0
+    - debug:
+        var: duply.stdout
   when: remote.backup_location is match('^s3://')
 
   # Add more fetch setups here
