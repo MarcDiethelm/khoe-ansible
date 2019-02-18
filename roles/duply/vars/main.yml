@@ -9,3 +9,4 @@ job_name: "backup-{{ username }}-{{ profile_name }}"
 restore_target: "{{ source_path }}/{{ share_name }}/restored"
 
 duplicity_log_path: /var/log/duplicity.log
+dry_run_option: ''

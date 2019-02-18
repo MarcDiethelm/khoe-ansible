@@ -3,16 +3,21 @@
     msg: |
       Run a duply backup, user: '{{ username }}', profile: '{{ profile_name }}'
       Backup location: {{ remote.backup_location }}"
+      Dry run: {{ dry_run }}
+
+- set_fact:
+    dry_run_option: ' --dry-run'
+  when: dry_run | bool
 
 # Using `sudo` like on the command line works, using `become` fails to access gpg keys
 
 - name: Backup to file system
-  shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} backup"
+  shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} backup {{ dry_run_option }}"
   register: duply
   when: remote.backup_location is match('^file:///')
 
 - name: Backup to S3 storage
-  shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} backup"
+  shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} backup {{ dry_run_option }}"
   environment:
     AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
     AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"

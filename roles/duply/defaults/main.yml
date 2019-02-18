@@ -7,6 +7,7 @@ max_fullbkp_age: 2M # Perform a full backup if latest full backup in the collect
 max_fulls_with_incrs: 2 # Number of full backups for which incrementals will be kept for
 
 age: 0D
+dry_run: no
 
 cron:
   minute:  '0'

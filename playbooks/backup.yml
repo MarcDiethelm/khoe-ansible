@@ -1,7 +1,7 @@
 ---
 # usage:
 # ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e "passphrase=''"] [-e share_name=username] [-e remote_name=remotename] [-e max_age=1Y] [-e max_fullbkp_age=2M] [-e max_fulls_with_incrs=2]
-# ansible-playbook playbooks/backup.yml -e task=backup -e username=example1 [-e share_name=username] [-e remote_name=remotename]
+# ansible-playbook playbooks/backup.yml -e task=backup -e username=example1 [-e share_name=username] [-e remote_name=remotename] [-e dry_run=no]
 # ansible-playbook playbooks/backup.yml -e task=restore -e username=example1 [-e share_name=username] [-e remote_name=remotename] [-e age=0D]  [-e age=2019-01-23]
 # ansible-playbook playbooks/backup.yml -e task=fetch -e username=username -e "fetch_path='dir/filename'" [-e share_name=nas]  [-e remote_name=remotename] [-e age=0D]  [-e age=2019-01-23]
 # ansible-playbook playbooks/backup.yml -e task=create-cronjob -e username=example1 [-e share_name=username] [-e remote_name=remotename] [-e minute=0]  [-e hour=4] [-e day=*] [-e month=*] [-e weekday=*]
