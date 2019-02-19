@@ -6,7 +6,7 @@
       Dry run: {{ dry_run }}
 
 - set_fact:
-    dry_run_option: ' --dry-run'
+    dry_run_option: '--dry-run'
   when: dry_run | bool
 
 # Using `sudo` like on the command line works, using `become` fails to access gpg keys

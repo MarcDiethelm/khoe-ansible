@@ -9,9 +9,8 @@ max_fulls_with_incrs: 2 # Number of full backups for which incrementals will be 
 age: 0D
 dry_run: no
 
-cron:
-  minute:  '0'
-  hour:    '4'
-  day:     '*'
-  month:   '*'
-  weekday: '*'
+minute:  '0'
+hour:    '4'
+day:     '*'
+month:   '*'
+weekday: '*'
