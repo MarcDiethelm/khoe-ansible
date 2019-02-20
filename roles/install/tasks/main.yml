@@ -10,7 +10,21 @@
   args:
     warn: no
 
-- name: Ensure group "{{ khoe_users_group }}" exists
+- name: 'Set UID min to {{ uid_min }}'
+  lineinfile:
+    dest: /etc/login.defs
+    regexp: '^UID_MIN'
+    line: 'UID_MIN			 {{ uid_min }}'
+  become: yes
+
+- name: 'Set GID min to {{ gid_min }}'
+  lineinfile:
+    dest: /etc/login.defs
+    regexp: '^GID_MIN'
+    line: 'GID_MIN			 {{ gid_min }}'
+  become: yes
+
+- name: 'Ensure group "{{ khoe_users_group }}" exists'
   group:
     name: "{{ khoe_users_group }}"
   become: yes
