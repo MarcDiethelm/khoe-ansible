@@ -1,9 +1,8 @@
 ---
-- name: Add fingerprint to user
+- name: 'Add fingerprint {{ fingerprint }} to user {{ username }}'
   set_fact:
     users: "{{ users | combine( { username: { 'fingerprint': fingerprint } }, recursive=True ) }}"
 
-  # Storing in khoe ensures ability to restore user from backup (todo: backup)
 - name:  write updated users config
   import_role:
     name: common
