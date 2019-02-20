@@ -8,9 +8,11 @@
 
   pre_tasks:
 
-    - fail:
-        msg:
-      when: recovery_disk_label is not defined
+    - assert:
+        that:
+          - username is defined
+          - password is defined
+          - recovery_disk_label is defined
 
     - include_role:
         name: common
