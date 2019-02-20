@@ -5,7 +5,6 @@
   mount:
     path: "{{ encrypted_root }}"
     state: unmounted
-  no_log: "{{ production }}"
   become: yes
 
 # See previous comments
