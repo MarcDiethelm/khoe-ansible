@@ -29,6 +29,15 @@
     name: "{{ khoe_users_group }}"
   become: yes
 
+# Prevent ureadahead from filling up syslog
+# https://askubuntu.com/questions/749224/92-of-syslog-is-filled-with-message-regarding-ureadahead-ignoring-relative-pa
+- name: Remove "ureadahead" package
+  apt:
+    name: ureadahead
+    state: absent
+    purge: yes
+  become: yes
+
 # - import_role:
 #     name: common
 #     tasks_from: install-config
