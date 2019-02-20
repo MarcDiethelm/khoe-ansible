@@ -1,23 +1,20 @@
 ---
 - include_tasks: sourcepath.yml
 
-- set_fact:
-    _fetch_path: "{{ share_name }}/{{ fetch_path }}"
-
 - debug:
     msg: |
-      Restore a file/dir from backup to {{ restore_target }}, user: '{{ username }}', profile: '{{ profile_name }}'
+      Restore a file/dir from backup to {{ restore_base_path }}, user: '{{ username }}', profile: '{{ profile_name }}'
       Backup location: {{ remote.backup_location }}"
-      Path in backup: '{{ _fetch_path }}'
+      Path in backup: '{{ real_fetch_path }}'
 
 - file:
-    path: "{{ restore_target }}"
+    path: "{{ restore_base_path }}"
     state: absent
   become: yes
 
-- name: "Ensure restore target directory is present: {{ restore_target }}."
+- name: "Ensure directory to restore to is present: {{ restore_base_path }}."
   file:
-    path: "{{ restore_target }}"
+    path: "{{ restore_base_path }}"
     state: directory
     owner: "{{ username }}"
     group: "{{ username }}"
@@ -25,11 +22,12 @@
   become: yes
 
 # Using `sudo` as on the command line works, using `become` fails
-# `shell` command and wrapping `fetch_path` in single quotes is needed to correctly handle spaces and possibly UTF-8 chars
 
 - block:
     - name: Restore from file system
-      shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ _fetch_path }}' '{{ restore_target }}/{{ _fetch_path | basename }}' {{ age }}"
+      command: 'sudo -E duply {{ profile_path|quote}} fetch {{ real_fetch_path|quote }} {{ fetch_target_path|quote }} {{ age|quote }}'
+      args:
+        warn: no
       register: duply
       failed_when: duply.stdout is search("Errno") or duply.rc > 0
     - debug:
@@ -38,10 +36,12 @@
 
 - block:
     - name: Restore from S3 storage
-      shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} fetch '{{ _fetch_path }}' '{{ restore_target }}/{{ _fetch_path | basename }}' {{ age }}"
+      command: 'sudo -E duply {{ profile_path|quote}} fetch {{ real_fetch_path|quote }} {{ fetch_target_path|quote }} {{ age|quote }}'
       environment:
         AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
         AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
+      args:
+        warn: no
       register: duply
       failed_when: duply.stdout is search("Errno") or duply.rc > 0
     - debug:

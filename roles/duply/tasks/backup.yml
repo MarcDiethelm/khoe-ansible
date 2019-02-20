@@ -11,23 +11,39 @@
 
 # Using `sudo` like on the command line works, using `become` fails to access gpg keys
 
-- block:
-    - name: Backup to file system
-      shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} backup {{ dry_run_option }}"
-      register: duply
-    - debug:
-        var: duply.stdout
-  when: remote.backup_location is match('^file:///')
+- syslogger:
+    msg: "Khoe: Starting backup, user: '{{ username }}', profile: '{{ profile_name }}"
 
 - block:
-    - name: Backup to S3 storage
-      shell: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} backup {{ dry_run_option }}"
-      environment:
-        AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
-        AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
-      register: duply
-    - debug:
-        var: duply.stdout
-  when: remote.backup_location is match('^s3://')
 
-# Add more `backup` setups here
+    - block:
+        - name: Backup to file system
+          command: "sudo -E duply {{ profile_path|quote }} backup {{ dry_run_option }}"
+          args:
+            warn: no
+          register: duply
+        - debug:
+            var: duply.stdout
+      when: remote.backup_location is match('^file:///')
+
+    - block:
+        - name: Backup to S3 storage
+          command: "sudo -E duply {{ profile_path|quote }} backup {{ dry_run_option }}"
+          args:
+            warn: no
+          environment:
+            AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
+            AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
+          register: duply
+        - debug:
+            var: duply.stdout
+      when: remote.backup_location is match('^s3://')
+
+      # Add more `backup` setups here
+
+    - syslogger:
+        msg: "Khoe: Backup complete: user: '{{ username }}', profile: '{{ profile_name }}"
+
+  rescue:
+    - syslogger:
+        msg: "Khoe: Backup failed: user: '{{ username }}', profile: '{{ profile_name }}"

@@ -1,12 +1,16 @@
 ---
-profile_name: "{{ share_name }}-{{ remote_name }}" # share_name defaults to username (via group_vars)
-backup_list_name: "backup-list-{{ profile_name }}"
+profiles_dir: '/home/{{ username }}/.duply'
+profile_name: '{{ share_name }}-{{ remote_name }}' # share_name defaults to username (via group_vars)
+profile_path: '/home/{{ username }}/.duply/{{ profile_name }}'
+backup_list_name: 'backup-list-{{ profile_name }}'
 
 remote: "{{ remote_backups[ remote_name ] }}"
-target: "{{ remote.backup_location }}/{{ hostname.stdout | default('khoe') }}-{{ username }}-{{ profile_name }}"
+backup_uri: "{{ remote.backup_location }}/{{ hostname.stdout | default('khoe') }}-{{ username }}-{{ profile_name }}"
 
-job_name: "backup-{{ username }}-{{ profile_name }}"
-restore_target: "{{ source_path }}/{{ share_name }}/restored"
-
-duplicity_log_path: /var/log/duplicity.log
 dry_run_option: ''
+job_name: 'backup-{{ username }}-{{ profile_name }}'
+duplicity_log_path: /var/log/duplicity.log
+
+restore_base_path: '{{ source_path }}/{{ share_name }}/restored'
+real_fetch_path: '{{ share_name }}/{{ fetch_path }}'
+fetch_target_path: '{{ restore_base_path }}/{{ real_fetch_path | basename }}'

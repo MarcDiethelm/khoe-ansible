@@ -8,7 +8,7 @@
   failed_when: false
 
 - debug:
-    msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nBackup location: {{ target }} \nEncrypting with gpg key: {{ user.fingerprint }}"
+    msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nBackup location: {{ backup_uri }} \nEncrypting with gpg key: {{ user.fingerprint }}"
 
 - name: "Create default backup file list (if none exists): {{ backup_list_name }}"
   copy:
@@ -30,7 +30,7 @@
   vars:
     ansible_become: yes # oefenweb.duply is written to require root
     ansible_become_user: root
-    duply_backup_profile_directory: "{{ profile_dir }}" # default set by oefenweb.duply: `/etc/duply/[profile_name]`
+    duply_backup_profile_directory: "{{ profiles_dir }}" # default set by oefenweb.duply: `/etc/duply/[profile_name]`
     duply_backup_profiles:
       '{{ profile_name }}':
         conf:
@@ -38,7 +38,7 @@
           gpg_pw: "{{ passphrase | default('') }}"
 
           source: "{{ source_path }}"
-          target: "{{ target }}"
+          target: "{{ backup_uri }}"
           # remote auth. Duply removed this functionality. Need to set env vars in backup.yml
           #target_user: "{{ remote_backup_key }}", #target_pass: "{{ remote_backup_psw }}"
 
@@ -56,7 +56,7 @@
 
         # pre: ../../../files/duply-backup/pre
         # post: ../../../files/duply-backup/post
-        excludes: "{{ ['- '+ restore_target] + filelist.stdout_lines + ['- **'] }}"
+        excludes: "{{ ['- '+ restore_base_path] + filelist.stdout_lines + ['- **'] }}"
 
         # Filelist format:
         #- /home/example1/nas/bar.txt
@@ -65,5 +65,5 @@
     # duply_backup_jobs: not using this. Because no env vars support and hardcoded root which gets messy because we need to run backups as khoe with sudo
 
 # - name: "Run a duply status command (to copy the gpg keys to the profile now)"
-#   command: "sudo duply {{ profile_dir }}/{{ profile_name }} status"
+#   command: "sudo duply {{ profiles_dir }}/{{ profile_name }} status"
 #   register: duply

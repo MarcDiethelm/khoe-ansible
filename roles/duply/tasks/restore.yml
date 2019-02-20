@@ -3,12 +3,12 @@
 
 - debug:
     msg: |
-      Restore a full backup to {{ restore_target }}, user: '{{ username }}', profile: '{{ profile_name }}'
+      Restore a full backup to {{ restore_base_path }}, user: '{{ username }}', profile: '{{ profile_name }}'
       Backup location: {{ remote.backup_location }}"
 
-- name: "Ensure restore target directory is not present: {{ restore_target }}."
+- name: "Remove previous restore directory: {{ restore_base_path }}."
   file:
-    path: "{{ restore_target }}"
+    path: "{{ restore_base_path }}"
     state: absent
   become: yes
 
@@ -16,7 +16,9 @@
 
 - block:
     - name: Restore from file system
-      command: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} restore {{ restore_target }} {{ age }}"
+      command: 'sudo -E duply {{ profile_path|quote}} restore {{ restore_base_path|quote }} {{ age|quote }}'
+      args:
+        warn: no
       register: duply
       failed_when: duply.stdout is search("Errno") or duply.rc > 0
     - debug:
@@ -25,10 +27,12 @@
 
 - block:
     - name: Restore from S3 storage
-      command: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} restore {{ restore_target }} {{ age }}"
+      command: 'sudo -E duply {{ profile_path|quote}} restore {{ restore_base_path|quote }} {{ age|quote }}'
       environment:
         AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
         AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"
+      args:
+        warn: no
       register: duply
       failed_when: duply.stdout is search("Errno") or duply.rc > 0
     - debug:

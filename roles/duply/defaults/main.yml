@@ -1,5 +1,3 @@
-profile_dir: "/home/{{ username }}/.duply" # vars
-
 remote_name: local
 
 max_age: 1Y # Time frame for old backups to keep
