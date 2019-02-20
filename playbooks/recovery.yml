@@ -28,54 +28,59 @@
 
   tasks:
 
-    - include_role:
-        name: pmount
-        tasks_from: mount
-      vars:
-        disk_label: "{{ recovery_disk_label }}"
-      with_dict: { '{{ disk_label }}': null }
-
-    - include_role:
-        name: ecryptfs
-        tasks_from: mount
-      vars:
-        encrypted_root: "{{ recovery_path }}"
-
-    # case: Create user recovery
-    ###########################################
-    - block:
-
-        - fail:
-            msg: 'username not found in config.'
-          when: users[username] is not defined
-
-        - include_role:
-            name: recovery
-            tasks_from: create_user_recovery
-
-      when: task == "create" and username is defined
-
-    # case: Recreate user from recovery
-    ###########################################
     - block:
 
         - include_role:
-            name: recovery
-            tasks_from: recover_user
+            name: pmount
+            tasks_from: mount
+          vars:
+            disk_label: "{{ recovery_disk_label }}"
+          with_dict: { '{{ disk_label }}': null }
 
-      when: task == "recover" and username is defined
+        # Remove previous recovery, encryption password might be different
+        - name: "Remove previous recovery dir: {{ recovery_path }}."
+          file:
+            path: "{{ recovery_path }}"
+            state: absent
 
+        # ansible mount creates the recovery dir for us as its 'mount point'
+        # (we're mounting the decrypted dir view directly on the encrypted dir, which ansible creates before mounting because the name is the same)
+        - include_role:
+            name: ecryptfs
+            tasks_from: mount
+          vars:
+            encrypted_root: "{{ recovery_path }}"
 
-  post_tasks:
+        # case: Create user recovery
+        ###########################################
+        - block:
+            - fail:
+                msg: 'username not found in config.'
+              when: users[username] is not defined
 
-    - include_role:
-        name: ecryptfs
-        tasks_from: unmount
-      vars:
-        encrypted_root: "{{ recovery_path }}"
+            - include_role:
+                name: recovery
+                tasks_from: create_user_recovery
+          when: task == "create" and username is defined
 
-    - include_role:
-        name: pmount
-        tasks_from: unmount
-      vars:
-        disk_label: "{{ recovery_disk_label }}"
+        # case: Recreate user from recovery
+        ###########################################
+        - block:
+            - include_role:
+                name: recovery
+                tasks_from: recover_user
+          when: task == "recover" and username is defined
+
+      always:
+
+        - include_role:
+            name: ecryptfs
+            tasks_from: unmount
+          vars:
+            encrypted_root: "{{ recovery_path }}"
+
+        - include_role:
+            name: pmount
+            tasks_from: unmount
+          vars:
+            disk_label: "{{ recovery_disk_label }}"
