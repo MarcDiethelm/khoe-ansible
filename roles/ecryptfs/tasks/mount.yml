@@ -1,17 +1,4 @@
 ---
-- name: 'Check for already mounted decrypted directory'
-  shell: grep '{{ encrypted_root }} ecryptfs' /etc/mtab
-  register: grep
-  changed_when: false
-  failed_when: false
-  become: yes
-
-- name: 'Umount decrypted directory.'
-  shell: "umount {{ encrypted_root }}"
-  become: yes
-  ignore_errors: true
-  when:  grep.rc == 0
-
 - name: 'Add tokens into user session keyring.'
   shell: 'printf "%s" "{{ password }}" | ecryptfs-add-passphrase | grep -o "\[.*\]" | sed "s/\[//g;s/\]//g"'
   register: password_hash
@@ -22,13 +9,8 @@
     path: "{{ encrypted_root }}"
     src: "{{ encrypted_root }}"
     fstype: ecryptfs
+    # password ends up in being visible in /etc/fstab
     opts: key=passphrase:passphrase_passwd={{ password }},verbose=no,no_sig_cache=yes,ecryptfs_passthrough=no,ecryptfs_enable_filename_crypto=no,ecryptfs_cipher=aes,ecryptfs_key_bytes=32,ecryptfs_sig={{ password_hash.stdout }},ecryptfs_unlink_sigs
     state: mounted
   no_log: "{{ production }}"
   become: yes
-
-
-# - name: 'Mount decrypted directory.'
-#   shell: "mount -t ecryptfs -o 'key=passphrase:passphrase_passwd={{ password }},verbose=no,no_sig_cache=yes,ecryptfs_passthrough=no,ecryptfs_enable_filename_crypto=no,ecryptfs_cipher=aes,ecryptfs_key_bytes=32,ecryptfs_sig={{ password_hash.stdout }},ecryptfs_unlink_sigs' {{ encrypted_root }}/ {{ encrypted_root }}/"
-#   no_log: "{{ production }}"
-#   become: yes
