@@ -1,7 +1,18 @@
 ---
+  # Cannot use ansible mount state: 'absent' because it wants to removes the mount point containing the crypted data.
+  # Using ansible mount state: 'unmounted' however does not delete the fstab entry.
 - name: 'Unmount decrypted directory'
   mount:
     path: "{{ encrypted_root }}"
+    state: unmounted
+  no_log: "{{ production }}"
+  become: yes
+
+# See previous comments
+- name: Remove fstab entry
+  lineinfile:
+    dest: /etc/fstab
+    regexp: '^{{ encrypted_root }}'
     state: absent
   no_log: "{{ production }}"
   become: yes
