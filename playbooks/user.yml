@@ -8,6 +8,11 @@
 
   pre_tasks:
 
+      - assert:
+          that:
+            - username is defined
+            - password is defined
+
       - include_role:
           name: common
           tasks_from: load-config
