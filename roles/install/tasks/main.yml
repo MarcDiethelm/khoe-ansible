@@ -1,11 +1,14 @@
 ---
-- file:
-    path: /home/khoe/inventory/host_vars
+- name: Restrict permissions on inventory/host_vars directory
+  file:
+    path: /home/khoe/ansible/inventory/host_vars
     mode: 0700
+    state: directory
 
-- file:
-    path: /home/khoe/inventory/host_vars/*
-    mode: 0600
+- name: Restrict permissions on inventory/host_vars files
+  shell: chmod 0600 /home/khoe/ansible/inventory/host_vars/*
+  args:
+    warn: no
 
 - name: Ensure group "{{ khoe_users_group }}" exists
   group:
