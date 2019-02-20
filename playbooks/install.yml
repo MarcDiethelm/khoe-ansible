@@ -17,8 +17,12 @@
       when: ansible_distribution == 'Ubuntu'
 
   tasks:
+    # Perform general khoe install actions
+
     - include_role:
         name: install
+
+    # Perform roles' install tasks (install dependencies and add config files to config dirs)
 
     - include_role:
         name: pmount
@@ -74,6 +78,7 @@
         name: duply
         tasks_from: install
 
+    # Reboots the system if needed after upgrade
     - include_role:
         name: apt
         tasks_from: upgrade
