@@ -5,7 +5,7 @@
   vars:
     file: "{{ file_user }}"
     varname: user_recovery
-    config_path: "{{ target }}"
+    config_path: "{{ recovery_path }}"
 
 - include_role:
     name: common
@@ -13,7 +13,7 @@
   vars:
     file: "{{ file_smb }}"
     varname: smb_recovery
-    config_path: "{{ target }}"
+    config_path: "{{ recovery_path }}"
 
 - include_role:
     name: user
@@ -31,7 +31,7 @@
     name: gpg
     tasks_from: import
   vars:
-    export_path: "{{ dir_gpg }}"
+    export_path: "{{ gpg_export_dir }}"
 
 - include_role:
     name: docker-smb
@@ -42,5 +42,5 @@
     name: docker-smb
 
 - name: "Copy duply profiles to user home dir'"
-  command: cp -r {{ target }}/.duply /home/{{ username }}
+  command: cp -r {{ recovery_path }}/.duply /home/{{ username }}
   become: yes

@@ -1,7 +1,7 @@
 ---
 - name: "Create recovery directory on disk {{ recovery_disk_label }}."
   file:
-    path: "{{ target }}"
+    path: "{{ recovery_path }}"
     state: directory
     owner: "{{ username }}"
     group: "{{ username }}"
@@ -9,13 +9,13 @@
   become: yes
 
 - name: "Copy duply profiles of user '{{ username }}' to disk '{{ recovery_disk_label }}'"
-  command: cp -r /home/{{ username }}/.duply {{ target }}
+  command: cp -r /home/{{ username }}/.duply {{ recovery_path }}
   become: yes
 
-- name: "Write user config file: {{ target }}/{{ file_user }}."
+- name: "Write user config file: {{ recovery_path }}/{{ file_user }}."
   copy:
     content: "{{ users[username] | to_nice_yaml }}"
-    dest: "{{ target }}/{{ file_user }}"
+    dest: "{{ recovery_path }}/{{ file_user }}"
     owner: "{{ username }}"
     group: "{{ username }}"
     mode: 0700
@@ -30,10 +30,10 @@
 - set_fact:
     smb_recovery: "{{ { 'shares': shares, 'users': smb.users[username] } }}"
 
-- name: "Write smb config file: {{ target }}/{{ file_smb }}."
+- name: "Write smb config file: {{ recovery_path }}/{{ file_smb }}."
   copy:
     content: "{{ smb_recovery | to_nice_yaml }}"
-    dest: "{{ target }}/{{ file_smb }}"
+    dest: "{{ recovery_path }}/{{ file_smb }}"
     owner: "{{ username }}"
     group: "{{ username }}"
     mode: 0700
@@ -43,4 +43,4 @@
     name: gpg
     tasks_from: export
   vars:
-    export_path: "{{ dir_gpg }}"
+    export_path: "{{ gpg_export_dir }}"

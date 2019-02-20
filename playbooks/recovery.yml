@@ -6,9 +6,6 @@
 - hosts: khoe
   gather_facts: no
 
-  vars:
-    target: /media/{{ recovery_disk_label }}/khoe/{{ username }}
-
   pre_tasks:
 
     - fail:
@@ -42,7 +39,7 @@
         name: ecryptfs
         tasks_from: mount
       vars:
-        encrypted_root: "{{ target }}"
+        encrypted_root: "{{ recovery_path }}"
 
     # case: Create user recovery
     ###########################################
@@ -75,7 +72,7 @@
         name: ecryptfs
         tasks_from: unmount
       vars:
-        encrypted_root: "{{ target }}"
+        encrypted_root: "{{ recovery_path }}"
 
     - include_role:
         name: pmount
