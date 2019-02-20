@@ -12,7 +12,7 @@
     mode: 0700
 
 - name: "Export secret key '{{ username }}' to: {{ export_key_file }}." # gpg secret key contains public key
-  shell: "gpg2 --armor --export-secret-keys {{ username }} > {{ export_key_file }}"
+  shell: "echo '{{ passphrase | default(omit) }}' | gpg2 --batch --passphrase-fd 0 --pinentry-mode loopback --armor --export-secret-keys {{ username }} > {{ export_key_file }}"
 
 - name: "Export ownertrust to: {{ export_ownertrust_file }}"
   shell: "gpg2 --export-ownertrust > {{ export_ownertrust_file }}"

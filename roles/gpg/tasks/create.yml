@@ -18,7 +18,7 @@
 - block:
 
   - name: "Generate keys for user: '{{ username }}'."
-    command: "gpg2 --batch --status-fd 1 --with-colons --passphrase {{ passphrase | default('\"\"') }} --quick-gen-key {{ keyname }}" # used to be: --quick-generate-key
+    shell: "echo '{{ passphrase | default(omit) }}' | gpg2 --passphrase-fd 0 --pinentry-mode loopback --batch --status-fd 1 --with-colons --quick-gen-key {{ keyname }}" # used to be: --quick-generate-key
     register: gpg_output
      # gnupg does not support operations using su. Unable to ex/import keys this way.
 
