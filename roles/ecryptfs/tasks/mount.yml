@@ -1,7 +1,8 @@
 ---
 - name: 'Add tokens into user session keyring.'
-  shell: 'printf "%s" "{{ password }}" | ecryptfs-add-passphrase | grep -o "\[.*\]" | sed "s/\[//g;s/\]//g"'
+  shell: 'printf "%s" {{ password|quote }} | ecryptfs-add-passphrase | grep -o "\[.*\]" | sed "s/\[//g;s/\]//g"'
   register: password_hash
+  no_log: '{{ production }}'
   become: yes
 
 - name: 'Mount decrypted directory: {{ encrypted_root }}.'
@@ -12,5 +13,5 @@
     # password ends up in being visible in /etc/fstab
     opts: key=passphrase:passphrase_passwd={{ password }},verbose=no,no_sig_cache=yes,ecryptfs_passthrough=no,ecryptfs_enable_filename_crypto=no,ecryptfs_cipher=aes,ecryptfs_key_bytes=32,ecryptfs_sig={{ password_hash.stdout }},ecryptfs_unlink_sigs
     state: mounted
-  no_log: "{{ production }}"
+  no_log: '{{ production }}'
   become: yes
