@@ -1,21 +1,28 @@
 ---
-- name: "Check that a home directory exists for the username: {{ username }}."
-  stat:
-    path: "/home/{{ username }}"
-  register: stat_result
-  failed_when: stat_result.stat.isdir is not defined or stat_result.stat.isdir == False
-
 - name: "Ensure export directory exists: {{ export_path }}."
   file:
     path: "{{ export_path }}"
     state: directory
     mode: 0700
 
-- name: "Export secret key '{{ username }}' to: {{ export_key_file }}." # gpg secret key contains public key
-  shell: "echo '{{ passphrase | default(omit) }}' | gpg2 --batch --passphrase-fd 0 --pinentry-mode loopback --armor --export-secret-keys {{ username }} > {{ export_key_file }}"
+- set_fact:
+    _passphrase: '{{ passphrase|quote }}'
+  when: passphrase is defined
+- set_fact:
+    _passphrase: ''
+  when: passphrase is undefined
 
-- name: "Export ownertrust to: {{ export_ownertrust_file }}"
-  shell: "gpg2 --export-ownertrust > {{ export_ownertrust_file }}"
+# This will currently export all secret keys of the user (but we only generate one primary key).
+# To export a specific key: -a 1234ABCD, to export subkeys: --export-secret-subkeys
+- syslogger:
+    msg: "khoe: exporting gpg keys: '{{ username }}', destination: '{{ export_key_file }}"
+
+- name: "Export secret key '{{ username }}' to: {{ export_key_file }}." # gpg secret key contains public key
+  shell: "echo '{{ _passphrase }}' | gpg2 --batch --passphrase-fd 0 --pinentry-mode loopback --armor --export-secret-keys {{ username|quote }} > {{ export_key_file|quote }}"
+  no_log: '{{ production }}'
+
+- name: 'Export ownertrust to: {{ export_ownertrust_file }}'
+  shell: 'gpg2 --export-ownertrust > {{ export_ownertrust_file|quote }}'
 
 - name: "Restrict permissions on exported files: {{ export_path }}."
   file:

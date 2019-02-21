@@ -1,6 +1,6 @@
 ---
 - name: "Import secret key from: {{ export_key_file }}."
-  command: "gpg2 --status-fd 1 --batch --import {{ export_key_file }}"
+  command: "gpg2 --status-fd 1 --batch --import {{ export_key_file|quote }}"
   register: gpg_output
 
 - name: "Get fingerprint from gpg output"
@@ -10,5 +10,5 @@
 - include_tasks: write-fingerprint.yml
 
 - name: "Import secret ownertrust db from: {{ export_ownertrust_file }}."
-  command: "gpg2 --import-ownertrust {{ export_ownertrust_file }}"
+  command: "gpg2 --import-ownertrust {{ export_ownertrust_file|quote }}"
   register: gpg_output  # on success stdout is empty
