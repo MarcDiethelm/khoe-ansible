@@ -1,5 +1,6 @@
 ---
 options: [
+  "-r", # disable recycle bin
   "-n",
   "-w \"WORKGROUP\"",
   "-g \"force user =\"",
