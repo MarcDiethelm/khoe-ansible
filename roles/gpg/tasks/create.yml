@@ -26,7 +26,11 @@
     set_fact:
       fingerprint: "{{ gpg_output.stdout | regex_search('[A-Z0-9]{40}', multiline=True) }}"
 
-  # gpg2 --verbose --quick-set-expire {{ fingerprint }} 0
+  # We are currently only generating primary keys. Disable expiration.
+  # https://security.stackexchange.com/questions/14718/does-openpgp-key-expiration-add-to-security
+  - name: 'Never expire primary key: {{ fingerprint }}.'
+    shell: 'gpg2 --verbose --quick-set-expire {{ fingerprint }} 0'
+    register: gpg_output
 
   when: fingerprint is not defined
 
