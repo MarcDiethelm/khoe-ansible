@@ -65,5 +65,5 @@
     # duply_backup_jobs: not using this. Because no env vars support and hardcoded root which gets messy because we need to run backups as khoe with sudo
 
 # - name: "Run a duply status command (to copy the gpg keys to the profile now)"
-#   command: "sudo duply {{ profiles_dir }}/{{ profile_name }} status"
+#   command: "sudo duply {{ profile_path|quote }} status"
 #   register: duply

@@ -1,6 +1,6 @@
 ---
 - name: "Looking for existing keys {{ keyname }}"
-  command: "gpg --with-colons --list-secret-keys {{ keyname }}"
+  command: "gpg --with-colons --list-secret-keys {{ keyname|quote }}"
   register: gpg_output
   failed_when: false
   changed_when: false
@@ -27,7 +27,7 @@
   # Gnupg does not support operations using su. Unable to ex-/import keys this way.
   # That's why all keys are managed by and stored in khoe user
   - name: "Generate keys for user: '{{ username }}'."
-    shell: "echo '{{ _passphrase }}' | gpg2 --passphrase-fd 0 --pinentry-mode loopback --batch --status-fd 1 --with-colons --quick-gen-key {{ keyname }}" # used to be: --quick-generate-key
+    shell: "echo '{{ _passphrase }}' | gpg2 --passphrase-fd 0 --pinentry-mode loopback --batch --status-fd 1 --with-colons --quick-gen-key {{ keyname|quote }}" # used to be: --quick-generate-key
     no_log: '{{ production }}'
     register: gpg_output
 

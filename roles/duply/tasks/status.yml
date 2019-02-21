@@ -10,7 +10,7 @@
 
 - block:
     - name: Get backup status from file system
-      command: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} status"
+      command: "sudo -E duply {{ profile_path|quote }} status"
       register: duply
       failed_when: duply.stdout is search("Errno") or duply.rc > 0
     - debug:
@@ -19,7 +19,7 @@
 
 - block:
     - name: Get backup status from S3 storage
-      command: "sudo -E duply /home/{{ username }}/.duply/{{ profile_name }} status"
+      command: "sudo -E duply {{ profile_path|quote }} status"
       environment:
         AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
         AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"

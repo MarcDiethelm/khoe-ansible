@@ -42,5 +42,5 @@
     name: docker-smb
 
 - name: "Copy duply profiles to user home dir'"
-  command: cp -r {{ recovery_path }}/.duply /home/{{ username }}
+  command: cp -r {{ recovery_path }}/.duply {{ user_home_path|quote }}
   become: yes

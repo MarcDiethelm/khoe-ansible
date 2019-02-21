@@ -9,7 +9,7 @@
   become: yes
 
 - name: "Copy duply profiles of user '{{ username }}' to disk '{{ recovery_disk_label }}'"
-  command: cp -r /home/{{ username }}/.duply {{ recovery_path }}
+  command: cp -r {{ duply_profiles_path|quote }} {{ recovery_path }}
   become: yes
 
 - name: "Write user config file: {{ recovery_path }}/{{ file_user }}."

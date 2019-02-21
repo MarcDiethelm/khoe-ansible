@@ -23,7 +23,7 @@
 
 - block:
     - name: "Check that disk_label '{{ disk_label }}' is mounted"
-      command: grep -w {{ disk_label }} /proc/mounts
+      command: grep -w {{ disk_label|quote }} /proc/mounts
       register: grep
       failed_when: false
     - fail:
