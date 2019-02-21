@@ -41,7 +41,7 @@
 - name: 'Add (cron) job "start_nas" to khoe''s crontab'
   cron:
     name: 'khoe-boot'
-    job: 'cd ansible && ansible-playbook playbooks/boot.yml'
+    job: 'cd ansible && ansible-playbook playbooks/boot.yml 2>&1 | logger -t "khoe: boot"'
     user: khoe
     state: present
     special_time: reboot
