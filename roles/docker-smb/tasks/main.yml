@@ -4,6 +4,16 @@
     - volumes: []
     # options are defined in vars/main.yml
 
+- syslogger:
+    msg: "khoe: rebuilding smb container"
+- syslogger:
+    msg: "share: {{ item.key }}: {{ item.value|to_json}}"
+  loop: "{{ _smb.shares|dict2items}}"
+- syslogger:
+    msg: "users: {{ _smb.users.keys() | join(', ') | to_json }}"
+
+- meta: end_play
+
 - name: (Re-)create a Samba container.
   docker_container:
     name: smb
@@ -21,6 +31,7 @@
     command: "{{ options | list }}"
     #volumes_from: # todo: create a data container and link it
     #  - mydata
+  no_log: '{{ production }}'
 
 - name: sleep for 2 seconds and continue with play
   wait_for: timeout=2
