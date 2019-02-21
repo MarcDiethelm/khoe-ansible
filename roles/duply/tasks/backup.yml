@@ -12,7 +12,7 @@
 # Using `sudo` like on the command line works, using `become` fails to access gpg keys
 
 - syslogger:
-    msg: "Khoe: Starting backup, user: '{{ username }}', profile: '{{ profile_name }}"
+    msg: "khoe: starting backup, user: '{{ username }}', profile: '{{ profile_name }}"
 
 - block:
 
@@ -42,8 +42,8 @@
       # Add more `backup` setups here
 
     - syslogger:
-        msg: "Khoe: Backup complete: user: '{{ username }}', profile: '{{ profile_name }}"
+        msg: "khoe: backup complete: user: '{{ username }}', profile: '{{ profile_name }}"
 
   rescue:
     - syslogger:
-        msg: "Khoe: Backup failed: user: '{{ username }}', profile: '{{ profile_name }}"
+        msg: "khoe: backup failed: user: '{{ username }}', profile: '{{ profile_name }}"
