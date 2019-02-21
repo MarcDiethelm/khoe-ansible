@@ -22,4 +22,4 @@ ansible-playbook $scriptpath/playbooks/install.yml
 # https://github.com/ansible/ansible-examples/blob/master/language_features/ansible_pull.yml
 # ansible-pull # need to check it out!
 
-printf '\n%s\n%s\n' "Installation complete." "Quickstart: 'ansible-playbook playbooks/user.yml -e task=create -e username=<example1> -e password=<1234> [-e share_path=/home/example1/nas] [-e smbpassword=<2345>]'."
+printf '\n%s\n%s\n' "Installation complete." "Quickstart: 'ansible-playbook playbooks/user.yml -e task=create -e username=example1 -e password=1234 [-e share_name=username] [disk_label=label] [-e smbpassword=2345]."
