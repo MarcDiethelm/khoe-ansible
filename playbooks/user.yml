@@ -11,7 +11,6 @@
       - assert:
           that:
             - username is defined
-            - password is defined
 
       - include_role:
           name: common
@@ -26,6 +25,10 @@
     - name: "Case: Create user {{ username }}"
       ########################################
       block:
+
+        - assert:
+            that:
+              - password is defined
 
         - include_role:
             name: user
