@@ -21,6 +21,9 @@
     #volumes_from: # todo: create a data container and link it
     #  - mydata
 
+- name: sleep for 2 seconds and continue with play
+  wait_for: timeout=2
+
   # Workaround for dperson/smb not knowing/setting user's gid, resulting in files created via smb having the wrong group.
   # https://github.com/dperson/samba/issues/190)
 - name: Set correct group IDs in container
