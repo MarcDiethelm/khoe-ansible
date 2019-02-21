@@ -8,7 +8,7 @@
 - name: "Add (cron) job {{ job_name }} to khoe's crontab"
   cron:
     name: "{{ job_name }}"
-    job: "cd ansible && ansible-playbook playbooks/backup.yml -e task=backup -e username={{ username }} -e share_name={{ share_name }} -e remote_name={{ remote_name }} -e dry_run={{ dry_run }}"
+    job: "cd ansible && ansible-playbook playbooks/backup.yml -e task=backup -e username={{ username|quote }} -e share_name={{ share_name|quote }} -e remote_name={{ remote_name|quote }} -e dry_run={{ dry_run|bool }}"
     user: khoe
     state: present
     minute:   "{{ minute }}"
