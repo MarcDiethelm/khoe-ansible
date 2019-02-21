@@ -1,5 +1,4 @@
 ---
-# config_path is defined in the inventory file
 - name: "Load config: {{ config_path }}/{{ file }}."
   command: "cat {{ config_path }}/{{ file | mandatory }}"
   register: cat
