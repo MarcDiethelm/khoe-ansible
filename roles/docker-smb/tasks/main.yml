@@ -10,6 +10,7 @@
     image: dperson/samba
     state: started
     recreate: yes
+    network_mode: host
     log_driver: syslog
     ports:
       - "139:139"

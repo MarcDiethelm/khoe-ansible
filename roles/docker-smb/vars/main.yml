@@ -1,2 +1,10 @@
 ---
-options: ["-n", "-g \"force user =\"", "-g \"force group =\""]
+options: [
+  "-n",
+  "-w \"WORKGROUP\"",
+  "-g \"force user =\"",
+  "-g \"force group =\"",
+  "-g \"wins support = yes\"",
+  "-g \"local master = yes\"",
+  "-g \"preferred master = yes\""
+]
