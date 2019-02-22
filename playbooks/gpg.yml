@@ -6,9 +6,9 @@
 # ansible-playbook playbooks/gpg.yml -e task=import -e username=example1 [-e export_path=~/gpg-export/username]
 
 # Not implemented
-# ansible-playbook playbooks/gpg.yml -e task=create -e username=example1 [-e passphrase="1234"]
+# ansible-playbook playbooks/gpg.yml -e task=create -e username=example1 [-e "passphrase='1234'"]
 # ansible-playbook playbooks/gpg.yml -e task=delete -e username=khoe [-e fingerprint=9409A43E4F16771D8FBF25CADF8D04072F675974]
-# ansible-playbook playbooks/gpg.yml -e task=export -e username=example1 [-e passphrase="1234"] [-e export_path=~/gpg-export/username]
+# ansible-playbook playbooks/gpg.yml -e task=export -e username=example1 [-e "passphrase='1234'"] [-e export_path=~/gpg-export/username]
 
 - hosts: khoe
   gather_facts: no

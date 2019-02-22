@@ -1,6 +1,6 @@
 ---
 # usage:
-# ansible-playbook playbooks/user.yml -e task=create -e username=example1 -e password=1234 [-e share_name=username] [disk_label=label] [-e smbpassword=2345]
+# ansible-playbook playbooks/user.yml -e task=create -e username=example1 -e "password='1234'" [-e share_name=username] [-e disk_label=label] [-e "smbpassword='2345'"]
 # ansible-playbook playbooks/user.yml -e task=delete -e username=example1
 
 - hosts: khoe

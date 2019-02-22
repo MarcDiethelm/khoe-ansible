@@ -1,7 +1,7 @@
 ---
 # Usage:
-# ansible-playbook playbooks/recovery.yml -e task=create -e username=example1 -e password=1234 -e recovery_disk_label=label
-# ansible-playbook playbooks/recovery.yml -e task=recover -e username=example1 -e password=1234 -e recovery_disk_label=label
+# ansible-playbook playbooks/recovery.yml -e task=create -e username=example1 -e "password='1234'" -e recovery_disk_label=label [-e "passphrase=''"]
+# ansible-playbook playbooks/recovery.yml -e task=recover -e username=example1 -e "password='1234'" -e recovery_disk_label=label
 
 - hosts: khoe
   gather_facts: no
