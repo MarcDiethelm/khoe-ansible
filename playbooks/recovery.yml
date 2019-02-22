@@ -44,6 +44,7 @@
           file:
             path: "{{ recovery_path }}"
             state: absent
+          when: task == "create" and username is defined
 
         # ansible mount creates the recovery dir for us as its 'mount point'
         # (we're mounting the decrypted dir view directly on the encrypted dir, which ansible creates before mounting because the name is the same)
