@@ -6,11 +6,14 @@
 
 - syslogger:
     msg: "khoe: rebuilding smb container"
+  no_log: yes # prevents invocation logging
 - syslogger:
     msg: "share: {{ item.key }}: {{ item.value|to_json}}"
   loop: "{{ _smb.shares|dict2items}}"
+  no_log: yes
 - syslogger:
     msg: "users: {{ _smb.users.keys() | join(', ') | to_json }}"
+  no_log: yes
 
 - name: (Re-)create a Samba container.
   docker_container:
