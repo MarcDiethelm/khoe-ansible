@@ -1,3 +1,4 @@
 ---
-uid_min: 2000
-gid_min: 2000
+khoe_users_gid: 2000
+uid_min: 2001
+gid_min: 2001

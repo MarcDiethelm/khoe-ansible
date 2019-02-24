@@ -32,6 +32,7 @@
 - name: 'Ensure group "{{ khoe_users_group }}" exists'
   group:
     name: "{{ khoe_users_group }}"
+    gid: "{{ khoe_users_gid }}"
   become: yes
 
 # Prevent ureadahead from filling up syslog
