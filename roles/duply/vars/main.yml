@@ -1,7 +1,6 @@
 ---
-profiles_dir: '/home/{{ username }}/.duply'
 profile_name: '{{ share_name }}-{{ remote_name }}-{{ backup_list_name }}' # share_name defaults to username (via group_vars)
-profile_path: '/home/{{ username }}/.duply/{{ profile_name }}'
+profile_path: '{{ duply_profiles_path }}/{{ profile_name }}'
 backup_list_file: 'backup-list-{{ profile_name }}.txt'
 
 remote: "{{ remote_backups[ remote_name ] }}"
