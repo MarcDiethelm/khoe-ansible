@@ -1,4 +1,12 @@
 ---
+- name: Create inventory/host_vars/localhost.yml
+  copy:
+    src: ../inventory/host_vars/example.yml
+    dest: /home/khoe/ansible/inventory/host_vars/localhost.yml
+    owner: khoe
+    group: khoe
+    force: no # preserve existing file
+
 # https://stackoverflow.com/a/11512211/546491
 - name: Restrict permissions on inventory directory and subdirectories
   command: 'find /home/khoe/ansible/inventory -type d -exec chmod 700 {} \;'

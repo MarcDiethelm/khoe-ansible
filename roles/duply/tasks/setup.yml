@@ -1,6 +1,10 @@
 ---
 - include_tasks: sourcepath.yml
 
+- fail:
+    msg: "No remote backup destinations are configured. The file inventory/host_vars/{{ inventory_hostname }}.yml should define the variable 'remote_backups'."
+  when: remote_backups is undefined
+
 - name: Get hostname
   command: hostname
   register: hostname
