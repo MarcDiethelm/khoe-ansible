@@ -27,8 +27,9 @@
     shares: "{{ shares | combine( { username + '_' + item.key: smb.shares[username + '_' + item.key] } ) }}"
   loop: "{{ users[username].shares | dict2items }}"
 
-- set_fact:
-    smb_recovery: "{{ { 'shares': shares, 'users': smb.users[username] } }}"
+- name: Create `smb_recovery` dict, with all shares and just the owner in `smb_recovery.users`.
+  set_fact: # additional users' access right is preserved in `smb_recovery.shares`, but the actual users must be restored through their own recovery.
+    smb_recovery: "{{ { 'shares': shares, 'users': { username: smb.users[username] } } }}"
 
 - name: "Write smb config file: {{ recovery_path }}/{{ file_smb }}."
   copy:

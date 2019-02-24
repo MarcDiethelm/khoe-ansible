@@ -36,6 +36,10 @@
 - include_role:
     name: docker-smb
     tasks_from: create-share
+  vars:
+    # `smb_recovery.users` contains just the owner
+    # additional users must be restored through their own recovery
+    smbpassword: "{{ smb_recovery.users[username].smbpsw }}"
   with_dict: "{{ user_recovery.shares }}"
 
 - include_role:
