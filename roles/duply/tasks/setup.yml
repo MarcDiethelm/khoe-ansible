@@ -12,20 +12,23 @@
   failed_when: false
 
 - debug:
-    msg: "Creating duply profile '{{ profile_name }}' for user '{{ username }}'. \nBackup location: {{ backup_uri }} \nEncrypting with gpg key: {{ user.fingerprint }}"
+    msg: |
+      Creating duply profile '{{ profile_name }}' for user '{{ username }}'
+      Backup destination: {{ backup_uri }}
+      Encrypting with gpg key: {{ user.fingerprint }}
 
-- name: "Create default backup file list (if none exists): {{ backup_list_name }}"
+- name: "Create backup file list (if none exists): {{ backup_list_file }}"
   copy:
     content: "+ {{ source_path }}/{{ share_name }}\n"
-    dest: "{{ config_dir_user }}/{{ backup_list_name }}"
-    force: no # if it already exists, do nothing
+    dest: "{{ config_dir_user }}/{{ backup_list_file }}"
+    force: no # preserve existing file
     owner: "{{ username }}"
     group: khoe
-    mode: 0640
-  become: yes
+    mode: 0660
+  become: yes # needed for chown from khoe to user
 
-- name: Read filelist
-  command: "cat {{ config_dir_user }}/{{ backup_list_name }}"
+- name: 'Read backup list: {{ backup_list_file }}'
+  command: "cat '{{ config_dir_user }}/{{ backup_list_file }}'"
   register: filelist
   changed_when: false
 
