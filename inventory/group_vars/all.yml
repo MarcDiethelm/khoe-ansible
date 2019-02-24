@@ -13,4 +13,5 @@ shares_path: '/home/{{ username }}/{{ shares_dirname }}'
 disk_label_shares_path: "/media/{{ disk_label }}/{{ username }}/{{ shares_dirname }}"
 share_name: '{{ username }}'
 
+duply_profiles_path: /home/{{ username }}/.duply
 recovery_path: "/media/{{ recovery_disk_label }}/khoe/{{ username }}"

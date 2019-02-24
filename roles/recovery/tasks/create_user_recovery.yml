@@ -8,8 +8,12 @@
     mode: 0700
   become: yes
 
-- name: "Copy duply profiles of user '{{ username }}' to disk '{{ recovery_disk_label }}'"
-  command: cp -r {{ duply_profiles_path|quote }} {{ recovery_path }}
+- name: "Copy duply profiles: user '{{ username }}', disk: '{{ recovery_disk_label }}'"
+  command: cp -r {{ duply_profiles_path|quote }} {{ recovery_path|quote }}
+  become: yes
+
+- name: "Copy user's config dir: user '{{ username }}', disk: '{{ recovery_disk_label }}'"
+  command: cp -r {{ config_dir_user|quote }} {{ recovery_path|quote }}
   become: yes
 
 - name: "Write user config file: {{ recovery_path }}/{{ file_user }}."

@@ -48,3 +48,7 @@
 - name: "Copy duply profiles to user home dir'"
   command: cp -r {{ recovery_path }}/.duply {{ user_home_path|quote }}
   become: yes
+
+- name: "Copy user's config dir to user home dir'"
+  command: cp -r {{ recovery_path }}/config {{ user_home_path|quote }}
+  become: yes

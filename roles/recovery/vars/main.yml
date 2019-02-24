@@ -1,5 +1,4 @@
 file_user: user.yml
 file_smb: smb.yml
 gpg_export_dir: "{{ recovery_path }}/gpg"
-duply_profiles_path: /home/{{ username }}/.duply
 user_home_path: /home/{{ username }}
