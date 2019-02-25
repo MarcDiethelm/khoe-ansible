@@ -16,35 +16,35 @@
 
 
 - block:
+    - set_fact:
+        _passphrase: '{{ passphrase|quote }}'
+      when: passphrase is defined
+    - set_fact:
+        _passphrase: "''"
+      when: passphrase is undefined
 
-  - set_fact:
-      _passphrase: '{{ passphrase|quote }}'
-    when: passphrase is defined
-  - set_fact:
-      _passphrase: "''"
-    when: passphrase is undefined
+    # Gnupg does not support operations using su. Unable to ex-/import keys this way.
+    # That's why all keys are managed by and stored in khoe user
 
-  # Gnupg does not support operations using su. Unable to ex-/import keys this way.
-  # That's why all keys are managed by and stored in khoe user
-  - name: "Generate keys for user: '{{ username }}'."
-    shell: "echo {{ _passphrase }} | gpg2 --passphrase-fd 0 --pinentry-mode loopback --batch --status-fd 1 --with-colons --quick-gen-key {{ keyname|quote }}" # used to be: --quick-generate-key
-    no_log: '{{ production }}'
-    register: gpg_output
+    # By default gpg2 generates a primary key pair (signing, certification) and a subkey pair (encryption).
+    # Note: If the args for `--quick-gen-key keyname [algo [usage [expire]]]` `algo` or `usage` are changed from `default`
+    # then gpg2 does not automatically generate subkeys. In that case need to use --quick-add-key fpr [algo [usage [expire]]]
 
-  - name: "Get fingerprint from gpg output"
-    set_fact:
-      fingerprint: "{{ gpg_output.stdout | regex_search('[A-Z0-9]{40}', multiline=True) }}"
+    # expiration disabled: https://security.stackexchange.com/questions/14718/does-openpgp-key-expiration-add-to-security
+    - name: "Generate keys for user: '{{ keyname }}'."
+      shell: "echo {{ _passphrase }} | gpg2 --passphrase-fd 0 --pinentry-mode loopback --batch --status-fd 1 --with-colons --quick-gen-key {{ keyname|quote }} default default none" # used to be: --quick-generate-key
+      no_log: '{{ production }}'
+      register: gpg_output
 
-  # We are currently only generating primary keys. Disable expiration.
-  # https://security.stackexchange.com/questions/14718/does-openpgp-key-expiration-add-to-security
-  - name: 'Never expire primary key: {{ fingerprint }}.'
-    shell: 'gpg2 --verbose --quick-set-expire {{ fingerprint }} 0'
-    register: gpg_output
+    - name: "Get fingerprint from gpg output"
+      set_fact: # need _fingerprint var so following tasks are not skipped by `block/when` condition
+        _fingerprint: "{{ gpg_output.stdout | regex_search('[A-Z0-9]{40}', multiline=True) }}"
 
+    - debug:
+        msg: "Created keys: {{ _fingerprint }} ({{ keyname }})"
+
+    - set_fact:
+        fingerprint: "{{ _fingerprint }}"
   when: fingerprint is not defined
 
-- block:
-
-    - include_tasks: write-fingerprint.yml
-
-  when: fingerprint is defined
+- include_tasks: write-fingerprint.yml

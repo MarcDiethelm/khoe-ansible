@@ -1,4 +1,4 @@
-keyname: "{{ username }}-master" # calling it master in case we want additional keys later
+keyname: "{{ username }}-master" # calling it master in case we want additional primary keys/identities later
 export_path: "/home/khoe/gpg-export/{{ username }}"
 export_key_file: "{{ export_path }}/gpgkey.{{ keyname }}.sec.asc"
 export_ownertrust_file: "{{ export_path }}/gpgkey.{{ username }}.ownertrust.txt"
