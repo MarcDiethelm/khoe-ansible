@@ -2,6 +2,14 @@
 profile_name: '{{ share_name }}-{{ remote_name }}-{{ backup_list_name }}' # share_name defaults to username (via group_vars)
 profile_path: '{{ duply_profiles_path }}/{{ profile_name }}'
 backup_list_file: 'backup-list-{{ profile_name }}.txt'
+backup_list_default_content: |
+  # Add files and folders to back up. Paths here are identical to paths inside the share.
+  # Don't quote paths. Absolute paths will be prefixed and the complete path automatically quoted.
+  # Below are some commented out examples:
+
+  #  - some folder as example/to exclude/
+  #  + some folder as example/
+  #  + important.pdf
 
 remote: "{{ remote_backups[ remote_name ] }}"
 backup_uri: "{{ remote.backup_location }}/{{ hostname.stdout | default('khoe') }}-{{ username }}-{{ profile_name }}"

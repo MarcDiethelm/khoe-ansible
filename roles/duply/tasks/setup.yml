@@ -19,7 +19,8 @@
 
 - name: "Create backup file list (if none exists): {{ backup_list_file }}"
   copy:
-    content: "+ {{ source_path }}/{{ share_name }}\n"
+    content: "{{ backup_list_default_content }}"
+
     dest: "{{ config_dir_user }}/{{ backup_list_file }}"
     force: no # preserve existing file
     owner: "{{ username }}"
@@ -29,8 +30,12 @@
 
 - name: 'Read backup list: {{ backup_list_file }}'
   command: "cat '{{ config_dir_user }}/{{ backup_list_file }}'"
-  register: filelist
+  register: backuplist
   changed_when: false
+
+- name: Prefix absolute paths to backup list
+  set_fact:
+    backuplist: "{{ backuplist.stdout_lines | map('regex_replace', '^([\\+|-]) (.*)', '\\1 \"'+source_path+'/'+share_name+'/\\2\"') | list }}"
 
 - include_role:
     name: oefenweb.duply-backup
@@ -63,7 +68,7 @@
 
         # pre: ../../../files/duply-backup/pre
         # post: ../../../files/duply-backup/post
-        excludes: "{{ ['- '+ restore_base_path] + filelist.stdout_lines + ['- **'] }}"
+        excludes: "{{ ['- '+ restore_base_path] + backuplist + ['- **'] }}"
 
         # Filelist format:
         #- /home/example1/nas/bar.txt
