@@ -4,7 +4,7 @@
   register: cat
   changed_when: false
 
-- name: "Parse config and write to '{{ varname }}'"
+- name: "Parse config and store in var '{{ varname }}'"
   set_fact:
     '{{ varname }}': "{{ cat.stdout | from_yaml }}"
   when: cat.stdout != ""
