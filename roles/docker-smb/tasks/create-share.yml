@@ -17,10 +17,6 @@
     share_name: "{{ item.key }}"
     disk_label: "{{ item.value }}"
 
-- set_fact:
-    share_path:  '/home/{{ username }}/{{ shares_dirname }}/{{ share_name }}'
-  when: disk_label == ''
-
 - block:
     - name: "Check that disk_label '{{ disk_label }}' is mounted"
       command: grep -w {{ disk_label|quote }} /proc/mounts
@@ -31,8 +27,7 @@
       when: grep.rc == 1
 
     - set_fact:
-        shares_path: "{{ disk_label_shares_path }}" # needed for duply backup; stored in users.yml:user.shares
-        share_path:  "{{ disk_label_shares_path }}/{{ share_name }}"
+        share_path: "{{ disk_label_share_path }}"
   when: disk_label != ''
 
 - assert:
