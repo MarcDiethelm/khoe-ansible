@@ -3,7 +3,7 @@ Khoe Cloud
 
 This project is for people who want to **self-host an easy to use personal cloud** at home or at a small business **with default settings that just work**, while leaving the door open for customisation.
 
-On a more philosophical level this project exists because **digital privacy and data security should be simple and universally affordable**. Which can be made a reality by bringing the open source tools already used in professional cloud and server environments into your home and office by taking care of the complex configuration those tools need. Khoe strives to provide convenience without sacrificing essential security.
+On a more philosophical level this project exists because **digital privacy and data security should be simple and universally affordable**. Which can be made a reality by bringing the open source tools already used in professional cloud and server environments into your home and office by taking care of the complex configuration those tools need. Convenience without sacrificing essential security.
 
 Khoe currently offers:
 
@@ -20,12 +20,12 @@ Right now the project is in an early stage and is not yet suited for your typica
 - Concise command line API, which abstracts away the complexities of the underlying tools like Samba, GnuPG, Duplicity, eCryptFS and so on.
 - Network shares are visible in network browsers (except Windows 10).
 - Network shares are Apple Time Machine compatible.
-- Share permissions are backed by real Linux users and file system permissions and support simple multi-user file sharing.
+- Share permissions are backed by real Linux users and file system permissions (soon: and support simple multi-user file sharing.)
 - Simple setup of backup profiles for network shares using Duply/Duplicity.
   - Easy configuration of remote backup destination for a backup profile.
   - Easy setup of cronjobs for automated backups.
-  - Multiple profiles possible per profile, with their own backup file lists.
-- User and data recovery from portable drive after disaster or accidental deletion.
+  - Multiple profiles possible per share, with individual backup file lists.
+- Disaster recovery of users and their setups from encrypted data on a USB key. USB drive may be FAT32 for additional storage use.
 - Automatic encryption key creation for each user using gnupg
 
 
@@ -41,11 +41,11 @@ Right now the project is in an early stage and is not yet suited for your typica
 
 To connect to the server using its hostname you'll want to add it to your local DNS and give it a static IP if you can, i.e. on your router. You may need to consult the documentation for your router. Otherwise use IP address assigned by your DHCP server to log in and also connect shares.
 
-The following assumes `khoe.lan` as the server's domain name in the local network. Substitute it with whatever your using.
+The following assumes `khoe.lan` as the server's domain name in the local network. Substitute it with what you're using.
 
 #### SSH
 
-To get [your ssh keys](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on the server, if not done during Ubuntu install. On your computer do the following. Or if you don't have ssh-copy-id: [see this](https://serverfault.com/a/583659/311594).
+To get [your ssh keys](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on the server, if not done during Ubuntu install. On your computer do the following. Or if you don't have `ssh-copy-id`: [see this](https://serverfault.com/a/583659/311594).
 
 ```bash
 ssh-copy-id -i ~/.ssh/id_rsa.pub khoe@khoe.lan
@@ -60,7 +60,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub khoe@khoe.lan
  ssh khoe.lan
  ```
 
-**Server**
+**Get Khoe**
 
 ```bash
 git clone --branch develop https://github.com/MarcDiethelm/khoe-ansible.git ansible
@@ -94,7 +94,7 @@ Backup profiles are bound to share directories, since the only way a standard us
 
 ## Commands
 
-Note: You should prepend any command that contain a secret with a space, this way it will not enter bash history.
+> Note: You should prepend any command that contain a secret with a space, this way it will not enter bash history.
 
 ### User
 
@@ -208,7 +208,7 @@ ansible-playbook playbooks/backup.yml -e task=list -e username=example1 [-e shar
 
 ### Recovery
 
-Writes all information (including encryption keys) needed to recreate a user and their data to an removable drive, e.g. a small USB "key" drive. The data is stored in an encrypted file system using the supplied password. The removable drive itself may be formatted with FAT32 for universal use. It is recommended to carry this key on your person, on your keyring just like your door keys.
+Writes all information (including encryption keys) needed to recreate a user and their data to a removable drive, e.g. a small USB "key" drive. The data is stored in an encrypted file system using the supplied password. The removable drive itself may be formatted with FAT32 for universal use. It is recommended to carry this key on your person, on your keyring just like your door keys.
 
 **Create**
 ```
@@ -221,7 +221,7 @@ Note: previous recovery data of the same user is removed.
 ansible-playbook playbooks/recovery.yml -e task=recover -e username=example1 -e password=1234 -e recovery_disk_label=label
 ```
 
-The recovery playbook mounts and then unmounts the specified disk automatically without saving the mount config. When the operation completes successfully the stick/drive may be removed immediately.
+The recovery playbook mounts and then unmounts the specified disk automatically without saving the mount config. When the operation completes successfully the drive may be removed immediately.
 
 
 ### GPG
