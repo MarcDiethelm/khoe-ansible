@@ -18,6 +18,6 @@ dry_run_option: ''
 job_name: 'backup-{{ username }}-{{ profile_name }}'
 duplicity_log_path: /var/log/duplicity.log
 
-restore_base_path: '{{ source_path }}/{{ share_name }}/restored'
+restore_base_path: '{{ source_path }}/{{ share_name }}/_restored'
 real_fetch_path: '{{ share_name }}/{{ fetch_path }}'
 fetch_target_path: '{{ restore_base_path }}/{{ real_fetch_path | basename }}'
