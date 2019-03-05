@@ -96,7 +96,7 @@ See [Options](#option-formats) below for specifics for some of the arguments
 This command creates and updates a Duply backup *profile* and creates a backup file list for a network share. To modify an existing profile including its associated *backup list* run setup again with the same `username`, `share_name`, `remote_name` and `backup_list_name` as used initially, varying only the other arguments. Any changes including an edited backup list will be integrated into the profile.  
 To create additional profiles just vary any of the values for the just listed arguments. E.g. to add a backup to a second remote with a different list, change `remote_name` and `backup_list_name` and edit the created backup list. Then run setup again with the same values, to integrate the edited list into the profile.
 
-- `max_age`: When a full backups reaches this [`age`](#age) it is deleted. Default: 1 year
+- `max_age`: When a full backup reaches this [`age`](#age) it is deleted. Default: 1 year
 - `max_fullbkp_age`: When the last full backup reaches this [`age`](#age) a new full backup is made. Default: 2 months
 - `max_fulls_with_incrs`: Number of full backups for which incrementals are preserved. Default: 2
 
