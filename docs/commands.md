@@ -43,7 +43,8 @@ Re-mount drives that were previously mounted with create.
 
 ### NAS shares
 
-Khoe uses Samba to share directories in the local network. Samba runs in a Docker container (however this may well change to save on memory requirements.)
+Khoe uses Samba to share directories in the local network. Samba runs in a Docker container (however this may well change to save on memory requirements.)  
+Samba's VFS "recycle bin" is disabled, because of its questionable usability. May add option to enable it (per share) if requested.
 
 ```
 ansible-playbook playbooks/nas.yml -e task=create -e username=example1 -e smbpassword=1234 [-e share_name=example1] [-e disk_label=label]
@@ -142,10 +143,12 @@ Collects the needed data needed to recover a  user and their data and writes it 
 > Note: previous recovery data of the same user is deleted!
 
 ###### Recover user
-Recreates a user, their shares, backup profiles and imports their gpg keys. Afterwards a run to restore shared files from backup may be run manually, if desired.
+Recreates a user, their shares, backup profiles and imports their gpg keys. but Restoration of share contents from backup is not part of recovery may be run manually, if desired.
 
 
 ### GPG
+
+Khoe does not use passphrases for the generated keys. (Although they work.) Passphrases (e.g. of imported keys) are not stored in recovery data (and likely never will be).
 
 ```
 ansible-playbook playbooks/gpg.yml -e task=import -e username=example1 [-e export_path=/home/khoe/gpg-export/username]

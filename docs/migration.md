@@ -1,5 +1,5 @@
-Migration
-=========
+Data Import and Migration
+=========================
 
 To use existing data, e.g. on a removable drive in a Khoe share and enjoy the correct permissions here are some tips.
 
