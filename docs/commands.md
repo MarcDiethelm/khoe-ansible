@@ -12,7 +12,8 @@ Commands
 
 Optional arguments to the commands are indicated with square brackets: `[option=value]`. Most optional arguments have default values which are also documented below.
 
-> Note: You should prepend any command that contain a secret with a space, this way it will not enter bash history.
+> Note: You should prepend any command that contain a secret with a space, this way it will not enter bash history. To be sure add:  
+`export HISTCONTROL="ignorespace${HISTCONTROL:+:$HISTCONTROL}"` to your .bash_profile
 
 
 ### User
