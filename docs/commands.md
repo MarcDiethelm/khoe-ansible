@@ -1,6 +1,15 @@
 Commands
 ========
 
+##### Quick links
+- [User](#user)
+- [Mount](#mount)
+- [Network shares](#network-shares)
+- [Backup](#backup)
+  - [Options](#option-formats)
+- [Recovery](#recovery)
+- [GPG keys](#gpg-keys)
+
 Optional arguments to the commands are indicated with square brackets: `[option=value]`. Most optional arguments have default values which are also documented below.
 
 > Note: You should prepend any command that contain a secret with a space, this way it will not enter bash history.
@@ -41,7 +50,7 @@ Unmount a drive with `label` from `/media/label` and remove the label from `conf
 Re-mount drives that were previously mounted with create.
 
 
-### NAS shares
+### Network shares
 
 Khoe uses Samba to share directories in the local network. Samba runs in a Docker container (however this may well change to save on memory requirements.)  
 Samba's VFS "recycle bin" is disabled, because of its questionable usability. May add option to enable it (per share) if requested.
@@ -80,7 +89,7 @@ ansible-playbook playbooks/backup.yml -e task=status -e username=example1 [-e sh
 ansible-playbook playbooks/backup.yml -e task=list -e username=example1 [-e share_name=username] [-e remote_name=remotename] [-e "backup_list_name='default'"] [-e age=0D] [-e age=2019-01-23]
 ```
 
-See [Options](#backup-options) below for specifics for some of the arguments
+See [Options](#option-formats) below for specifics for some of the arguments
 
 ###### Setup
 This command creates and updates a Duply backup *profile* and creates a backup file list for a network share. To modify an existing profile including its associated *backup list* run setup again with the same `username`, `share_name`, `remote_name` and `backup_list_name` as used initially, varying only the other arguments. Any changes including an edited backup list will be integrated into the profile.  
@@ -110,10 +119,10 @@ Commands Duplicity to output a list of all existing backups in a chain of backup
 ###### List
 Commands Duplicity to output a list of all backed up files at a certain date for a profile. Specify [`age`](#age) to set the date.
 
-#### <a name=backup-options>Options</a>
+#### <a name=option-formats>Option formats</a>
 Some of the command and configuration options need to be in specific formats understood by the underlying tools.
 
-**remotename**: Backup destinations and their authentication secrets should be added to the file `inventory/host_vars/localhost.yml`. The *key* (first line) defines the `remotename` which may then be specified in the commands.  
+<a name=option-remotename>**remotename**</a>: Backup destinations and their authentication secrets should be added to the file `inventory/host_vars/localhost.yml`. The *key* (first line) defines the `remotename` which may then be specified in the commands.  
 Currently file (local) and S3 protocols are implemented. More [protocols supported by Duplicity](http://duplicity.nongnu.org/duplicity.1.html#sect7) can be [added by pull request](#adding-backup-protocols) or by [creating an issue](https://github.com/MarcDiethelm/khoe-ansible/issues/new).
 
 <a name=age>**age**</a>: used for `setup`, `restore`, `fetch` and `list`. Specified in [Duplicity time format](http://duplicity.nongnu.org/duplicity.1.html#sect8).  
@@ -146,7 +155,7 @@ Collects the needed data needed to recover a  user and their data and writes it 
 Recreates a user, their shares, backup profiles and imports their gpg keys. but Restoration of share contents from backup is not part of recovery may be run manually, if desired.
 
 
-### GPG
+### GPG Keys
 
 Khoe does not use passphrases for the generated keys. (Although they work.) Passphrases (e.g. of imported keys) are not stored in recovery data (and likely never will be).
 

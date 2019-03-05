@@ -1,7 +1,7 @@
 Khoe Cloud
 ==========
 
-Docs:
+##### Quick links
 - [Commands](docs/commands.md)
 - [Development](docs/development.md)
 - [Data Import and Migration](docs/migration.md)
@@ -9,31 +9,36 @@ Docs:
 
 This project is for people who want to **self-host an easy to use personal cloud** at home or at a small business **with default settings that just work**, while leaving the door open for customisation.
 
-On a more philosophical level this project exists because **digital privacy and data security should be simple and universally affordable**. Which can be made a reality by bringing the open source tools already used in professional cloud and server environments into your home and office by taking care of the complex configuration those tools need. Convenience without sacrificing essential security.
-
 Khoe currently offers:
 
-- NAS
+- command-line only, but easy to use
+- user management
+- NAS (network attached storage)
 - encrypted remote backups
 - data recovery USB key
 
 On top of this foundation myriad useful cloud services can be built.
 
-Right now the project is in an early stage and is not yet suited for consumers. Instead the ideal early adopter is someone with some knowledge of Linux systems, Ansible, Samba, etc. Khoe uses [**Ansible**](https://github.com/ansible/ansible) to set up and maintain a personal cloud server.
+On a more philosophical level this project exists because **digital privacy and data security should be simple and universally affordable**. Which can be made a reality by bringing the open source tools already used in professional cloud and server environments into your home and office by taking care of the complex configuration those tools need. Convenience without sacrificing essential security.
+
+Right now the project is in an early stage and is not yet suited for consumers. There's no UI yet. Instead the ideal early adopter is someone with some knowledge of Linux systems, Ansible, Samba, GnuPG, etc. Khoe uses [**Ansible**](https://github.com/ansible/ansible) to set up and maintain a personal cloud server.
 
 ## The good stuff
-- Hardware independent. If it can run Linux it probably can run Khoe.
+
+- Open-source
+- Hardware independent NAS. If it can run Linux it probably can run Khoe.
+- Khoe will be able to run on a Banana Pi / Raspberry Pi. (not tested yet!)
+- Automatic encryption key creation for each user using GnuPG.
 - Concise command line API, which abstracts away the complexities of the underlying tools like Samba, GnuPG, Duplicity, eCryptFS and so on.
 - Network shares are visible in network browsers (except Windows 10).
 - Network shares are Apple Time Machine compatible.
-- Share permissions are backed by real Linux users and file system permissions (soon: and support simple multi-user file sharing.)
+- Share permissions are backed by actual Linux users and file system permissions (soon: and support simple multi-user file sharing.)
 - Simple setup of backup profiles for network shares using Duply/Duplicity.
-  - Easy configuration of remote backup destination for a backup profile.
-  - Easy setup of cronjobs for automated backups.
-  - Multiple profiles possible per share, with individual backup file lists.
-- Disaster recovery of users and their setups from encrypted data on a USB key. USB drive may be FAT32 for additional storage use.
-- Automatic encryption key creation for each user using gnupg
-- Khoe will be able to run on a Banana Pi / Raspberry Pi. (not tested yet!)
+  - Easy configuration of [remote backup](docs/commands.md#option-remotename) destination (S3 storage) for a backup profile.
+  - Easy setup of cron jobs for automated backups.
+  - Multiple backup profiles with individual file lists possible per share
+- Disaster recovery of users and their setups from encrypted data on a USB key. Key may be FAT32 for additional storage use.
+- Easy mounting of removable drives.
 
 
 ## Prerequisites
@@ -80,7 +85,7 @@ Then enter `khoe` user's password once, when `sudo` asks for it.
 **After that you should re-login.**
 
 
-##  Operation
+## Operation
 
 Standard administration of a Khoe server is currently performed by executing `ansible-playbook` [commands](docs/commands.md) logged-in as user `khoe` on the server. (This will be replaced with a web frontend.)
 
@@ -96,5 +101,7 @@ Creating a user with Khoe also creates
 - a Samba share (NAS)
 - a Duply backup profile for the Samba share
 
-A share can either be created in the users home directory on the boot drive (default) or on a removable drive by specifying a disk label. The share paths are created programmatically from disk label, username and share name and may not be specified. To use existing data with a Khoe share see [Migration](docs/migration.md).
+A share can either be created in the users home directory on the boot drive (default) or on a removable drive by specifying a disk label. The share paths are created programmatically from disk label, username and share name and may not be specified. To use existing data with a Khoe share see [Data Import and Migration](docs/migration.md).
 Backup profiles are bound to share directories, since the only way a standard user interacts with Khoe is via Samba shares. (future: likely also restricted rsync.)
+
+See [Commands](docs/commands.md) for in-depth usage documentation.
