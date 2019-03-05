@@ -28,7 +28,7 @@ Right now the project is in an early stage and is not yet suited for consumers. 
 - Open-source
 - Hardware independent NAS. If it can run Linux it probably can run Khoe.
 - Khoe will be able to run on a Banana Pi / Raspberry Pi. (not tested yet!)
-- Automatic encryption key creation for each user using GnuPG.
+- Automatic GnuPG encryption key creation for every user.
 - Concise command line API, which abstracts away the complexities of the underlying tools like Samba, GnuPG, Duplicity, eCryptFS and so on.
 - Network shares are visible in network browsers (except Windows 10).
 - Network shares are Apple Time Machine compatible.
