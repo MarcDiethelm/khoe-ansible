@@ -8,16 +8,15 @@ Khoe Cloud
 - [Roadmap](https://github.com/MarcDiethelm/khoe-ansible/projects/2)
 - [FAQ](https://github.com/MarcDiethelm/khoe-ansible/wiki/Frequently-Asked-Questions)
 
-The mission of this project is to bring the basics of digital privacy and data security to non-technical users as affordably as possible. It must be easy to set up and use, with default settings that just work, while leaving the door open for customisation. Convenience without sacrificing essential security.
+The mission of this project is to bring the basics of digital privacy and data security to non-technical users as affordably as possible. It must be easy to set up and use, with default settings that just work, while leaving the door open for customisation. Convenience without sacrificing essential security. This project is intended as a **self-hosted personal cloud** for homes or small businesses.
 
 We believe the bare minimum everybody should have at their disposal consists of
-- network attached storage
-- encrypted offsite backup
-- general encryption
-- password manager
+- Network attached storage
+- Encrypted offsite backup
+- General encryption
+- Password manager
 
-The solution is bringing the open source tools already used in "industrial" cloud and server environments into homes and small businesses and taking care of the complex configuration those tools need.
-This project is intended as a **self-hosted personal cloud** for homes or small businesses. On top of this foundation myriad useful *personal* cloud services can be added.
+The solution: bringing the open source tools already used in "industrial" cloud and server environments into homes and small businesses while taking care of and hiding away the complex configuration those tools need. On top of this foundation myriad useful *personal* cloud services can be added.
 
 Right now the project is in an early stage and is not yet suited for consumers. Instead the ideal early adopter is an enthusiast with some knowledge of Linux systems, Ansible, Samba, GnuPG, etc. Khoe uses [**Ansible**](https://github.com/ansible/ansible) to set up and maintain a personal cloud server.
 
