@@ -35,7 +35,7 @@
         - include_role: # not using handlers because we want this to fail if input was bad
             name: pmount
             tasks_from: mount
-          with_dict: "{{ mounts }}"
+          with_dict: "{ '{{ disk_label }}': {} }"
 
         - name:  write updated mounts config
           include_role:
