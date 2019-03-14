@@ -5,8 +5,8 @@ Khoe Cloud
 - [Commands](docs/commands.md)
 - [Development](docs/development.md)
 - [Data Import and Migration](docs/migration.md)
-- [Roadmap](https://github.com/MarcDiethelm/khoe-ansible/projects/2)
-- [FAQ](https://github.com/MarcDiethelm/khoe-ansible/wiki/Frequently-Asked-Questions)
+- [Roadmap](https://github.com/khoe-cloud/khoe-ansible/projects/2)
+- [FAQ](https://github.com/khoe-cloud/khoe-ansible/wiki/Frequently-Asked-Questions)
 
 The mission of this project is to bring the basics of digital privacy and data security to non-technical users as affordably as possible. It must be easy to set up and use, with default settings that just work, while leaving the door open for customisation. Convenience without sacrificing essential security. This project is intended as a **self-hosted personal cloud** for homes or small businesses.
 
@@ -76,7 +76,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub khoe@khoe.lan
 **Get Khoe**
 
 ```bash
-git clone https://github.com/MarcDiethelm/khoe-ansible.git ansible
+git clone https://github.com/khoe-cloud/khoe-ansible.git ansible
 cd ansible && ./install.sh
 ```
 Then enter `khoe` user's password once, when `sudo` asks for it.
