@@ -10,6 +10,8 @@ Commands
 - [Recovery](#recovery)
 - [GPG keys](#gpg-keys)
 
+> See [Operation](../README.md#operation) in the README for a short introduction on how the different services go together.
+
 Optional arguments to the commands are indicated with square brackets: `[option=value]`. Most optional arguments have default values which are also documented below.
 
 > Note: You should prepend any command that contain a secret with a space, this way it will not enter bash history. To be sure add:  
@@ -74,7 +76,7 @@ Remove the network share. The data and Samba user are not removed.
 
 ### Backup
 
-The backup API is a bit more technical than the other commands. Khoe uses the well-known Duplicity through a wrapper named Duply to create backups of user shares. Cron is used to schedule regular backup jobs. Backups are run by the `khoe` user with `sudo`.
+The backup API is a bit more technical than the other commands. Khoe uses the well-known [Duplicity](http://duplicity.nongnu.org/) through a wrapper named [Duply](https://duply.net/) to create backups of user shares. Cron is used to schedule regular backup jobs. Backups are run by the `khoe` user with `sudo`.
 
 ```
 ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e "passphrase=''"] [-e share_name=username] [-e remote_name=remotename] [-e "backup_list_name='default'"] [-e max_age=1Y] [-e max_fullbkp_age=2M] [-e max_fulls_with_incrs=2]

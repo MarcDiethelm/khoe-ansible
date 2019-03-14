@@ -1,33 +1,36 @@
 Khoe Cloud
 ==========
 
-##### Quick links
+##### More docs
 - [Commands](docs/commands.md)
 - [Development](docs/development.md)
 - [Data Import and Migration](docs/migration.md)
 - [Roadmap](https://github.com/khoe-cloud/khoe-ansible/projects/2)
 - [FAQ](https://github.com/khoe-cloud/khoe-ansible/wiki/Frequently-Asked-Questions)
 
-The mission of this project is to bring the basics of digital privacy and data security to non-technical users as affordably as possible. It must be easy to set up and use, with default settings that just work, while leaving the door open for customisation. Convenience without sacrificing essential security. This project is intended as a **self-hosted personal cloud** for homes or small businesses.
+The mission of this project is to offer essential data privacy and security by making self-hosting basic services simple and secure. Those services are:
 
-We believe the bare minimum everybody should have at their disposal consists of
-- Network attached storage
-- Encrypted offsite backup
-- General encryption
-- Password manager
+1. Network attached storage
+2. Encrypted offsite backup
+3. System recovery with a USB 'key'
+4. General encryption
+5. Polished web frontend
+6. Password manager
 
-The solution: bringing the open source tools already used in "industrial" cloud and server environments into homes and small businesses while taking care of and hiding away the complex configuration those tools need. On top of this foundation myriad useful *personal* cloud services can be added.
+1 and 2 are working. 3 is partially done. 4, 5 and 6 are not done yet.
 
-Right now the project is in an early stage and is not yet suited for consumers. Instead the ideal early adopter is an enthusiast with some knowledge of Linux systems, Ansible, Samba, GnuPG, etc. Khoe uses [**Ansible**](https://github.com/ansible/ansible) to set up and maintain a personal cloud server.
+The goal of this project is to make setup and usage of its services as non-technical and convenient as feasible. And as such it naturally comes with some restrictions to keep the users safe and combobulated and also with default settings that just work. It's really important to strike the right balance between security and convenience. My hope is the community will inform these decisions as the project evolves.
 
-Not yet implemented:
+Right now the project is at an early stage and is not yet suited for consumers or recommended for production. Many design decisions are open for discussion. The ideal early adopter is an enthusiast with some knowledge of Linux systems, Ansible, Samba, GnuPG, etc. Khoe uses [**Ansible**](https://github.com/ansible/ansible) to set up and maintain a personal cloud server.
 
-- no graphical user interface. command-line only (but easy to use)
-- no password manager yet
+The UI still is command line only but working well. We're hoping for feedback, info about your use cases, what you like and what's missing for you and of course contributions, be that code or bug reports or help with documentation. Questions are welcome too.
 
-## The good stuff
+If you encounter any problems please [open an issue](https://github.com/khoe-cloud/khoe-ansible/issues/new).
 
-- Open-source
+
+## Features (and some technical info)
+
+- Open-source, duh.
 - Hardware independent NAS. If it can run Linux it probably can run Khoe.
 - Automatic GnuPG encryption key creation for every user.
 - Concise command line API, which abstracts away the complexities of the underlying tools like Samba, GnuPG, Duplicity, eCryptFS and so on.
@@ -35,55 +38,11 @@ Not yet implemented:
 - Network shares are Apple Time Machine compatible.
 - Share permissions are backed by actual Linux users and file system permissions (soon: and support simple multi-user file sharing.)
 - Simple setup of backup profiles for network shares using Duply/Duplicity.
-  - Easy configuration of [remote backup](docs/commands.md#option-remotename) destination (S3 storage) for a backup profile.
+  - Easy configuration of [remote backup](docs/commands.md#option-remotename) destination for a backup profile.
   - Easy setup of cron jobs for automated backups.
   - Multiple backup profiles with individual file lists possible per share
 - Disaster recovery of users and their setups from encrypted data on a USB key. Key may be FAT32 for additional storage use.
 - Easy mounting of removable drives.
-
-
-## Prerequisites
-
-- A Ubuntu Server 18.04 LTS install. A fresh install is recommended.
-- Create a standard user with username `khoe`.
-
-> If you want Khoe running on different distros, PRs are welcome of course. But presently I will only support Ubuntu. Debian is under consideration, PRs for it would be very welcome.
-
-
-### Connecting to the server
-
-To connect to the server using its hostname you'll want to add it to your local DNS and give it a static IP if you can, i.e. on your router. You may need to consult the documentation for your router. Otherwise use IP address assigned by your DHCP server to log in and also connect shares.
-
-The following assumes `khoe.lan` as the server's domain name in the local network. Substitute it with what you're using.
-
-#### SSH
-
-To get [your ssh keys](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on the server, if not done during Ubuntu install. On your computer do the following. Or if you don't have `ssh-copy-id`: [see this](https://serverfault.com/a/583659/311594).
-
-```bash
-ssh-copy-id -i ~/.ssh/id_rsa.pub khoe@khoe.lan
-```
-
-
-## Install
-
-**Log in to server**
-
- ```bash
- ssh khoe.lan
- ```
-
-**Get Khoe**
-
-```bash
-git clone https://github.com/khoe-cloud/khoe-ansible.git ansible
-cd ansible && ./install.sh
-```
-Then enter `khoe` user's password once, when `sudo` asks for it.
-
-`install.sh` sets up passwordless `sudo` for the `khoe` user, installs Ansible and then uses `ansible-playbook` to set up the server software. After that the system packages are upgraded and the server will reboot if needed. The process will take a few minutes.
-
-**After that you should re-login.**
 
 
 ## Operation
@@ -102,7 +61,52 @@ Creating a user with Khoe also creates
 - a Samba share (NAS)
 - a Duply backup profile for the Samba share
 
-A share can either be created in the users home directory on the boot drive (default) or on a removable drive by specifying a disk label. The share paths are created programmatically from disk label, username and share name and may not be specified. To use existing data with a Khoe share see [Data Import and Migration](docs/migration.md).
-Backup profiles are bound to share directories, since the only way a standard user interacts with Khoe is via Samba shares. (future: likely also restricted rsync.)
+A share can either be created in the users home directory on the boot drive (default) or on a removable drive by specifying a disk label. The share paths are created programmatically from disk label, username and share name and may not be explicitly specified.  
+To use existing data with a Khoe share see [Data Import and Migration](docs/migration.md).  
+Backup profiles are bound to share directories, since the only way a standard user interacts with Khoe is via Samba shares. (future: likely also restricted rsync.)  
+For offsite backups to storage platforms like DigitalOcean Places you need to create an account there and enter the credentials as described in [remotename](docs/commands.md#option-remotename).
 
 See [Commands](docs/commands.md) for in-depth usage documentation.
+
+
+## Install
+
+### Prerequisites
+
+- A Ubuntu Server 18.04 LTS install. A fresh install is recommended.
+- Create a standard user with username `khoe`.
+
+> If you want Khoe running on different distros, PRs are welcome of course. But presently I will only support Ubuntu. Armbian and Debian are under consideration, PRs for those would be very welcome.
+
+
+#### Connecting to the server
+
+To connect to the server using its hostname you'll want to add it to your local DNS and give it a static IP if you can, i.e. on your router. You may need to consult the documentation for your router. Otherwise use IP address assigned by your DHCP server to log in and also connect shares.
+
+The following assumes `khoe.lan` as the server's domain name in the local network. Substitute it with what you're using.
+
+##### SSH
+
+To get [your ssh keys](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on the server, if not done during Ubuntu install. On your computer do the following. Or if you don't have `ssh-copy-id`: [see this](https://serverfault.com/a/583659/311594).
+
+```bash
+ssh-copy-id -i ~/.ssh/id_rsa.pub khoe@khoe.lan
+```
+
+**Log in to server**
+
+ ```bash
+ ssh khoe.lan
+ ```
+
+**Get Khoe**
+
+```bash
+git clone https://github.com/khoe-cloud/khoe-ansible.git ansible
+cd ansible && ./install.sh
+```
+Then enter `khoe` user's password once, when `sudo` asks for it.
+
+`install.sh` sets up passwordless `sudo` for the `khoe` user, installs Ansible and then uses `ansible-playbook` to set up the server software. After that the system packages are upgraded and the server will reboot if needed. The process will take a few minutes.
+
+**After that you should re-login.**
