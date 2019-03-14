@@ -1,0 +1,3 @@
+---
+disk_path: '/dev/disk/by-label/{{ item.key }}'
+mount_path: '/media/{{ item.key }}'

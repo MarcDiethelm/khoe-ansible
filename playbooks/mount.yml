@@ -18,12 +18,6 @@
 
   tasks:
 
-    - include_role:
-        name: pmount
-        tasks_from: mount
-      with_dict: "{{ mounts }}"
-      when: task is undefined
-
     # case: Add disk mount
     ###########################################
     - block:
@@ -73,3 +67,15 @@
           do_backup: no
 
       when: task is defined and task == "delete"
+
+
+    # case: Re-mount all disks
+    ###########################################
+    - block:
+
+        - include_role: # not using handlers because we want this to fail if input was bad
+            name: pmount
+            tasks_from: mount
+          with_dict: "{{ mounts }}"
+
+      when: task is undefined

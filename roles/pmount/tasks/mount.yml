@@ -1,25 +1,24 @@
 ---
-- name: "Check if disk is mounted: {{ item.key }}"
-  shell: pmount | grep {{ item.key }}
+- name: "Check if disk is mounted: {{ item.key|quote }}"
+  shell: 'pmount | grep {{ item.key|quote }}'
   register: grep
   failed_when: "grep.rc == 2"
   check_mode: no
   changed_when: false
 
 - debug:
-    msg: "Disk {{ item.key }} is already mounted."
+    msg: "Disk is already mounted: {{ item.key|quote }}"
   when: grep.rc == 0
-
 
 - block:
 
-    - name: "Ensure mount dir is absent before mounting"
+    - name: 'Ensure mount dir is absent before mounting: {{ mount_path|quote }}'
       file:
-        path: "/media/{{ item.key }}"
+        path: '{{ mount_path|quote }}'
         state: absent
       become: yes
 
-    - name: "Mount disk {{ item.key }} to /media/{{ item.key }}."
-      shell: pmount /dev/disk/by-label/{{ item.key }} {{ item.key }}
+    - name: "Mount disk, label: {{ disk_path|quote }}, mount path: {{ mount_path|quote }}."
+      command: 'pmount {{ disk_path|quote }} {{ item.key|quote }}'
 
   when: grep.rc == 1
