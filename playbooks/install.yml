@@ -25,8 +25,13 @@
       when: ansible_distribution == 'Ubuntu' and ansible_architecture is search('armv')
 
   tasks:
-    # Perform general khoe install actions
 
+    # Perform hardware tweaks/workarounds
+  - include_role:
+      name: install
+      tasks_from: hardware
+
+    # Perform general khoe install actions
     - include_role:
         name: install
 

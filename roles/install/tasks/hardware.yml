@@ -1,0 +1,13 @@
+---
+- name: 'Look for bugged crypto module "sun4i_ss" (BananaPi)'
+  shell: 'lsmod | grep sun4i_ss'
+  failed_when: grep.rc > 1
+  changed_when: false
+  register: sun4i_ss
+
+- name: 'Blacklist bugged crypto module "sun4i_ss" (BananaPi)'
+  kernel_blacklist:
+    name: sun4i_ss
+    state: present # means: do blacklist
+  become: yes
+  when: grep.rc == 0
