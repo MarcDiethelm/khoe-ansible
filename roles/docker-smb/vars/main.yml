@@ -1,6 +1,7 @@
 ---
 share_path: '{{ shares_path }}/{{ share_name }}'
 disk_label_share_path: '{{ disk_label_shares_path }}/{{ share_name }}'
+dockerfile_tag: latest
 
 options: [
   "-r", # disable recycle bin

@@ -4,6 +4,11 @@
     - volumes: []
     # options are defined in vars/main.yml
 
+  # Use the correct Dockerfile for the architecture; 'latest' is the default tag
+- set_fact:
+    dockerfile_tag: 'armhf'
+  when: ansible_architecture is search('armv')
+
 - syslogger:
     msg: "khoe: rebuilding smb container"
   no_log: yes # prevents invocation logging
@@ -18,7 +23,7 @@
 - name: (Re-)create a Samba container.
   docker_container:
     name: smb
-    image: dperson/samba
+    image: 'dperson/samba:{{ dockerfile_tag }}'
     state: started
     recreate: yes
     network_mode: host

@@ -14,7 +14,15 @@
         state: present
         update_cache: yes
       become: yes
-      when: ansible_distribution == 'Ubuntu'
+      when: ansible_distribution == 'Ubuntu' and ansible_architecture is not search('armv')
+
+    - name: Add Universe repository (ARM)
+      apt_repository:
+        repo: deb http://ports.ubuntu.com/ubuntu-ports {{ ansible_distribution_release }} universe
+        state: present
+        update_cache: yes
+      become: yes
+      when: ansible_distribution == 'Ubuntu' and ansible_architecture is search('armv')
 
   tasks:
     # Perform general khoe install actions
@@ -51,6 +59,7 @@
         ansible_become: yes
         ansible_become_user: root
         docker_users: [ 'khoe' ] # requires re-log to apply
+        docker_apt_arch: '{{ (ansible_architecture is search("armv")) | ternary("armhf", "amd64") }}'
 
     - include_role:
         name: docker-smb

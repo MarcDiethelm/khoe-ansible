@@ -1,12 +1,13 @@
 Khoe Cloud
 ==========
 
-##### More docs
+##### Docs
 - [Commands](docs/commands.md)
 - [Development](docs/development.md)
 - [Data Import and Migration](docs/migration.md)
 - [Roadmap](https://github.com/khoe-cloud/khoe-ansible/projects/2)
 - [FAQ](https://github.com/khoe-cloud/khoe-ansible/wiki/Frequently-Asked-Questions)
+- [Hardware](https://github.com/khoe-cloud/khoe-ansible/wiki/Hardware)
 
 The mission of this project is to offer essential data privacy and security by making self-hosting basic services simple and secure. Those services are:
 
@@ -31,7 +32,7 @@ If you encounter any problems please [open an issue](https://github.com/khoe-clo
 ## Features (and some technical info)
 
 - Open-source, duh.
-- Hardware independent NAS. If it can run Linux it probably can run Khoe.
+- Hardware independent NAS. If it can run Linux it probably [can run Khoe](https://github.com/khoe-cloud/khoe-ansible/wiki/Hardware).
 - Automatic GnuPG encryption key creation for every user.
 - Concise command line API, which abstracts away the complexities of the underlying tools like Samba, GnuPG, Duplicity, eCryptFS and so on.
 - Network shares are visible in network browsers (except Windows 10).
@@ -76,7 +77,7 @@ See [Commands](docs/commands.md) for in-depth usage documentation.
 - A Ubuntu Server 18.04 LTS install. A fresh install is recommended.
 - Create a standard user with username `khoe`.
 
-> If you want Khoe running on different distros, PRs are welcome of course. But presently I will only support Ubuntu. Armbian and Debian are under consideration, PRs for those would be very welcome.
+> If you want Khoe running on different distros, PRs are welcome of course. But presently only Ubuntu and Armbian (Ubuntu) are supported. Debian is under consideration, PRs for it would be very welcome.
 
 
 #### Connecting to the server
