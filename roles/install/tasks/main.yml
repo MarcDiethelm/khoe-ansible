@@ -1,4 +1,11 @@
 ---
+- name: '~/.profile: cd to ~/ansible on login'
+  blockinfile:
+    path: ~/.profile
+    block: |
+      echo 'cd ~/ansible'
+      cd ~/ansible
+
 - name: Create inventory/host_vars/localhost.yml
   copy:
     src: ../inventory/host_vars/example.yml
