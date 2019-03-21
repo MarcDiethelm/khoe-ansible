@@ -5,9 +5,6 @@
 # ansible-playbook playbooks/nas.yml # (re)start all shares
 
 - hosts: khoe
-  gather_facts: yes
-  gather_subset:
-    - hardware
 
   tasks:
 

@@ -5,8 +5,11 @@
     # options are defined in vars/main.yml
 
   # Use the correct Dockerfile for the architecture; 'latest' is the default tag
+- setup:
+    gather_subset:
+      - hardware
 - set_fact:
-    dockerfile_tag: 'armhf'
+    dockerfile_tag: armhf
   when: ansible_architecture is search('armv')
 
 - syslogger:
