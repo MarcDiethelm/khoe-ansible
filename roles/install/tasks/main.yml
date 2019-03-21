@@ -6,24 +6,14 @@
       echo 'cd ~/ansible'
       cd ~/ansible
 
-- name: Create inventory/host_vars/localhost.yml
-  copy:
-    src: ../inventory/host_vars/example.yml
-    dest: /home/khoe/ansible/inventory/host_vars/localhost.yml
-    owner: khoe
+- name: 'Ensure config directory is present: {{ config_path }}.'
+  file:
+    path: '{{ config_path | mandatory }}'
+    state: directory
+    owner: root
     group: khoe
-    force: no # preserve existing file
-
-# https://stackoverflow.com/a/11512211/546491
-- name: Restrict permissions on inventory directory and subdirectories
-  command: 'find /home/khoe/ansible/inventory -type d -exec chmod 700 {} \;'
-  args:
-    warn: no
-
-- name: Restrict permissions on inventory files
-  command: 'find /home/khoe/ansible/inventory -type f -exec chmod 600 {} \;'
-  args:
-    warn: no
+    mode: 0770
+  become: yes
 
 - name: Restrict permissions on ansible.cfg
   file:

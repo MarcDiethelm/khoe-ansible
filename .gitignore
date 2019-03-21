@@ -3,7 +3,3 @@
 .DS_Store
 
 /roles/_galaxy
-/config
-
-/inventory/host_vars/*
-!/inventory/host_vars/example.yml

@@ -1,4 +1,5 @@
 ---
+  # Using this task instead of `vars_files` reads files on the server host, which makes development easier
 - name: "Load config: {{ config_path }}/{{ file }}."
   command: "cat {{ config_path }}/{{ file | mandatory }}"
   register: cat

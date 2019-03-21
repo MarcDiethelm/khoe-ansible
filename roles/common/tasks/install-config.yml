@@ -1,18 +1,9 @@
 ---
-# config_path is defined in the inventory file
-- name: "Ensure config directory is present: {{ config_path }}."
-  file:
-    path: "{{ config_path | mandatory }}"
-    state: directory
-    owner: khoe
-    group: khoe
-    mode: 0700
-
 - name: "Add config file: {{ config_path }}/{{ file }}."
   copy:
     src: "files/{{ file }}"
     dest: "{{ config_path }}/{{ file }}"
-    backup: yes
+    force: no
     owner: khoe
     group: khoe
     mode: 0600

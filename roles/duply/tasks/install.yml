@@ -4,3 +4,18 @@
     name: python-boto
     state: present
   become: yes
+
+- import_role:
+    name: common
+    tasks_from: install-config
+  vars:
+    file: remote_backups.example.yml
+
+- name: 'Create file: {{ config_path }}/{{ config_file_remote_backups }}'
+  copy:
+    remote_src: yes
+    src: '{{ config_path }}/remote-backups.example.yml'
+    dest: '{{ config_path }}/{{ config_file_remote_backups }}'
+    owner: khoe
+    group: khoe
+    force: no  # preserve existing file

@@ -1,9 +1,10 @@
 khoe_users_group: khoe-users
-config_path: /etc/khoe/
+config_path: /etc/khoe
 config_file_khoe: khoe.yml
 config_file_users: users.yml
 config_file_mounts: mounts.yml
 config_file_smb: smb.yml
+config_file_remote_backups: remote-backups.yml
 
 config_dir_user: /home/{{ username }}/config
 

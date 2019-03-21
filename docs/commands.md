@@ -133,7 +133,7 @@ Commands Duplicity to output a list of all backed up files at a certain date for
 #### <a name=option-formats>Option formats</a>
 Some of the command and configuration options need to be in specific formats understood by the underlying tools.
 
-<a name=option-remotename>**remotename**</a>: Backup destinations and their authentication secrets should be added to the file `inventory/host_vars/localhost.yml`. The *key* (first line) defines the `remotename` which may then be specified in the commands.  
+<a name=option-remotename>**remotename**</a>: Backup destinations and their authentication secrets should be added to the file `/etc/khoe/remote-backups.yml`. The *key* (first line of a configuration block) defines the `remotename` which may then be specified as an option in the commands.  
 Currently file (local) and S3 protocols are implemented. More [protocols supported by Duplicity](http://duplicity.nongnu.org/duplicity.1.html#sect7) can be [added by pull request](#adding-backup-protocols) or by [creating an issue](https://github.com/khoe-cloud/khoe-ansible/issues/new).
 
 <a name=age>**age**</a>: used for `setup`, `restore`, `fetch` and `list`. Specified in [Duplicity time format](http://duplicity.nongnu.org/duplicity.1.html#sect8).  

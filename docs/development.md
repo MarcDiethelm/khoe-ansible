@@ -18,7 +18,6 @@ For *remote* development from your work machine some additional steps are requir
 - `sudo easy_install pip && pip install --user passlib` (Mac only, needed for password hashing in user:create task)
 - Edit the file `ansible.cfg`: search for `inventory` and un/comment the  development/localhost lines respectively. By default the `localhost` line is uncommented.
 - Enter the correct hostname in `inventory/development` [default: khoe.lan].
-- Create a file `domain.tld.yml` in `inventory/host_vars` with your remote storage credentials.
 
 ### Adding backup protocols
 
