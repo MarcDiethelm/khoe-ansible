@@ -7,9 +7,12 @@ backup_list_default_content: |
   # Don't quote paths. Absolute paths will be prefixed and the complete path automatically quoted.
   # Below are some commented out examples:
 
-  #  - some folder as example/to exclude/
-  #  + some folder as example/
-  #  + important.pdf
+  # - some folder as example/to exclude/
+  # + some folder as example/
+  # + important.pdf
+
+  # To backup everything use this. This is the default
+  + **
 
 remote: "{{ remote_backups[ remote_name ] }}"
 backup_uri: "{{ remote.backup_location }}/{{ hostname.stdout | default('khoe') }}-{{ username }}-{{ profile_name }}"
