@@ -17,14 +17,15 @@ The mission of this project is to offer essential data privacy and security by m
 4. General encryption
 5. Polished web frontend
 6. Password manager
+7. VPN to access your cloud while on the road (?)
 
-1 and 2 are working. 3 is partially done. 4, 5 and 6 are not done yet.
+1 and 2 are working. 3 is partially done. 4, 5, 6 and 7 are not done yet.
 
-The goal of this project is to make setup and usage of its services as non-technical and convenient as feasible. And as such it naturally comes with some restrictions to keep the users safe and combobulated and also with default settings that just work. It's really important to strike the right balance between security and convenience. My hope is the community will inform these decisions as the project evolves.
+The goal of this project is to make setup and usage of its services as non-technical and convenient as feasible. And as such it naturally comes with some restrictions to keep the users safe and combobulated and also with default options that just work. It's really important to strike the right balance between security and convenience. My hope is the community will inform these decisions as the project evolves.
 
 Right now the project is at an early stage and is not yet suited for consumers or recommended for production. Many design decisions are open for discussion. The ideal early adopter is an enthusiast with some knowledge of Linux systems, Ansible, Samba, GnuPG, etc. Khoe uses [**Ansible**](https://github.com/ansible/ansible) to set up and maintain a personal cloud server.
 
-The UI still is command line only but working well. We're hoping for feedback, info about your use cases, what you like and what's missing for you and of course contributions, be that code or bug reports or help with documentation. Questions are welcome too.
+The UI still is command line only but working well. If you've entered some commands in Bash before, you'll manage. We're hoping for feedback, info about your use cases, what you like and what's missing for you and of course contributions, be that code or bug reports or help with documentation. Questions are welcome too.
 
 If you encounter any problems please [open an issue](https://github.com/khoe-cloud/khoe-ansible/issues/new).
 
