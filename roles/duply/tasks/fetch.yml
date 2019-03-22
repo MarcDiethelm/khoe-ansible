@@ -5,7 +5,7 @@
     msg: |
       Restore a file/dir from backup to {{ restore_base_path }}, user: '{{ username }}', profile: '{{ profile_name }}'
       Backup location: {{ remote.backup_location }}"
-      Path in backup: '{{ real_fetch_path }}'
+      Path in backup: '{{ fetch_path }}'
 
 - file:
     path: "{{ restore_base_path }}"
@@ -25,7 +25,7 @@
 
 - block:
     - name: Restore from file system
-      command: 'sudo -E duply {{ profile_path|quote}} fetch {{ real_fetch_path|quote }} {{ fetch_target_path|quote }} {{ age|quote }}'
+      command: 'sudo -E duply {{ profile_path|quote}} fetch {{ fetch_path|quote }} {{ fetch_target_path|quote }} {{ age|quote }}'
       args:
         warn: no
       register: duply
@@ -36,7 +36,7 @@
 
 - block:
     - name: Restore from S3 storage
-      command: 'sudo -E duply {{ profile_path|quote}} fetch {{ real_fetch_path|quote }} {{ fetch_target_path|quote }} {{ age|quote }}'
+      command: 'sudo -E duply {{ profile_path|quote}} fetch {{ fetch_path|quote }} {{ fetch_target_path|quote }} {{ age|quote }}'
       environment:
         AWS_ACCESS_KEY_ID: "{{ remote.api_key }}"
         AWS_SECRET_ACCESS_KEY: "{{ remote.api_key_secret }}"

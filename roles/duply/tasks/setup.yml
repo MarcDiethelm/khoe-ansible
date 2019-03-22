@@ -10,6 +10,7 @@
 - debug:
     msg: |
       Creating duply profile '{{ profile_name }}' for user '{{ username }}'
+      Source path: {{ source_path }}
       Backup destination: {{ backup_uri }}
       Encrypting with gpg key: {{ user.fingerprint }}
 
@@ -31,7 +32,7 @@
 
 - name: Prefix absolute paths to backup list
   set_fact:
-    backuplist: "{{ backuplist.stdout_lines | map('regex_replace', '^([\\+|-]) (.*)', '\\1 \"'+source_path+'/'+share_name+'/\\2\"') | list }}"
+    backuplist: "{{ backuplist.stdout_lines | map('regex_replace', '^([\\+|-]) (.*)', '\\1 \"'+source_path+'/\\2\"') | list }}"
 
 - include_role:
     name: oefenweb.duply-backup

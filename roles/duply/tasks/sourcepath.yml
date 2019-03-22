@@ -15,9 +15,9 @@
 
 - name: "set default source path"
   set_fact:
-    source_path: "{{ shares_path }}"
+    source_path: "{{ shares_path }}/{{ share_name }}"
   when: disk_label == ''
 - name: "set source path for disk label: {{ disk_label }}"
   set_fact:
-    source_path: "{{ disk_label_shares_path }}"
+    source_path: "{{ disk_label_shares_path }}/{{ share_name }}"
   when: disk_label != ''
