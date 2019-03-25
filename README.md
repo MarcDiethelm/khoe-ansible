@@ -9,23 +9,23 @@ Khoe Cloud
 - [FAQ](https://github.com/khoe-cloud/khoe-ansible/wiki/Frequently-Asked-Questions)
 - [Hardware](https://github.com/khoe-cloud/khoe-ansible/wiki/Hardware)
 
-The mission of this project is to offer essential data privacy and security by making self-hosting basic services simple and secure. Those services are:
+The mission of this project is to offer essential data privacy and security by making self-hosting basic services really simple and secure. Those services are:
 
 1. Network attached storage
 2. Encrypted offsite backup
 3. System recovery with a USB 'key'
 4. General encryption
-5. Polished web frontend
+5. Polished, unified and simple web frontend
 6. Password manager
 7. VPN to access your cloud while on the road (?)
 
 1 and 2 are working. 3 is partially done. 4, 5, 6 and 7 are not done yet.
 
-The goal of this project is to make setup and usage of its services as non-technical and convenient as feasible. And as such it naturally comes with some restrictions to keep the users safe and combobulated and also with default options that just work. It's really important to strike the right balance between security and convenience. My hope is the community will inform these decisions as the project evolves.
+The goal is to make setup and usage of those services as non-technical and convenient as feasible. And as such it naturally comes with some restrictions to keep the users safe and [combobulated](https://www.urbandictionary.com/define.php?term=combobulated) but also with default options that just work. It's really important to strike the right balance between security and convenience. My hope is the community will inform these decisions as the project evolves.
 
-Right now the project is at an early stage and is not yet suited for consumers or recommended for production. Many design decisions are open for discussion. The ideal early adopter is an enthusiast with some knowledge of Linux systems, Ansible, Samba, GnuPG, etc. Khoe uses [**Ansible**](https://github.com/ansible/ansible) to set up and maintain a personal cloud server.
+Right now the project is at an early stage and is not yet suited for end users or recommended for production. Many design decisions are open for discussion. The ideal early adopter is an enthusiast with some knowledge of Linux systems, SSH, Ansible, Samba, GnuPG, etc. Khoe uses [**Ansible**](https://github.com/ansible/ansible) to set up and maintain a personal cloud server.
 
-The UI still is command line only but working well. If you've entered some commands in Bash before, you'll manage. We're hoping for feedback, info about your use cases, what you like and what's missing for you and of course contributions, be that code or bug reports or help with documentation. Questions are welcome too.
+The UI still is command line only but working well. If you've entered some commands in Bash before, you'll manage. We're hoping for feedback, info about your use cases, what you like and what's missing for you, suggestions how to make it easier to use and of course contributions, be that code or bug reports or help with documentation. Questions are welcome too!
 
 If you encounter any problems please [open an issue](https://github.com/khoe-cloud/khoe-ansible/issues/new).
 
@@ -33,9 +33,10 @@ If you encounter any problems please [open an issue](https://github.com/khoe-clo
 ## Features (and some technical info)
 
 - Open-source, duh.
-- Hardware independent NAS. If it can run Linux it probably [can run Khoe](https://github.com/khoe-cloud/khoe-ansible/wiki/Hardware).
-- Automatic GnuPG encryption key creation for every user.
+- Hardware independent, e.g. use an old laptop or an ARM single board computer. If it can run Linux it probably [can run Khoe](https://github.com/khoe-cloud/khoe-ansible/wiki/Hardware).
+- Configuration-free
 - Concise command line API, which abstracts away the complexities of the underlying tools like Samba, GnuPG, Duplicity, eCryptFS and so on.
+- Automatic GnuPG encryption key creation for every user.
 - Network shares are visible in network browsers (except Windows 10).
 - Network shares are Apple Time Machine compatible.
 - Share permissions are backed by actual Linux users and file system permissions (soon: and support simple multi-user file sharing.)
@@ -54,7 +55,7 @@ Standard administration of a Khoe server is currently performed by executing `an
 **Quick start**: the following command will create a user with default options.
 
 ```bash
-ansible-playbook playbooks/user.yml -e task=create -e username=example1 -e password=1234
+ansible-playbook playbooks/user.yml -e task=create -e username=example1 -"e password='1234'"
 ```
 
 Creating a user with Khoe also creates
