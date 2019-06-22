@@ -16,8 +16,8 @@ The mission of this project is to offer essential data privacy and security by m
 3. System recovery with a USB 'key'
 4. General encryption
 5. Polished, unified and simple web frontend
-6. Password manager
-7. VPN to access your cloud while on the road (?)
+6. VPN to access your cloud while on the road (?)
+7. ~~Password manager~~
 
 1 and 2 are working. 3 is partially done. 4, 5, 6 and 7 are not done yet.
 
@@ -72,7 +72,7 @@ For offsite backups to storage platforms like DigitalOcean Places you need to cr
 See [Commands](docs/commands.md) for in-depth usage documentation.
 
 
-## Install
+## Installation
 
 ### Prerequisites
 
@@ -99,14 +99,15 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub khoe@khoe.lan
 **Log in to server**
 
  ```bash
- ssh khoe.lan
+ ssh khoe@khoe.lan
  ```
 
 **Get Khoe**
 
 ```bash
-git clone https://github.com/khoe-cloud/khoe-ansible.git ansible
-cd ansible && ./install.sh
+git clone https://github.com/khoe-cloud/khoe-ansible.git ansible \
+&& cd ansible \
+&& ./install.sh
 ```
 Then enter `khoe` user's password once, when `sudo` asks for it.
 
