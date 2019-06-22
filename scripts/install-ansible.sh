@@ -6,3 +6,4 @@ sudo apt-get install --yes \
     software-properties-common \
     ansible \
     python-jmespath \
+&& ansible --version
