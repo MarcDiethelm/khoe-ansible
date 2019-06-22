@@ -9,7 +9,7 @@
     name: common
     tasks_from: install-config
   vars:
-    file: remote_backups.example.yml
+    file: remote-backups.example.yml
 
 - name: 'Create file: {{ config_path }}/{{ config_file_remote_backups }}'
   copy:
