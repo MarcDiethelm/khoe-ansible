@@ -58,21 +58,6 @@
         ansible_become_user: root
 
     - include_role:
-        name: geerlingguy.pip
-      vars:
-        ansible_become: yes
-        ansible_become_user: root
-        pip_install_packages: docker # additional package to control containers with python
-
-    - include_role:
-        name: geerlingguy.docker
-      vars:
-        ansible_become: yes
-        ansible_become_user: root
-        docker_users: [ 'khoe' ] # requires re-log to apply
-        docker_apt_arch: '{{ (ansible_architecture is search("armv")) | ternary("armhf", "amd64") }}'
-
-    - include_role:
         name: docker-smb
         tasks_from: install
 

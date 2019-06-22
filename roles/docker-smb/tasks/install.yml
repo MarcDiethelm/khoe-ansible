@@ -4,3 +4,76 @@
     tasks_from: install-config
   vars:
     file: smb.yml
+
+- name: 'Get DEB architecture.'
+  command: dpkg --print-architecture
+  register: deb_arch
+- set_fact:
+    arch: '{{ deb_arch.stdout is search("arm") | ternary("arm", "x86") }}'
+- debug:
+    var: arch
+- set_fact:
+    docker_apt_arch: '{{ arch is search("arm") | ternary("armhf", "amd64") }}'
+- debug:
+    var: docker_apt_arch
+
+## not needed
+# - include_role:
+#     name: geerlingguy.pip
+#   vars:
+#     ansible_become: yes
+#     ansible_become_user: root
+#     pip_install_packages: docker # additional package to control containers with python
+
+## fails with: "No package matching 'docker-ce' is available"
+# - include_role:
+#     name: geerlingguy.docker
+#   vars:
+#     ansible_become: yes
+#     ansible_become_user: root
+#     docker_users: [ 'khoe' ] # requires re-log to apply
+#     docker_apt_arch: '{{ arch is search("arm") | ternary("armhf", "amd64") }}'
+
+## Implement the failing role above ourselves
+
+- name: Add Docker apt key.
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    state: present
+  ignore_errors: "{{ docker_apt_ignore_key_error }}"
+  become: true
+
+## Errors the first time, but repo is added correctly
+- name: Add Docker repository.
+  apt_repository:
+    repo: "{{ docker_apt_repository }}"
+    state: present
+    update_cache: true
+  become: true
+  register: ar
+#
+# - debug:
+#     var: ar
+
+## fails again with: "No package matching 'docker-ce' is available"
+## apt show docker-ce shows the package however
+# - name: Install Docker.
+#   package:
+#     name: "{{ docker_package }}"
+#     state: "{{ docker_package_state }}"
+#   become: true
+
+## https://github.com/ansible/ansible/issues/58237
+
+- name: Install Docker manually
+  command: apt install --yes docker-ce
+  become: true
+
+- name: Ensure docker users are added to the docker group.
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: true
+  with_items: "{{ docker_users }}"
+  become: true
