@@ -3,26 +3,32 @@
   gather_facts: yes
 
   pre_tasks:
+    - name: 'Get DEB architecture.'
+      command: dpkg --print-architecture
+      register: deb_arch
+    - set_fact:
+        arch: '{{ deb_arch.stdout is search("arm") | ternary("arm", "x86") }}'
+
     - name: Update apt cache.
       apt: update_cache=true cache_valid_time=600
       when: ansible_os_family == 'Debian'
       become: yes
 
-    - name: Add Universe repository
+    - name: Add Universe repository (any x86)
       apt_repository:
         repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
         state: present
         update_cache: yes
       become: yes
-      when: ansible_distribution == 'Ubuntu' and ansible_architecture is not search('armv')
+      when: ansible_distribution == 'Ubuntu' and arch == 'x86'
 
-    - name: Add Universe repository (ARM)
+    - name: Add Universe repository (any ARM)
       apt_repository:
-        repo: deb http://ports.ubuntu.com/ubuntu-ports {{ ansible_distribution_release }} universe
+        repo: deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports {{ ansible_distribution_release }} universe
         state: present
         update_cache: yes
       become: yes
-      when: ansible_distribution == 'Ubuntu' and ansible_architecture is search('armv')
+      when: ansible_distribution == 'Ubuntu' and arch == 'arm'
 
   tasks:
 
