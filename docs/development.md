@@ -1,5 +1,5 @@
 
-# Development
+Development
 =============
 
 ## Setup normal usage vs. development
