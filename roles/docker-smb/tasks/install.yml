@@ -17,7 +17,15 @@
 - debug:
     var: docker_apt_arch
 
-## fails with: "No package matching 'docker-ce' is available" on Rock 64 (Armbian Bionic)
+## not needed
+# - include_role:
+#     name: geerlingguy.pip
+#   vars:
+#     ansible_become: yes
+#     ansible_become_user: root
+#     pip_install_packages: docker # additional package to control containers with python
+
+## fails with: "No package matching 'docker-ce' is available"
 # - include_role:
 #     name: geerlingguy.docker
 #   vars:
