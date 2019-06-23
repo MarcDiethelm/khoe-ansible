@@ -5,13 +5,9 @@
   vars:
     file: smb.yml
 
-- name: 'Get DEB architecture.'
-  command: dpkg --print-architecture
-  register: deb_arch
-- set_fact:
-    arch: '{{ deb_arch.stdout is search("arm") | ternary("arm", "x86") }}'
-- debug:
-    var: arch
+- include_role:
+    name: common
+    tasks_from: get-architecture
 - set_fact:
     docker_apt_arch: '{{ arch is search("arm") | ternary("armhf", "amd64") }}'
 - debug:

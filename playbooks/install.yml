@@ -3,11 +3,9 @@
   gather_facts: yes
 
   pre_tasks:
-    - name: 'Get DEB architecture.'
-      command: dpkg --print-architecture
-      register: deb_arch
-    - set_fact:
-        arch: '{{ deb_arch.stdout is search("arm") | ternary("arm", "x86") }}'
+    - include_role:
+        name: common
+        tasks_from: get-architecture
 
     - name: Update apt cache.
       apt: update_cache=true cache_valid_time=600

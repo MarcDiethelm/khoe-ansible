@@ -1,0 +1,12 @@
+---
+# - setup:
+#     gather_subset:
+#       - hardware
+# Get CPU architecture
+- name: 'Get DEB architecture.'
+  command: dpkg --print-architecture
+  register: deb_arch
+- set_fact:
+    arch: '{{ deb_arch.stdout is search("arm") | ternary("arm", "x86") }}'
+- debug:
+    var: arch

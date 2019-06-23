@@ -5,12 +5,12 @@
     # options are defined in vars/main.yml
 
   # Use the correct Dockerfile for the architecture; 'latest' is the default tag
-- setup:
-    gather_subset:
-      - hardware
+- include_role:
+    name: common
+    tasks_from: get-architecture
 - set_fact:
     dockerfile_tag: armhf
-  when: ansible_architecture is search('armv')
+  when: arch == 'arm'
 
 - syslogger:
     msg: "khoe: rebuilding smb container"
@@ -23,7 +23,7 @@
     msg: "users: {{ _smb.users.keys() | join(', ') | to_json }}"
   no_log: yes
 
-- name: (Re-)create a Samba container.
+- name: '(Re-)create a Samba container, dockerfile_tag: {{ dockerfile_tag }}.'
   docker_container:
     name: smb
     image: 'dperson/samba:{{ dockerfile_tag }}'
