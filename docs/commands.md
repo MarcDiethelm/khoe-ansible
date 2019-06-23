@@ -37,7 +37,7 @@ Removable drives need to have a *label* (name) to be mounted by Khoe.
 To see the labelled drives available on the system: `ls /dev/disk/by-label/`. To see disks mounted by khoe: `pmount`.
 `pmount` is used to mount removable drives without changing `/etc/fstab`.
 
-Note: The disk label must not contain ascii hex codes. E.g. NTFS drives with `\x20` (space).
+Note: The disk label must not contain ascii hex codes. E.g. NTFS drives with `\x20` (space character).
 
 ```
 ansible-playbook playbooks/mount.yml -e task=create -e disk_label=label
