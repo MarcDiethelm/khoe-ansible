@@ -3,9 +3,6 @@
 - src: geerlingguy.docker # can be github, web, etc.
   version: master # default, but useful to lock to specific version
 
-- src: geerlingguy.pip
-  version: master
-
 - src: oefenweb.duply
   version: master
 
