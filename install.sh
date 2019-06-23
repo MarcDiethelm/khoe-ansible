@@ -20,7 +20,7 @@ ansible-galaxy install -r requirements.yml && \
 printf '\n%s\n' "Installing programs and config files." && \
 ansible-playbook $scriptpath/playbooks/install.yml && \
 \
-printf '\n%s\n%s\n' "Installation complete." "Quickstart: 'ansible-playbook playbooks/user.yml -e task=create -e username=example1 -e \"password='1234'\" [-e share_name=username] [disk_label=label] [-e \"smbpassword='2345'\"]."
+printf '\n%s\n%s\n' "Installation complete." "Quickstart: 'ansible-playbook playbooks/user.yml -e task=create -e username=example1 -e \"password='1234'\" [-e share_name=username] [-e disk_label=label] [-e \"smbpassword='2345'\"]."
 
 # https://github.com/ansible/ansible-examples/blob/master/language_features/ansible_pull.yml
 # ansible-pull # need to check it out!
