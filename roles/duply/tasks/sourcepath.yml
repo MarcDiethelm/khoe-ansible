@@ -1,15 +1,4 @@
 ---
-- block:
-    - include_role:
-        name: common
-        tasks_from: load-config
-      vars:
-        file: "{{ config_file_users }}"
-        varname: "users"
-  when: users is not defined
-
-- set_fact:
-    user: "{{ users[username] }}"
 - set_fact:
     disk_label: "{{ user.shares[share_name] }}"
 

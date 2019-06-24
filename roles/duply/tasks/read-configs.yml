@@ -1,0 +1,31 @@
+---
+- include_role:
+    name: common
+    tasks_from: load-config
+  vars:
+    file: "{{ config_file_remote_backups }}"
+    varname: "remote_backups"
+
+- fail:
+    msg: "No remote backup destinations are configured. The {{ config_file_remote_backups }} should define the variable 'remote_backups'."
+  when: remote_backups is undefined
+
+- include_role:
+    name: common
+    tasks_from: load-config
+  vars:
+    file: "{{ config_file_users }}"
+    varname: users
+
+- set_fact:
+    user: "{{ users[username] }}"
+
+
+- block:
+    - include_role:
+        name: common
+        tasks_from: load-config
+      vars:
+        file: "{{ config_file_users }}"
+        varname: "users"
+  when: users is not defined

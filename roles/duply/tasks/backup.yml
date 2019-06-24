@@ -1,4 +1,6 @@
 ---
+- include_tasks: read-configs.yml
+
 - debug:
     msg: |
       Run a duply backup, user: '{{ username }}', profile: '{{ profile_name }}'
