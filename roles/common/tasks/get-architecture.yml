@@ -5,6 +5,7 @@
 # Get CPU architecture
 - name: 'Get DEB architecture.'
   command: dpkg --print-architecture
+  changed_when: false
   register: deb_arch
 - set_fact:
     arch: '{{ deb_arch.stdout is search("arm") | ternary("arm", "x86") }}'
