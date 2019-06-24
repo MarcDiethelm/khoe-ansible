@@ -69,7 +69,7 @@ To use existing data with a Khoe share see [Data Import and Migration](docs/migr
 Backup profiles are bound to share directories, since the only way a standard user interacts with Khoe is via Samba shares. (future: likely also restricted rsync.)  
 For offsite backups to storage platforms like DigitalOcean Places you need to create an account there and enter the credentials as described in [remotename](docs/commands.md#option-remotename).
 
-See [Commands](docs/commands.md) for in-depth usage documentation.
+> See [Commands](docs/commands.md) for in-depth usage documentation.
 
 
 ## Installation
