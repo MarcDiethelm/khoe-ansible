@@ -17,9 +17,8 @@ The mission of this project is to offer essential data privacy and security by m
 4. General encryption
 5. Polished, unified and simple web frontend
 6. VPN to access your cloud while on the road (?)
-7. ~~Password manager~~
 
-1 and 2 are working. 3 is partially done. 4, 5, 6 and 7 are not done yet.
+1 and 2 are working. 3 is partially done. 4, 5 and 6 are not done yet.
 
 The goal is to make setup and usage of those services as non-technical and convenient as feasible. And as such it naturally comes with some restrictions to keep the users safe and [combobulated](https://www.urbandictionary.com/define.php?term=combobulated) but also with default options that just work. It's really important to strike the right balance between security and convenience. My hope is the community will inform these decisions as the project evolves.
 
