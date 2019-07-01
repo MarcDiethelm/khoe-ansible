@@ -13,7 +13,7 @@ For *remote* development from your work machine some additional steps are requir
 **on work machine**
 
 - Install ansible
-- Clone the khoe-ansible project to a local workspace: `git clone --branch develop https://github.com/khoe-cloud/khoe-ansible.git khoe-ansible`
+- Clone the khoe-nas project to a local workspace: `git clone --branch develop https://github.com/khoe-cloud/khoe-nas.git khoe-nas`
 - `ansible-galaxy install -r requirements.yml` (satisfy dependencies; installs to `roles/_galaxy`)
 - `sudo easy_install pip && pip install --user passlib` (Mac only, needed for password hashing in user:create task)
 - Edit the file `ansible.cfg`: search for `inventory` and un/comment the  development/localhost lines respectively. By default the `localhost` line is uncommented.

@@ -1,13 +1,13 @@
-Khoe Cloud
+Khoe NAS
 ==========
 
 ##### Docs
 - [Commands](docs/commands.md)
 - [Development](docs/development.md)
 - [Data Import and Migration](docs/migration.md)
-- [Roadmap](https://github.com/khoe-cloud/khoe-ansible/projects/2)
-- [FAQ](https://github.com/khoe-cloud/khoe-ansible/wiki/Frequently-Asked-Questions)
-- [Hardware](https://github.com/khoe-cloud/khoe-ansible/wiki/Hardware)
+- [Roadmap](https://github.com/khoe-cloud/khoe-nas/projects/2)
+- [FAQ](https://github.com/khoe-cloud/khoe-nas/wiki/Frequently-Asked-Questions)
+- [Hardware](https://github.com/khoe-cloud/khoe-nas/wiki/Hardware)
 
 The mission of this project is to offer essential data privacy and security by making self-hosting basic services really simple and secure. Those services are:
 
@@ -27,16 +27,16 @@ Right now the project is at an early stage and is not yet suited for end users o
 
 The UI still is command line only but working well. If you've entered some commands in Bash before, you'll manage. We're hoping for feedback, info about your use cases, what you like and what's missing for you, suggestions how to make it easier to use and of course contributions, be that code or bug reports or help with documentation. Questions are welcome too!
 
-If you encounter any problems please [open an issue](https://github.com/khoe-cloud/khoe-ansible/issues/new).
+If you encounter any problems please [open an issue](https://github.com/khoe-cloud/khoe-nas/issues/new).
 
 
 ## Features (and some technical info)
 
 - Open-source, duh.
-- Hardware independent, e.g. use an old laptop or an ARM single board computer. If it can run Linux it probably [can run Khoe](https://github.com/khoe-cloud/khoe-ansible/wiki/Hardware).
+- Hardware independent, e.g. use an old laptop or an ARM single board computer. If it can run Linux it probably [can run Khoe](https://github.com/khoe-cloud/khoe-nas/wiki/Hardware).
 - Configuration-free
 - Concise command line API, which abstracts away the complexities of the underlying tools like Samba, GnuPG, Duplicity, eCryptFS and so on.
-- Automatic GnuPG encryption key creation for every user.
+- Automatic GnuPG encryption key creation for each user.
 - Network shares are visible in network browsers (except Windows 10).
 - Network shares are Apple Time Machine compatible.
 - Share permissions are backed by actual Linux users and file system permissions (soon: and support simple multi-user file sharing.)
@@ -105,7 +105,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub khoe@khoe.lan
 **Get Khoe**
 
 ```bash
-git clone https://github.com/khoe-cloud/khoe-ansible.git ansible \
+git clone https://github.com/khoe-cloud/khoe-nas.git ansible \
 && cd ansible \
 && ./install.sh
 ```
