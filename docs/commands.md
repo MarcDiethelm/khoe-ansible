@@ -61,7 +61,7 @@ Khoe uses Samba to share directories in the local network. Samba runs in a Docke
 Samba's VFS "recycle bin" is disabled, because of its questionable usability. May add option to enable it (per share) if requested.
 
 ```
-ansible-playbook playbooks/nas.yml -e task=create -e username=example1 -e smbpassword=1234 [-e share_name=example1] [-e disk_label=label]
+ansible-playbook playbooks/nas.yml -e task=create -e username=example1 -e "smbpassword='1234'" [-e share_name=example1] [-e disk_label=label]
 ansible-playbook playbooks/nas.yml -e task=delete -e username=example1 -e share_name=example1
 ansible-playbook playbooks/nas.yml
 ```
