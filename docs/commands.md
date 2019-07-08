@@ -85,7 +85,7 @@ ansible-playbook playbooks/backup.yml -e task=setup -e username=example1 [-e "pa
 
 ansible-playbook playbooks/backup.yml -e task=backup -e username=example1 [-e share_name=username] [-e remote_name=remotename] [-e "backup_list_name='default'"] [-e dry_run=no]
 ansible-playbook playbooks/backup.yml -e task=restore -e username=example1 [-e share_name=username] [-e remote_name=remotename] [-e "backup_list_name='default'"] [-e age=0D] [-e age=2019-01-23]
-ansible-playbook playbooks/backup.yml -e task=fetch -e username=username -e "fetch_path='dir/filename'" [-e share_name=nas] [-e remote_name=remotename] [-e "backup_list_name='default'"] [-e age=0D] [-e age=2019-01-23]
+ansible-playbook playbooks/backup.yml -e task=fetch -e username=username -e "fetch_path='dir/filename'" [-e share_name=username] [-e remote_name=remotename] [-e "backup_list_name='default'"] [-e age=0D] [-e age=2019-01-23]
 
 ansible-playbook playbooks/backup.yml -e task=create-cronjob -e username=example1 [-e share_name=username] [-e remote_name=remotename] [-e "backup_list_name='default'"] [-e minute=0] [-e hour=4] [-e day=*] [-e month=*] [-e weekday=*] [-e dry_run=no]
 ansible-playbook playbooks/backup.yml -e task=delete-cronjob -e username=example1 [-e share_name=username] [-e remote_name=remotename] [-e "backup_list_name='default'"]
