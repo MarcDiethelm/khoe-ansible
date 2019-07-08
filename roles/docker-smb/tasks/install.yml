@@ -17,59 +17,15 @@
     ansible_become_user: root
     pip_install_packages: docker
 
-## fails with: "No package matching 'docker-ce' is available" on Rock 64 (Armbian Bionic)
-# - include_role:
-#     name: geerlingguy.docker
-#   vars:
-#     ansible_become: yes
-#     ansible_become_user: root
-#     docker_users: [ 'khoe' ] # requires re-log to apply
-#     docker_apt_arch: '{{ deb_architecture }}'
+- include_role:
+    name: geerlingguy.docker
+  vars:
+    ansible_become: yes
+    ansible_become_user: root
+    docker_users: [ 'khoe' ] # requires re-log to apply
+    docker_apt_arch: '{{ deb_architecture }}'
 
-## Implement the failing role above ourselves
-
-- name: Add Docker apt key.
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
-    state: present
-  ignore_errors: "{{ docker_apt_ignore_key_error }}"
-  become: true
-
-## Errors the first time, but repo is added correctly
-- name: 'Add Docker repository: {{ docker_apt_repository }}'
-  apt_repository:
-    repo: "{{ docker_apt_repository }}"
-    state: present
-    update_cache: true
-  become: true
-  register: ar
-#
-# - debug:
-#     var: ar
-
-## fails again with: "No package matching 'docker-ce' is available"
-## apt show docker-ce shows the package however
-# - name: Install Docker.
-#   package:
-#     name: "{{ docker_package }}"
-#     state: "{{ docker_package_state }}"
-#   become: true
-
-## https://github.com/ansible/ansible/issues/58237
-
-- name: Install Docker manually
-  command: apt install --yes docker-ce
-  become: true
-
-- name: Ensure docker users are added to the docker group.
-  user:
-    name: "{{ item }}"
-    groups: docker
-    append: true
-  with_items: "{{ docker_users }}"
-  become: true
-
+# Pull dperson/samba from Docker Hub now, saves time later
 - set_fact:
     dockerfile_tag: '{{ deb_architecture }}'
   when: architecture_is_arm|bool
