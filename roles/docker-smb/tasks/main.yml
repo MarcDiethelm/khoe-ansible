@@ -9,8 +9,11 @@
     name: common
     tasks_from: get-architecture
 - set_fact:
-    dockerfile_tag: armhf
-  when: arch == 'arm'
+    dockerfile_tag: '{{ deb_architecture }}'
+  when: architecture_is_arm|bool
+- set_fact:
+    dockerfile_tag: aarch64
+  when: architecture_is_arm|bool and deb_architecture == 'arm64'
 
 - syslogger:
     msg: "khoe: rebuilding smb container"

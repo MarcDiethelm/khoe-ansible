@@ -8,10 +8,6 @@
 - include_role:
     name: common
     tasks_from: get-architecture
-- set_fact:
-    docker_apt_arch: '{{ arch is search("arm") | ternary("armhf", "amd64") }}'
-- debug:
-    var: docker_apt_arch
 
 ## Needed for module docker_container
 - include_role:
@@ -28,7 +24,7 @@
 #     ansible_become: yes
 #     ansible_become_user: root
 #     docker_users: [ 'khoe' ] # requires re-log to apply
-#     docker_apt_arch: '{{ arch is search("arm") | ternary("armhf", "amd64") }}'
+#     docker_apt_arch: '{{ deb_architecture }}'
 
 ## Implement the failing role above ourselves
 
@@ -41,7 +37,7 @@
   become: true
 
 ## Errors the first time, but repo is added correctly
-- name: Add Docker repository.
+- name: 'Add Docker repository: {{ docker_apt_repository }}'
   apt_repository:
     repo: "{{ docker_apt_repository }}"
     state: present

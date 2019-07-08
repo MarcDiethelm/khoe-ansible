@@ -2,12 +2,14 @@
 # - setup:
 #     gather_subset:
 #       - hardware
-# Get CPU architecture
+
+# Get CPU architecture (faster)
 - name: 'Get DEB architecture.'
   command: dpkg --print-architecture
   changed_when: false
-  register: deb_arch
+  register: deb_arch_cmd
+
 - set_fact:
-    arch: '{{ deb_arch.stdout is search("arm") | ternary("arm", "x86") }}'
-- debug:
-    var: arch
+    deb_architecture: '{{deb_arch_cmd.stdout}}'
+- set_fact:
+    architecture_is_arm: '{{ deb_architecture is search("arm") | ternary(true, false) }}'

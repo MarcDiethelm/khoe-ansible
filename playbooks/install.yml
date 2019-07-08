@@ -18,15 +18,16 @@
         state: present
         update_cache: yes
       become: yes
-      when: ansible_distribution == 'Ubuntu' and arch == 'x86'
+      when: ansible_distribution == 'Ubuntu' and not architecture_is_arm
 
-    - name: Add Universe repository (any ARM)
+    - name: 'Add Universe repository (ARM), deb_architecture: {{ deb_architecture }}'
       apt_repository:
-        repo: deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports {{ ansible_distribution_release }} universe
+        repo: 'deb [arch={{ deb_architecture }}] http://ports.ubuntu.com/ubuntu-ports {{ ansible_distribution_release }} universe'
         state: present
         update_cache: yes
       become: yes
-      when: ansible_distribution == 'Ubuntu' and arch == 'arm'
+      when: ansible_distribution == 'Ubuntu' and architecture_is_arm
+
 
   tasks:
 
