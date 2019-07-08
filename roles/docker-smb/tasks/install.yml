@@ -69,3 +69,15 @@
     append: true
   with_items: "{{ docker_users }}"
   become: true
+
+- set_fact:
+    dockerfile_tag: '{{ deb_architecture }}'
+  when: architecture_is_arm|bool
+- set_fact:
+    dockerfile_tag: aarch64
+  when: architecture_is_arm|bool and deb_architecture == 'arm64'
+
+- name: 'Pull Docker image: dperson/samba:{{ dockerfile_tag }}'
+  docker_image:
+    name: 'dperson/samba:{{ dockerfile_tag }}'
+    source: pull
