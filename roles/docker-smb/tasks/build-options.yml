@@ -26,7 +26,7 @@
 
 - name: Add smb users to docker entrypoint options.
   set_fact:
-    options: "{{ options }} + [ '-u \"{{ i.key }};{{ i.value.smbpsw }};{{ i.value.userid }};{{ i.value.group }}\"' ]"
+    options: "{{ options }} + [ '-u \"{{ i.key }};{{ i.value.smbpsw }};{{ i.value.userid }};{{ i.value.group }};{{ i.value.groupid }}\"' ]"
   no_log: "{{ production }}"
   loop: "{{ _smb.users | dict2items }}"
   loop_control:
