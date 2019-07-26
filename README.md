@@ -104,8 +104,8 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub khoe@khoe.lan
 **Get Khoe**
 
 ```bash
-git clone https://github.com/khoe-cloud/khoe-nas.git ansible \
-&& cd ansible \
+git clone https://github.com/khoe-cloud/khoe-nas.git khoe-nas \
+&& cd khoe-nas \
 && ./install.sh
 ```
 Then enter `khoe` user's password once, when `sudo` asks for it.
