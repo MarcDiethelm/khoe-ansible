@@ -16,7 +16,7 @@ insert_final_newline = true
 [*.less]
 indent_size = 2
 
-[{.yml,package.json,.bowerrc,bower.json}]
+[{*.yml,package.json,hosts,inventory/*}]
 indent_style = space
 indent_size = 2
 
