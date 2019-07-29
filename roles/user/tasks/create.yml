@@ -1,17 +1,18 @@
 ---
-- name: Ensure group "{{ username }}" exists
+- name: 'Create group: {{ username }}'
   group:
     name: "{{ username }}"
     gid: "{{ gid | default(omit) }}"
   become: yes
 
-- name: Create user "{{ username }}"
+- name: 'Create user: {{ username }}''
   user:
     name: "{{ username }}"
     uid: "{{ uid | default(omit) }}"
     group: "{{ username }}"
     groups: "{{ khoe_users_group }}"
     password: "{{ password | password_hash('sha512') }}"
+    shell: /bin/bash
   register: user
   become: yes
 
