@@ -16,7 +16,11 @@ insert_final_newline = true
 [*.less]
 indent_size = 2
 
-[{*.yml,package.json,hosts,inventory/*}]
+[{*.yml,package.json,hosts}]
+indent_style = space
+indent_size = 2
+
+[{inventory/*}]
 indent_style = space
 indent_size = 2
 
