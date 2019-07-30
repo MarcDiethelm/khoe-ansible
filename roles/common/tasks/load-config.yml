@@ -4,6 +4,8 @@
   command: "cat {{ config_path }}/{{ file | mandatory }}"
   register: cat
   changed_when: false
+  become: yes
+  become_user: "{{ khoe_user }}"
 
 - name: "Parse config and store in var '{{ varname }}'"
   set_fact:

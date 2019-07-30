@@ -19,3 +19,5 @@
     owner: khoe
     group: khoe
     force: no  # preserve existing file
+  become: yes
+  become_user: "{{ khoe_user }}"
