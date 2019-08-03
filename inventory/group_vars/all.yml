@@ -1,7 +1,7 @@
 khoe_user: khoe
 khoe_users_group: khoe-users
 khoe_nas_path: /usr/local/lib/khoe-nas/current
-config_path: /etc/khoe
+config_path: /etc/khoe-nas
 config_file_khoe: khoe.yml
 config_file_users: users.yml
 config_file_mounts: mounts.yml
