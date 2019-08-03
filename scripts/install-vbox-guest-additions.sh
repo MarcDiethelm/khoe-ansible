@@ -1,13 +1,15 @@
 #!/usr/bin/env sh
+set -eo pipefail
 
-# run with shutdown
+# Mount the Guest Additions ISO and run this script in the Ubuntu guest with sudo
 
 apt install gcc make perl
 
-mount /dev/cdrom /mnt              # or any other mountpoint
+mount /dev/cdrom /mnt
 cd /mnt
 ./VBoxLinuxAdditions.run
 
+# Give access to Virtualbox-mounted shared folders
 usermod -a -G vboxsf $USER
 
 # mount the project here later (if vbox creates the dirs their permissions are wrong)
