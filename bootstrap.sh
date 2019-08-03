@@ -42,5 +42,6 @@ sudo mkdir -p $install_path
 sudo bash -c "wget $tarball_url -O - | tar -xz --directory=$install_path --strip-components 1"
 printf '%s\n' "Saved to: $install_path"
 
+cd $install_path
 printf '\n%s\n' "Running $install_path/install.sh"
-. $install_path/install.sh
+bash $install_path/install.sh
