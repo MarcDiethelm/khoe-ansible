@@ -18,7 +18,7 @@ $scriptpath/scripts/passwordless-sudo.sh $khoe_user && \ # todo: do this with an
 sudo chown 700 $scriptpath/ansible.cfg && \
 \
 printf '\n%s\n' "Installing playbook dependencies from Ansible Galaxy." && \
-ansible-galaxy install -r requirements.yml && \
+sudo ansible-galaxy install -r requirements.yml && \
 \
 printf '\n%s\n' "Setting system, installing khoe-nas dependencies and config files." && \
 ansible-playbook $scriptpath/playbooks/install.yml && \
