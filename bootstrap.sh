@@ -17,15 +17,14 @@ sudo -E apt-get install --yes \
 	jq # for parsing versions.json
 
 
-# Dev: `bash bootstrap.sh no-autoinstall` exits the script here.
-# prevents downloading and installing latest published version
-if [ "$1" == "no-autoinstall" ]
+# Dev: `bash bootstrap.sh` exits the script here.
+if [ -z "$1" ]
 then
 	printf '\n%s\n' "No auto-install requested. Exiting."
 	exit 0
 fi
 
-
+# `bash bootstrap.sh latest` installs the highest tagged version from Github.
 if [ "$1" == "latest" ]
 then
 	# Github sorts the tags correctly (by tag not by date)
@@ -39,7 +38,7 @@ then
 	version=$latest
 fi
 
-
+# `bash bootstrap.sh develop` installs the current state of the develop branch from Github.
 if [ "$1" == "develop" ]
 then
 	tarball_url="https://github.com/khoe-cloud/khoe-nas/archive/develop.tar.gz"
