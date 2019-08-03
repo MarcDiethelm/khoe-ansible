@@ -5,7 +5,7 @@
     gid: "{{ gid | default(omit) }}"
   become: yes
 
-- name: 'Create user: {{ username }}''
+- name: 'Create user: {{ username }}'
   user:
     name: "{{ username }}"
     uid: "{{ uid | default(omit) }}"
