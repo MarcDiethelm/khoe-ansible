@@ -1,10 +1,20 @@
 ---
-- name: '~/.profile: cd to ~/ansible on login'
+# KHOE_NAS_PATH is globally available after reboot only; (but install.sh sets it for its session.)
+- name: 'Persist KHOE_NAS_PATH in /etc/environment. value: {{ khoe_nas_path }}'
+  lineinfile:
+    path: /etc/environment
+    regexp: '^KHOE_NAS_PATH='
+    line: 'KHOE_NAS_PATH={{ khoe_nas_path }}'
+  become: yes
+
+- name: '/home/{{ khoe_user }}/.profile: cd to {{ khoe_nas_path }} on login'
   blockinfile:
-    path: ~/.profile
+    path: '/home/{{ khoe_user }}/.profile'
     block: |
-      echo 'cd ~/ansible'
-      cd ~/ansible
+      echo 'cd {{ khoe_nas_path}} '
+      cd {{ khoe_nas_path }}
+  become: yes
+  become_user: '{{ khoe_user }}'
 
 - name: 'Ensure config directory is present: {{ config_path }}.'
   file:
