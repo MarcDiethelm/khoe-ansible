@@ -39,11 +39,6 @@
     mode: 0770
   become: yes
 
-- name: Restrict permissions on ansible.cfg
-  file:
-    path: /home/khoe/ansible/ansible.cfg
-    mode: 0700
-
 - name: 'Set UID min to {{ uid_min }}'
   lineinfile:
     dest: /etc/login.defs
