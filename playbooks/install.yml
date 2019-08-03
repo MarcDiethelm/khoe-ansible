@@ -37,6 +37,7 @@
         tasks_from: hardware
 
     # Perform general khoe install actions
+    ######################################
     - include_role:
         name: install
 

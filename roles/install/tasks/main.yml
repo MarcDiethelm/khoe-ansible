@@ -30,7 +30,7 @@
   become: yes
   become_user: '{{ khoe_user }}'
 
-- name: 'Ensure config directory is present: {{ config_path }}.'
+- name: 'Create config directory: {{ config_path }}.'
   file:
     path: '{{ config_path | mandatory }}'
     state: directory
@@ -53,7 +53,7 @@
     line: 'GID_MIN			 {{ gid_min }}'
   become: yes
 
-- name: 'Ensure group "{{ khoe_users_group }}" exists'
+- name: 'Create group: {{ khoe_users_group }}'
   group:
     name: "{{ khoe_users_group }}"
     gid: "{{ khoe_users_gid }}"
