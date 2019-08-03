@@ -1,2 +1,10 @@
-[khoe]
-acer.lan  production=no
+khoe:
+  hosts:
+  	vbox-khoe-nas:
+    #rock64:
+    #acer:
+    #bananapi:
+    #nuc.lan
+      #production: yes
+  vars:
+    production: no

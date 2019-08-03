@@ -1,2 +1,5 @@
-[khoe]
-localhost ansible_connection=local production=yes
+khoe:
+  hosts:
+    localhost:
+      ansible_connection: local
+      production: yes
