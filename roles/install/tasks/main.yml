@@ -7,6 +7,20 @@
     line: 'KHOE_NAS_PATH={{ khoe_nas_path }}'
   become: yes
 
+- name: 'Create group: {{ khoe_user }}'
+  group:
+    name: "{{ khoe_user }}"
+  become: yes
+
+- name: 'Create user: {{ khoe_user }}'
+  user:
+    name: "{{ khoe_user }}"
+    group: "{{ khoe_user }}"
+    groups: "adm,sudo,vboxsf" # plugdev is added by pmount install, docker by docker-smb install
+    shell: /bin/bash
+    update_password: on_create
+  become: yes
+
 - name: '/home/{{ khoe_user }}/.profile: cd to {{ khoe_nas_path }} on login'
   blockinfile:
     path: '/home/{{ khoe_user }}/.profile'
