@@ -1,20 +1,14 @@
 #!/usr/bin/env bash
-
-# This script is used to install Ansible and download the latest Khoe NAS software.
-
 set -eo pipefail
 
-install_base_path=/usr/local/lib/khoe-nas/versions
+########################################################################################################################
+#
+# Download this script to fetch the latest Khoe NAS software from Github and place it in $install_base_path/$version
+# Once khoe-nas is present, just run install.sh.
+#
+########################################################################################################################
 
-printf '\n%s\n' "Installing Ansible"
-sudo apt-add-repository --yes ppa:ansible/ansible
-sudo apt-get update
-export DEBIAN_FRONTEND=noninteractive
-sudo -E apt-get install --yes \
-    software-properties-common \
-    ansible \
-    python-jmespath \
-	jq # for parsing versions.json
+install_base_path=/usr/local/lib/khoe-nas/versions
 
 
 # Dev: `bash bootstrap.sh` exits the script here.
@@ -27,6 +21,10 @@ fi
 # `bash bootstrap.sh latest` installs the highest tagged version from Github.
 if [ "$1" == "latest" ]
 then
+	if ! [ -x "$(command -v jq)" ]; then
+		sudo apt-get install jq # for parsing versions.json
+	fi
+
 	# Github sorts the tags correctly (by tag not by date)
 	# therefore we can use the first element from versions array
 	# using https://stedolan.github.io/jq/
