@@ -9,6 +9,7 @@
       Age: {{ age }}
 
 # Using `sudo` like on the command line works, using `become` fails
+# If no backup exists duplicity errors: "CollectionsError: No signature chains found"
 
 - block:
     - name: List files in backup from file system
