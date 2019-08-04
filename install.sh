@@ -18,12 +18,9 @@ export KHOE_NAS_PATH=$khoe_nas_path
 printf '\n%s\n' "Running scripts/passwordless-sudo.sh."
 $scriptpath/scripts/passwordless-sudo.sh $khoe_user # todo: do this with ansible
 
-sudo chmod 700 $scriptpath/ansible.cfg
-
 if ! [ -x "$(command -v ansible)" ]; then
 	printf '\n%s\n' "Installing Ansible"
 	sudo apt-add-repository --yes ppa:ansible/ansible
-	sudo apt-get update
 	sudo DEBIAN_FRONTEND=noninteractive \
 		apt-get install --yes \
 	    software-properties-common \
