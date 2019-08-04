@@ -4,4 +4,4 @@ digitalocean:
   api_key_secret:   qwertyuiop123456789qwertyuiop1234567890qwer
 
 local:
-  backup_location:  file:///var/khoe/backup
+  backup_location:  file:///var/khoe-nas/backup
